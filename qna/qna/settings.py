@@ -3,23 +3,30 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 import os
-
+import dj_database_url
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'qnadatabase',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+if bool(os.environ.get('LOCAL_DEV', False)):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'qnadatabase',                      # Or path to database file if using sqlite3.
+            'USER': '',                      # Not used with sqlite3.
+            'PASSWORD': '',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        }
     }
-}
+    #FACEBOOK_APP_ID = '343120432448964'
+    #FACEBOOK_API_SECRET  = 'f43073165e02ef728f31a315cd9fa6de'
+else:
+    DATABASES = {'default': dj_database_url.config()}
+    #FACEBOOK_API_SECRET  = "924a5a01f43de7d991cd1c17edf4469b"
+    #FACEBOOK_APP_ID = "406831919365032"
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
