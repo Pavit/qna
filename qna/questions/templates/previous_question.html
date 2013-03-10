@@ -1,0 +1,106 @@
+{% load staticfiles %}
+<div id = "previous_question">
+<div id="previous_question" class="row">
+  <div class="twelve columns">
+    <div class="panel gray">
+      <div class="row">
+        <div class="twelve columns">
+          <p class="previous_question text-center">{{previous_question.question}}</p>
+        </div>
+      </div>
+      <div class="row">
+          <div class="eight columns centered">
+          <div id="stat_chart"></div>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  if (!window.Highcharts) {
+    $.getScript("{% static 'javascripts/highcharts.js' %}", function(){});
+  };
+
+
+});
+$(function () {
+    var chart;
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'stat_chart',
+                type: 'column',
+                backgroundColor:'rgba(255, 255, 255, 0.0)'
+            },
+            colors: ['#f15c22', '#eb4f68', '#eb62ca', '#9567eb', '#73a1d5'],
+            legend: {
+              align: 'center',
+              verticalAlign: 'bottom',
+              borderWidth:0,
+              itemStyle: {
+                color:'black',
+                fontFamily:'Bree Serif'
+              }
+
+            },
+            title: {
+                text: null
+            },
+            xAxis: {
+                labels: {enabled:false},
+            },
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels:{enabled:false}
+            },
+            tooltip: {
+                formatter: function() {
+                    return ''+
+                        this.series.name +': '+ this.y +' ('+ Math.round(this.percentage) +'%)';
+                      
+                }
+            },
+                    plotOptions: {
+            column:{
+                stacking: 'percent',
+                colorByPoint: false,
+                pointPadding: 0,
+                groupPadding: 0,
+                dataLabels: {
+                    enabled: true,
+                    align: 'center',
+                    style: {
+                        color:'black',
+                        fontFamily:'Bree Serif',
+                    },
+                    formatter: function(){
+                      if (this.y == 0) {
+                        return '';
+                      } else {
+                        if (this.y == 1) {
+                          return this.y + ' vote ('+Highcharts.numberFormat(this.percentage, 2, '.')+'%)';
+                        } else {
+                        return this.y + ' votes ('+Highcharts.numberFormat(this.percentage, 2, '.')+'%)';
+                      }
+                      }
+                    }
+                }
+            }
+        },
+                series: [
+                  {% for answer in previous_question.answer_set.all %}
+                {name: '{{answer}}',
+                data: [{{answer.votes}}]
+            }{% if not forloop.last %},{%else%}{%endif%}{%endfor%}]
+
+        });
+    
+});
+</script>

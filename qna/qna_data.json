@@ -1,0 +1,698 @@
+[
+    {
+        "pk": 1,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Dogs or cats?",
+            "slug": "dogs-or-cats"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Terran, Protoss, or Zerg?",
+            "slug": "terran-protoss-or-zerg"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Who did you vote for?",
+            "slug": "who-did-you-vote-for"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Can you swim?",
+            "slug": "can-you-swim"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Blondes or Brunettes?",
+            "slug": "blondes-or-brunettes"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "How do you feel about eating meat?",
+            "slug": "how-do-you-feel-about-eating-meat"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "What is the solution to 48\u00f72(9+3)?",
+            "slug": "what-is-the-solution-to-48293"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "What is your favorite wall material?",
+            "slug": "what-is-your-favorite-wall-material"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Who would win in a fight?",
+            "slug": "who-would-win-in-a-fight"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Who has the most leadership?",
+            "slug": "who-has-the-most-leadership"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Do you enjoy having photos taken of you?",
+            "slug": "do-you-enjoy-having-photos-taken-of-you"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Would you ever consider going to a Black Friday sale?",
+            "slug": "would-you-ever-consider-going-to-a-black-friday-sale"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Who is the greatest bald character of all time?",
+            "slug": "who-is-the-greatest-bald-character-of-all-time"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "What would you do if you got a tattoo of your significant other and then broke up with him/her?",
+            "slug": "what-would-you-do-if-you-got-a-tattoo-of-your-significant-other-and-then-broke-up-with-himher"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "questions.question",
+        "fields": {
+            "created": "2012-11-12",
+            "submitter": null,
+            "answered_by": [],
+            "question": "Would you have the balls to punch a shark in the face?",
+            "slug": "would-you-have-the-balls-to-punch-a-shark-in-the-face"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Dogs",
+            "selected_by": [],
+            "question": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Cats",
+            "selected_by": [],
+            "question": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Neither",
+            "selected_by": [],
+            "question": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Turtles",
+            "selected_by": [],
+            "question": 1
+        }
+    },
+    {
+        "pk": 5,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Terran",
+            "selected_by": [],
+            "question": 2
+        }
+    },
+    {
+        "pk": 6,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Protoss",
+            "selected_by": [],
+            "question": 2
+        }
+    },
+    {
+        "pk": 7,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Zerg",
+            "selected_by": [],
+            "question": 2
+        }
+    },
+    {
+        "pk": 8,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "What?",
+            "selected_by": [],
+            "question": 2
+        }
+    },
+    {
+        "pk": 9,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Voting's for jews.",
+            "selected_by": [],
+            "question": 3
+        }
+    },
+    {
+        "pk": 10,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Obama",
+            "selected_by": [],
+            "question": 3
+        }
+    },
+    {
+        "pk": 11,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Romney",
+            "selected_by": [],
+            "question": 3
+        }
+    },
+    {
+        "pk": 12,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Yes",
+            "selected_by": [],
+            "question": 4
+        }
+    },
+    {
+        "pk": 13,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "No",
+            "selected_by": [],
+            "question": 4
+        }
+    },
+    {
+        "pk": 14,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Blondes",
+            "selected_by": [],
+            "question": 5
+        }
+    },
+    {
+        "pk": 15,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Brunettes",
+            "selected_by": [],
+            "question": 5
+        }
+    },
+    {
+        "pk": 16,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "I will take anything.",
+            "selected_by": [],
+            "question": 5
+        }
+    },
+    {
+        "pk": 17,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Meat is delicious.",
+            "selected_by": [],
+            "question": 6
+        }
+    },
+    {
+        "pk": 18,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Eating meat is unhealthy.",
+            "selected_by": [],
+            "question": 6
+        }
+    },
+    {
+        "pk": 19,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Eating meat is inhumane and uncivilized.",
+            "selected_by": [],
+            "question": 6
+        }
+    },
+    {
+        "pk": 20,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "I can't enjoy a meal unless it once had hopes and dreams.",
+            "selected_by": [],
+            "question": 6
+        }
+    },
+    {
+        "pk": 21,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "2",
+            "selected_by": [],
+            "question": 7
+        }
+    },
+    {
+        "pk": 22,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "288",
+            "selected_by": [],
+            "question": 7
+        }
+    },
+    {
+        "pk": 23,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Leave me alone, I just wanted to study literature!",
+            "selected_by": [],
+            "question": 7
+        }
+    },
+    {
+        "pk": 24,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Exposed brick.",
+            "selected_by": [],
+            "question": 8
+        }
+    },
+    {
+        "pk": 25,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Wood panel.",
+            "selected_by": [],
+            "question": 8
+        }
+    },
+    {
+        "pk": 26,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Concrete.",
+            "selected_by": [],
+            "question": 8
+        }
+    },
+    {
+        "pk": 27,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Tiles.",
+            "selected_by": [],
+            "question": 8
+        }
+    },
+    {
+        "pk": 28,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Plaster.",
+            "selected_by": [],
+            "question": 8
+        }
+    },
+    {
+        "pk": 29,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Superman",
+            "selected_by": [],
+            "question": 9
+        }
+    },
+    {
+        "pk": 30,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "The Hulk",
+            "selected_by": [],
+            "question": 9
+        }
+    },
+    {
+        "pk": 31,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Thor",
+            "selected_by": [],
+            "question": 9
+        }
+    },
+    {
+        "pk": 32,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Goku",
+            "selected_by": [],
+            "question": 9
+        }
+    },
+    {
+        "pk": 33,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Batman",
+            "selected_by": [],
+            "question": 9
+        }
+    },
+    {
+        "pk": 34,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Captain America",
+            "selected_by": [],
+            "question": 10
+        }
+    },
+    {
+        "pk": 35,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Optimus Prime",
+            "selected_by": [],
+            "question": 10
+        }
+    },
+    {
+        "pk": 36,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Leonardo",
+            "selected_by": [],
+            "question": 10
+        }
+    },
+    {
+        "pk": 37,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Captain Kirk",
+            "selected_by": [],
+            "question": 10
+        }
+    },
+    {
+        "pk": 38,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Duke",
+            "selected_by": [],
+            "question": 10
+        }
+    },
+    {
+        "pk": 39,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Only if I\u2019ve had time to get ready.",
+            "selected_by": [],
+            "question": 11
+        }
+    },
+    {
+        "pk": 40,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Never.",
+            "selected_by": [],
+            "question": 11
+        }
+    },
+    {
+        "pk": 41,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Always.",
+            "selected_by": [],
+            "question": 11
+        }
+    },
+    {
+        "pk": 42,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Only if the background has lasers.",
+            "selected_by": [],
+            "question": 11
+        }
+    },
+    {
+        "pk": 43,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "I go every year.",
+            "selected_by": [],
+            "question": 12
+        }
+    },
+    {
+        "pk": 44,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Only if there\u2019s something I really want.",
+            "selected_by": [],
+            "question": 12
+        }
+    },
+    {
+        "pk": 45,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Hell no, I value my life too much.",
+            "selected_by": [],
+            "question": 12
+        }
+    },
+    {
+        "pk": 46,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "No, I just order everything online.",
+            "selected_by": [],
+            "question": 12
+        }
+    },
+    {
+        "pk": 47,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Professor X",
+            "selected_by": [],
+            "question": 13
+        }
+    },
+    {
+        "pk": 48,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Charlie Brown",
+            "selected_by": [],
+            "question": 13
+        }
+    },
+    {
+        "pk": 49,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Captain Picard",
+            "selected_by": [],
+            "question": 13
+        }
+    },
+    {
+        "pk": 50,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Morpheus",
+            "selected_by": [],
+            "question": 13
+        }
+    },
+    {
+        "pk": 51,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Captain Kirk",
+            "selected_by": [],
+            "question": 13
+        }
+    },
+    {
+        "pk": 52,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Laser removal.",
+            "selected_by": [],
+            "question": 14
+        }
+    },
+    {
+        "pk": 53,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Keep it as is.",
+            "selected_by": [],
+            "question": 14
+        }
+    },
+    {
+        "pk": 54,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Modify it so that it insults them.",
+            "selected_by": [],
+            "question": 14
+        }
+    },
+    {
+        "pk": 55,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Cover it with something cool looking.",
+            "selected_by": [],
+            "question": 14
+        }
+    },
+    {
+        "pk": 56,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "If I was drunk.",
+            "selected_by": [],
+            "question": 15
+        }
+    },
+    {
+        "pk": 57,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "I punch sharks in the faces all the time.",
+            "selected_by": [],
+            "question": 15
+        }
+    },
+    {
+        "pk": 58,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "Maybe if it was eating my leg.",
+            "selected_by": [],
+            "question": 15
+        }
+    },
+    {
+        "pk": 59,
+        "model": "questions.answer",
+        "fields": {
+            "answer": "No, I\u2019d just start crying or something.",
+            "selected_by": [],
+            "question": 15
+        }
+    }
+]
