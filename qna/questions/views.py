@@ -21,6 +21,8 @@ def index(request):
         current_question = Question.objects.all().order_by('?')[:1].get()
         return render_to_response("index.html", {"current_question": current_question,}, context_instance = RequestContext(request))
 
+def sunburstplay(request):
+    return render_to_response("sunburstplay.html")
 
 def current_question(request, current_question_id):
     current_question = get_object_or_404(Question, pk=current_question_id)
@@ -35,6 +37,10 @@ def previous_question(request, previous_question_id):
     previous_question = get_object_or_404(Question, pk=previous_question_id)
     return render_to_response("previous_question.html", {"previous_question":previous_question})
 
+def question_details(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render_to_response("question_details.html", {"question":question}, context_instance = RequestContext(request))
+    
 
 def vote(request, answer_id):
     selected_answer = Answer.objects.get(pk=answer_id)

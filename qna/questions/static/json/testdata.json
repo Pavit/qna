@@ -1,0 +1,33 @@
+{
+ "name": "flare",
+ "children": [
+  {
+   "name": "Are you stupid?",
+   "children": [
+    {
+     "name": "Yes",
+     "size": 8000,
+     "children": [
+      {"name": "Males",
+        "size": 5000,
+        "children": [
+        {"name": "East", "size":1000},
+        {"name": "Midwest", "size": 3000},
+        {"name": "West", "size": 2000}
+        ]
+        },
+      {"name": "Females", "size": 3000}
+     ]
+    },
+    {
+     "name": "No",
+     "size": 2000,
+     "children": [
+      {"name": "Males", "size": 500},
+      {"name": "Females", "size": 1500}
+     ]
+    }
+   ]
+  }
+ ]
+}
