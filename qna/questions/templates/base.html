@@ -30,12 +30,12 @@
   <div class="twelve columns">
   <nav class="top-bar">
     <ul>
-      <li class="name"><h1><a href="{%url index%}">QNA</a></h1></li>
+      <li class="name"><h1><a href="/">QNA</a></h1></li>
       <li class="toggle-topbar"><a href="#"></a></li>
     </ul>
     <section>
       <ul class="right">
-        <li><a href="/submitquestion/">SUBMIT</a></li>
+        <li><a href="/questions/submit/">SUBMIT</a></li>
         <li><a href="/profile/">PROFILE</a></li>
         <li><a href="#">{% if user.is_authenticated %} LOGGED IN AS {{user.first_name}} {{user.last_name}}. {%else%} LOGIN {%endif%}</a></li>
         <li class="search">
@@ -51,6 +51,9 @@
 
 {% endblock navbar %}
 
+{% block submit_question %}{% endblock submit_question %}
+
+{% block profile %}{% endblock profile %}
 
 {% block current_question %}
 <div id = "current_question">
@@ -76,7 +79,7 @@
 
 
 <script type="text/javascript">
-  $('.answer').click(function(e) {
+  $('.answervote').click(function(e) {
     e.preventDefault();
     $('#previous_question').fadeOut(300);
     $('#current_question').fadeOut(300);

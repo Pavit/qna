@@ -21,12 +21,12 @@ if bool(os.environ.get('LOCAL_DEV', False)):
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
-    #FACEBOOK_APP_ID = '343120432448964'
-    #FACEBOOK_API_SECRET  = 'f43073165e02ef728f31a315cd9fa6de'
+    FACEBOOK_APP_ID = '343120432448964'
+    FACEBOOK_API_SECRET  = 'f43073165e02ef728f31a315cd9fa6de'
 else:
     DATABASES = {'default': dj_database_url.config()}
-    #FACEBOOK_API_SECRET  = "924a5a01f43de7d991cd1c17edf4469b"
-    #FACEBOOK_APP_ID = "406831919365032"
+    FACEBOOK_API_SECRET  = "924a5a01f43de7d991cd1c17edf4469b"
+    FACEBOOK_APP_ID = "406831919365032"
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -130,7 +130,43 @@ INSTALLED_APPS = (
     'south',
     'core',
     'questions',
+    'social_auth',
+    'facepy',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'social_auth.context_processors.social_auth_login_redirect',
+    'social_auth.context_processors.social_auth_backends',
+
+)
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_PROFILE_MODULE= 'core.UserProfile'
+#---------social_auth settings--------------------
+# SOCIAL_AUTH_USER_MODEL = 'core.UserProfile'
+LOGIN_URL          = '/login-form/'
+LOGIN_REDIRECT_URL = '/questions/'
+LOGIN_ERROR_URL    = '/login-error/'
+
+FACEBOOK_EXTENDED_PERMISSIONS = [
+    'email','friends_likes','user_about_me',
+    'user_birthday', 'friends_birthday', 'friends_about_me',
+    'user_location', 'friends_location','user_relationships','friends_relationships',
+    'friends_education_history','user_education_history','user_interests',
+    'friends_interests','user_relationship_details','friends_relationship_details','user_religion_politics',
+    'friends_religion_politics',
+]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

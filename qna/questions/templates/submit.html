@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load url from future %}
+
+{% block submit_question %}
+
+
+<div id="current_question" class="row">
+  <div class="twelve columns">
+    <div class="panel red">
+      <div class="row">
+        <div class="three columns">
+          <h1 class="left">Submit</h1>
+        </div>
+        <!-- Begin Form -->
+        <div class="nine columns">
+          <form action="" method="POST">
+            {% csrf_token %}
+            <!-- Question -->
+            <div class="row">
+              <div class="three columns">
+                <h1 class="text-center">Q.</h1>
+              </div>
+              <div class="nine columns h1_offset">
+                {{question_form.as_p}}
+              </div>
+            </div>
+            <!-- Answers -->
+            <div class="row">
+              <div class="three columns">
+                <h1 class="text-center">A.</h1>
+                
+              </div>
+              
+              <div class="nine columns h1_offset">
+              {{ answer_formset.management_form }}
+                <div class = "answer">
+                  {{answer_formset.non_form_errors }}
+                  {% for form in answer_formset.forms %}
+                  {{form.as_p}}
+
+                   {% endfor %}
+                   </div>
+
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="row">
+              <div class="three columns">
+              </div>
+              <div class="nine columns">
+                <input class="button expand h1_offset" type="submit" value="submit"/>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- End Form -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock submit_question %}

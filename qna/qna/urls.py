@@ -7,6 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'questions.views.index', name='index'),
+    url(r'^profile/$', 'questions.views.profile', name='profile'),
+    url(r'', include('social_auth.urls')),
     # url(r'^qna/', include('qna.foo.urls')),
     url(r'^questions/', include('questions.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:

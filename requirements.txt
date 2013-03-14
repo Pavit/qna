@@ -7,3 +7,4 @@ wadofstuff-django-serializers
 simplejson==2.3.2
 requests
 south
+facepy

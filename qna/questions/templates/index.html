@@ -1,4 +1,7 @@
 
 {% load url from future %}
 
-<a href="{% url 'current_question' current_question.id %}">Start</a>
+<p><a rel="nofollow" href="{% url "socialauth_begin" "facebook" %}">{{ "facebook"|title }}</a>{% csrf_token %}</p>
+
+
+<a href="{% url 'current_question' current_question.id %}">Start anonymously</a>

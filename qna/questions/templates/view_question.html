@@ -30,7 +30,7 @@ $(document).ready(function() {
       <div class="row">
         <div class="twelve columns">
           {% for a in current_question.answer_set.all %} {%csrf_token%}
-          <a href = '' id="{{a.id}}" type="int" class="answer"><p class="current_answers text-center">{{a.answer}}</p></a>
+          <a href = '' id="{{a.id}}" type="int" class="answervote"><p class="current_answers text-center">{{a.answer}}</p></a>
           {%endfor%}
         </div>
       </div>

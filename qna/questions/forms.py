@@ -16,5 +16,5 @@ class AnswerForm(ModelForm):
 
 	class Meta:
 		model = Answer
-		fields = ("answer",)
+		exclude = ("question", "selected_by", "votes",)
 
