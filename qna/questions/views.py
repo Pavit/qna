@@ -67,7 +67,7 @@ def question_details(request, question_id):
                                         ]
                                     }]
                                     })
-    json = simplejson.dumps(resp_dict)
+    json = simplejson.dumps(resp_dict).replace("'", r"\'")
     # return HttpResponse(json)
     return render_to_response("question_details.html", {"question":question, "json":json})
     
