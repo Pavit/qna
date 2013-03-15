@@ -23,7 +23,7 @@ var width = 400,
     radius = Math.min(width, height) / 2,
     color = d3.scale.category20c();
 
-var data = "{{ json }}";
+var data = "{{ json|safe }}";
 
 var svg = d3.select("#chart").append("svg")
     .attr("width", width)

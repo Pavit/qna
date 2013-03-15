@@ -1,0 +1,205 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "size": 45,
+              "name": "< 15"
+            },
+            {
+              "size": 491,
+              "name": "16 - 25"
+            },
+            {
+              "size": 431,
+              "name": "26 - 35"
+            },
+            {
+              "size": 237,
+              "name": "36+"
+            }
+          ],
+          "size": 1249,
+          "name": "males"
+        },
+        {
+          "children": [
+            {
+              "size": 46,
+              "name": "< 15"
+            },
+            {
+              "size": 504,
+              "name": "16 - 25"
+            },
+            {
+              "size": 429,
+              "name": "26 - 35"
+            },
+            {
+              "size": 216,
+              "name": "36+"
+            }
+          ],
+          "size": 1249,
+          "name": "females"
+        }
+      ],
+      "size": 2500,
+      "name": "Terran"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "size": 72,
+              "name": "< 15"
+            },
+            {
+              "size": 729,
+              "name": "16 - 25"
+            },
+            {
+              "size": 673,
+              "name": "26 - 35"
+            },
+            {
+              "size": 360,
+              "name": "36+"
+            }
+          ],
+          "size": 1906,
+          "name": "males"
+        },
+        {
+          "children": [
+            {
+              "size": 63,
+              "name": "< 15"
+            },
+            {
+              "size": 742,
+              "name": "16 - 25"
+            },
+            {
+              "size": 661,
+              "name": "26 - 35"
+            },
+            {
+              "size": 361,
+              "name": "36+"
+            }
+          ],
+          "size": 1906,
+          "name": "females"
+        }
+      ],
+      "size": 3812,
+      "name": "Protoss"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "size": 8,
+              "name": "< 15"
+            },
+            {
+              "size": 144,
+              "name": "16 - 25"
+            },
+            {
+              "size": 154,
+              "name": "26 - 35"
+            },
+            {
+              "size": 70,
+              "name": "36+"
+            }
+          ],
+          "size": 394,
+          "name": "males"
+        },
+        {
+          "children": [
+            {
+              "size": 17,
+              "name": "< 15"
+            },
+            {
+              "size": 154,
+              "name": "16 - 25"
+            },
+            {
+              "size": 138,
+              "name": "26 - 35"
+            },
+            {
+              "size": 67,
+              "name": "36+"
+            }
+          ],
+          "size": 394,
+          "name": "females"
+        }
+      ],
+      "size": 788,
+      "name": "Zerg"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "size": 20,
+              "name": "< 15"
+            },
+            {
+              "size": 187,
+              "name": "16 - 25"
+            },
+            {
+              "size": 133,
+              "name": "26 - 35"
+            },
+            {
+              "size": 92,
+              "name": "36+"
+            }
+          ],
+          "size": 450,
+          "name": "males"
+        },
+        {
+          "children": [
+            {
+              "size": 14,
+              "name": "< 15"
+            },
+            {
+              "size": 176,
+              "name": "16 - 25"
+            },
+            {
+              "size": 166,
+              "name": "26 - 35"
+            },
+            {
+              "size": 84,
+              "name": "36+"
+            }
+          ],
+          "size": 451,
+          "name": "females"
+        }
+      ],
+      "size": 901,
+      "name": "What?"
+    }
+  ],
+  "name": "Terran, Protoss, or Zerg?"
+}
