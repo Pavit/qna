@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'questions',
     'social_auth',
     'facepy',
+    'wadofstuff.django.serializers',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -146,6 +147,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social_auth.context_processors.social_auth_backends',
 
 )
+
+SERIALIZATION_MODULES = {
+    'json': 'wadofstuff.django.serializers.json'
+}
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
