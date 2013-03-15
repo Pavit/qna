@@ -11,12 +11,13 @@
 
 </head>
 <body>
-{{json}}
+
 <div id = "chart" width: "500"></div><br/>
  <div id = "tooltip"></div>
 
  <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
 <script>
+var jsondata = '{{json|safe}}';
 
 var width = 400,
     height = 400,
@@ -40,7 +41,8 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-d3.json({{ json|safe }}, function(root) {
+/*d3.json("{{ json|safe }}", function(root) {*/
+  root = JSON.parse(jsondata);
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
     .enter().append("path")
@@ -66,7 +68,7 @@ $("#tooltip").html("<B>QUESTION:</b>"+d.name);
          })
     .on("mouseout", function() { paths.attr("opacity", 1); $("#tooltip").hide(); })
 
-});
+/*});*/
   
 
 

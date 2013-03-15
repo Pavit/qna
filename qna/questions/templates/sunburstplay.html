@@ -18,6 +18,8 @@
  <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
 <script>
 
+var myjson = '{"children": [{"children": [{"children": [{"name": "< 15", "size": 45}, {"name": "16 - 25", "size": 491}, {"name": "26 - 35", "size": 431}, {"name": "36+", "size": 237}], "name": "males", "size": 1249}, {"children": [{"name": "< 15", "size": 46}, {"name": "16 - 25", "size": 504}, {"name": "26 - 35", "size": 429}, {"name": "36+", "size": 216}], "name": "females", "size": 1249}], "name": "Terran", "size": 2500}, {"children": [{"children": [{"name": "< 15", "size": 72}, {"name": "16 - 25", "size": 729}, {"name": "26 - 35", "size": 673}, {"name": "36+", "size": 360}], "name": "males", "size": 1906}, {"children": [{"name": "< 15", "size": 63}, {"name": "16 - 25", "size": 742}, {"name": "26 - 35", "size": 661}, {"name": "36+", "size": 361}], "name": "females", "size": 1906}], "name": "Protoss", "size": 3812}, {"children": [{"children": [{"name": "< 15", "size": 8}, {"name": "16 - 25", "size": 144}, {"name": "26 - 35", "size": 154}, {"name": "36+", "size": 70}], "name": "males", "size": 394}, {"children": [{"name": "< 15", "size": 17}, {"name": "16 - 25", "size": 154}, {"name": "26 - 35", "size": 138}, {"name": "36+", "size": 67}], "name": "females", "size": 394}], "name": "Zerg", "size": 788}, {"children": [{"children": [{"name": "< 15", "size": 20}, {"name": "16 - 25", "size": 187}, {"name": "26 - 35", "size": 133}, {"name": "36+", "size": 92}], "name": "males", "size": 450}, {"children": [{"name": "< 15", "size": 14}, {"name": "16 - 25", "size": 176}, {"name": "26 - 35", "size": 166}, {"name": "36+", "size": 84}], "name": "females", "size": 451}], "name": "What?", "size": 901}], "name": "Terran, Protoss, or Zerg?"}';
+
 var width = 400,
     height = 400,
     radius = Math.min(width, height) / 2,
@@ -40,7 +42,8 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-d3.json("{% static 'json/testdata2.json' %}", function(root) {
+/*d3.json("{% static 'json/testdata2.json' %}", function(root) {*/
+  root = JSON.parse(myjson);
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
     .enter().append("path")
@@ -65,8 +68,8 @@ $("#tooltip").html("<B>QUESTION:</b>"+d.name);
       $("#tooltip").show();
          })
     .on("mouseout", function() { paths.attr("opacity", 1); $("#tooltip").hide(); })
-
-});
+/*
+});*/
   
 
 
