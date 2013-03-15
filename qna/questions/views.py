@@ -41,9 +41,9 @@ def question_details(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     resp_dict=dict()
     for answer in question.answer_set.all():
-        resp_dict["name"] = answer.answer
-        resp_dict["size"] = answer.votes
-        resp_dict["children"] = [
+        resp_dict[answer.answer] = {"name": answer.answer,
+                                    "size": answer.votes,
+                                    "children": [
                                     { 
                                     "name": "males",
                                     "size": answer.selected_by.filter(gender="M").count(),
@@ -64,8 +64,10 @@ def question_details(request, question_id):
                                         {"name": "36+", "size": answer.selected_by.filter(gender="F").filter(age__gt=35).count()}
                                         ]
                                     }]
+                                    }
     json = simplejson.dumps(resp_dict)
-    return render_to_response("question_details.html", {"question":question, "json":json}, context_instance = RequestContext(request))
+    # return HttpResponse(json)
+    return render_to_response("question_details.html", {"question":question, "json":json})
     
 
 def vote(request, answer_id):
