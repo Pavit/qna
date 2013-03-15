@@ -39,7 +39,33 @@ def previous_question(request, previous_question_id):
 
 def question_details(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    return render_to_response("question_details.html", {"question":question}, context_instance = RequestContext(request))
+    resp_dict=dict()
+    for answer in question.answer_set.all():
+        resp_dict["name"] = answer.answer
+        resp_dict["size"] = answer.votes
+        resp_dict["children"] = [
+                                    { 
+                                    "name": "males",
+                                    "size": answer.selected_by.filter(gender="M").count(),
+                                    "children":[
+                                        {"name":"< 15", "size": answer.selected_by.filter(gender="M").filter(age__lt=16).count() },
+                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="M").filter(age__gte=16).filter(age__lte=25).count()},
+                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="M").filter(age__gt=26).filter(age__lte=35).count()},
+                                        {"name": "36+", "size": answer.selected_by.filter(gender="M").filter(age__gt=35).count()}
+                                        ]
+                                    }, 
+                                    {
+                                    "name": "females",
+                                    "size": answer.selected_by.filter(gender="F").count(),
+                                    "children": [
+                                        {"name":"< 15", "size": answer.selected_by.filter(gender="F").filter(age__lt=16).count() },
+                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="F").filter(age__gte=16).filter(age__lte=25).count()},
+                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="F").filter(age__gt=26).filter(age__lte=35).count()},
+                                        {"name": "36+", "size": answer.selected_by.filter(gender="F").filter(age__gt=35).count()}
+                                        ]
+                                    }]
+    json = simplejson.dumps(resp_dict)
+    return render_to_response("question_details.html", {"question":question, "json":json}, context_instance = RequestContext(request))
     
 
 def vote(request, answer_id):
