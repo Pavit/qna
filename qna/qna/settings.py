@@ -132,7 +132,6 @@ INSTALLED_APPS = (
     'questions',
     'social_auth',
     'facepy',
-    'csvimport',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
