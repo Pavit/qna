@@ -10,7 +10,7 @@ from django.utils import simplejson
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.core.context_processors import csrf
 from questions.models import Question, Answer
-from questions.forms import QuestionForm, AnswerForm
+from questions.forms import QuestionForm, AnswerForm, StatForm
 from questions.utils import *
 
 def index(request):
@@ -42,6 +42,44 @@ def question_details(request, question_id):
     resp_dict=dict()
     resp_dict["name"] = question.question
     resp_dict["children"]=[]
+    if request.is_ajax():
+        print request.GET.get('formnumber')
+        if request.GET.get('formnumber') == '1':
+            print "ok"
+            selected_stat = request.GET.get('stat')
+            print selected_stat
+            if selected_stat == "gender":
+                print "ok"
+                for answer in question.answer_set.all():
+                    resp_dict["children"].append(
+                                        {"name": answer.answer,
+                                        "size": answer.votes,
+                                        "children": [
+                                            {"name": "males", "size": answer.selected_by.filter(gender="M").count()}, 
+                                            {"name": "females", "size": answer.selected_by.filter(gender="F").count()}
+                                            ]
+                                        })
+                print resp_dict
+            if selected_stat == "age":
+                for answer in question.answer_set.all():
+                    resp_dict["children"].append( {"name": answer.answer,
+                                                    "size": answer.votes,
+                                                    "children": [
+                                                        {"name":"< 15", "size": answer.selected_by.filter(age__lt=16).count() },
+                                                        {"name": "16 - 25", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).count()},
+                                                        {"name": "26 - 35", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).count()},
+                                                        {"name": "36+", "size": answer.selected_by.filter(age__gt=35).count()}
+                                                        ]
+                                                    })
+        json = simplejson.dumps(resp_dict).replace("'", r"\'")
+        stat_form = StatForm()
+        print json
+        return HttpResponse(json, mimetype="application/json")
+        # return render_to_response("question_details.html", {"question":question, "json":json, "stat_form":stat_form})
+    question = get_object_or_404(Question, pk=question_id)
+    resp_dict=dict()
+    resp_dict["name"] = question.question
+    resp_dict["children"]=[]
     for answer in question.answer_set.all():
         resp_dict["children"].append( {"name": answer.answer,
                                     "size": answer.votes,
@@ -69,7 +107,9 @@ def question_details(request, question_id):
                                     })
     json = simplejson.dumps(resp_dict).replace("'", r"\'")
     # return HttpResponse(json)
-    return render_to_response("question_details.html", {"question":question, "json":json})
+    stat_form1 = StatForm(initial = {'stat':'--'})
+    stat_form2 = StatForm(initial = {'stat':'--'})
+    return render_to_response("question_details.html", {"question":question, "json":json, "stat_form1":stat_form1, "stat_form2":stat_form2})
     
 
 def vote(request, answer_id):
