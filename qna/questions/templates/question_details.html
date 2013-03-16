@@ -58,7 +58,7 @@ draw(data);
 
 function draw(data) {
 
-$("#chart").empty();
+
 var width = 400,
     height = 400,
     radius = Math.min(width, height) / 2,
@@ -111,7 +111,14 @@ $("#tooltip").html("<B>QUESTION:</b>"+d.name);
 /*});*/
   
 
+ d3.selectAll("form").on("change", function change() {
 
+    path
+        .data(partition.value(value).nodes)
+      .transition()
+        .duration(1500)
+        .attrTween("d", arcTween);
+  });
 // Stash the old values for transition.
 function stash(d) {
   d.x0 = d.x;
