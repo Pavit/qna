@@ -71,7 +71,7 @@ def question_details(request, question_id):
                                                         {"name": "36+", "size": answer.selected_by.filter(age__gt=35).count()}
                                                         ]
                                                     })
-        json = simplejson.dumps(resp_dict).replace("'", r"\'")
+        json = simplejson.dumps(resp_dict)
         stat_form = StatForm()
         print json
         return HttpResponse(json, mimetype="application/json")
