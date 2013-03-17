@@ -71,6 +71,65 @@ def question_details(request, question_id):
                                                         {"name": "36+", "size": answer.selected_by.filter(age__gt=35).count()}
                                                         ]
                                                     })
+        else:
+            selected_stat = request.GET.get('stat')
+            if request.GET.get('dropdown1') == 'gender':
+                if selected_stat == "age":
+                    print "ok"
+                    for answer in question.answer_set.all():
+                        resp_dict["children"].append( {"name": answer.answer,
+                                                    "size": answer.votes,
+                                                    "children": [
+                                                    { 
+                                                    "name": "males",
+                                                    "size": answer.selected_by.filter(gender="M").count(),
+                                                    "children":[
+                                                        {"name":"< 15", "size": answer.selected_by.filter(gender="M").filter(age__lt=16).count() },
+                                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="M").filter(age__gte=16).filter(age__lte=25).count()},
+                                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="M").filter(age__gt=26).filter(age__lte=35).count()},
+                                                        {"name": "36+", "size": answer.selected_by.filter(gender="M").filter(age__gt=35).count()}
+                                                        ]
+                                                    }, 
+                                                    {
+                                                    "name": "females",
+                                                    "size": answer.selected_by.filter(gender="F").count(),
+                                                    "children": [
+                                                        {"name":"< 15", "size": answer.selected_by.filter(gender="F").filter(age__lt=16).count() },
+                                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="F").filter(age__gte=16).filter(age__lte=25).count()},
+                                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="F").filter(age__gt=26).filter(age__lte=35).count()},
+                                                        {"name": "36+", "size": answer.selected_by.filter(gender="F").filter(age__gt=35).count()}
+                                                        ]
+                                                    }]
+                                                    })
+            if request.GET.get('dropdown1') == 'age':
+                if selected_stat == "gender":
+                    print "ok"
+                    for answer in question.answer_set.all():
+                            resp_dict["children"].append( {"name": answer.answer,
+                                                            "size": answer.votes,
+                                                            "children": [
+                                                                {"name":"< 15", "size": answer.selected_by.filter(age__lt=16).count(),
+                                                                      "children": [
+                                            {"name": "males", "size": answer.selected_by.filter(age__lt=16).filter(gender="M").count()}, 
+                                            {"name": "females", "size": answer.selected_by.filter(age__lt=16).filter(gender="F").count()}
+                                            ]},
+                                                                {"name": "16 - 25", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).count(),
+                                                                   "children": [
+                                            {"name": "males", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).filter(gender="M").count()}, 
+                                            {"name": "females", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).filter(gender="F").count()}
+                                            ]},
+                                                                {"name": "26 - 35", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).count(),
+                                                                   "children": [
+                                            {"name": "males", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).filter(gender="M").count()}, 
+                                            {"name": "females", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).filter(gender="F").count()}
+                                            ]},
+                                                                {"name": "36+", "size": answer.selected_by.filter(age__gt=35).count(),
+                                                                   "children": [
+                                            {"name": "males", "size": answer.selected_by.filter(age__gt=35).filter(gender="M").count()}, 
+                                            {"name": "females", "size": answer.selected_by.filter(age__gt=35).filter(gender="F").count()}
+                                            ]}
+                                                                ]
+                                                            })
         json = simplejson.dumps(resp_dict)
         stat_form = StatForm()
         print json
