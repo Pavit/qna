@@ -12,34 +12,26 @@ $(document).ready(function() {
 });
 </script>
 <div id = "current_question">
-<div id="current_question" class="row">
-  <div class="twelve columns">
-    <div class="panel red">
-      <div class="row">
-        <div class="twelve columns">
-          <p class="current_question text-center">{{current_question.question}}</p>
-        </div>
+  <div class="row">
+    <div class="large-9 large-centered columns">
+      <div class="panel red current">
+        <h1 class="text-center">{{current_question.question}}</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-9 large-centered columns">
+      <div class="panel blue current">
+        {% for a in current_question.answer_set.all %} {%csrf_token%}
+        <a href = '' id="{{a.id}}" type="int" class="answer"><p class="current_answers text-center">{{a.answer}}</p></a>
+        {%endfor%}
       </div>
     </div>
   </div>
 </div>
 
-<div id="current_answers" class="row">
-  <div class="twelve columns">
-    <div class="panel blue">
-      <div class="row">
-        <div class="twelve columns">
-          {% for a in current_question.answer_set.all %} {%csrf_token%}
-          <a href = '' id="{{a.id}}" type="int" class="answervote"><p class="current_answers text-center">{{a.answer}}</p></a>
-          {%endfor%}
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div id = "previous_question"></div>
+<div id="previous_question"></div>
 {%endblock current_question%}
 
 

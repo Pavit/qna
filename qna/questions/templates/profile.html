@@ -4,77 +4,62 @@
 
 {% block profile %}
 
-
-
 <!--PROFILE BEGINS HERE-->
 
-<div id="current_question" class="row">
-  <div class="twelve columns">
-    <div class="panel red">
+<div class="row">
+  <div class="large-9 large-centered columns">
+    <div class="panel gray profile">
+      <h1>{{user.first_name}} {{user.last_name}}</h1>
+      <p class="subheader text-right">Member Since {{user.userprofile.created_at}}</p>
+      <p>Age: {{user.userprofile.age}}</p>
       <div class="row">
-        <div class="twelve columns">
-          <h1>{{user.first_name}} {{user.last_name}}</h1>
-        </div>
-      </div>
-      <!-- Stats -->
-        <div class="row">
-          <h3 class="four columns">STATS</h3>
-          <div class="eight columns h3_offset">
-          <p>Member Since: {{user.userprofile.created_at}}</p>
-          <p>Age: {{user.userprofile.age}}</p>
-          <p>Gender: {{user.userprofile.gender}}</p>
-          <p># of Friends: {{user.userprofile.friends.count}}</p>
+        <div class="large-12 columns">
+          <p>Friends: {{user.userprofile.friends.count}}</p>
           <p>Friend List: </p>
           {%for friend in user.userprofile.friends.all %}
           <p>{{friend.first_name}}</p></br>
           {%endfor%}
-          <p>Favorite Subject: {{user.userprofile.toptag}}</p>
-          </div>    
         </div>
+      </div>
+      <p>Favorite Subject: {{user.userprofile.toptag}}</p>
+      <div class="row">
+        <div class="large-12 columns">
+          <p>Grid:</p>
+        </div>
+      </div>
+      <p>Submitter Ranking: {{user.userprofile.submittedresponsesrank}}</p>
+      <p>Respondent Ranking: {{user.answeredresponsesrank}}</p>
       <!-- End Stats -->
       <!-- Questions Submitted -->
-        <div class="row">
-          <div class="four columns">
-            <h3>SUBMITTED</h3>
-          </div>
-          <div class="eight columns h3_offset">
-            <p>{{totalvotes}} people have answered your questions at a rate of {{user.submittedresponserate}} per day.</p>
-            <p>{{user.userprofile.submittedresponsesrank}} users have asked more questions than you.</p>
-            <p class="expanderHead">Questions Submitted ({{user.userprofile.submissions.count}}) <span class="right expanderSign">+</span></p>
-            <div class="expanderContent">
-            <!-- Begin Insert of User-Submitted Questions -->
+      <div class="row">
+        <div class="large-12 columns">
+          <h2>Questions Submitted ({{user.userprofile.submissions.count}})</h2>
+          <p>{{totalvotes}} people have answered your questions at a rate of {{user.submittedresponserate}} per day.</p>
+          <!-- Begin Insert of User-Submitted Questions -->
             {%for question in user.userprofile.submissions.all %}
-            Question:{{question.question}}<br/>
+            {{question.question}}<br/>
             Answers: <br>
             {% for answer in question.answer_set.all %}
-            {{answer}} : {{answer.get_vote_count}} votes <br>
+            {{answer}} : {{answer.get_vote_count}}<br>
             {%endfor%}  
             {%endfor%}
-            <!-- End Insert of User-Submitted Questions -->
-            </div>
-          </div>    
-        </div>
-      <!-- End Questions Submitted -->
-      <!-- Questions Answered -->
-        <div class="row">
-          <div class="four columns">
-            <h3>ANSWERED</h3>
+          <!-- End Insert of User-Submitted Questions -->
           </div>
-          <div class="eight columns h3_offset">
-            <p>You have answered {{user.userprofile.selections.count}} questions at a rate of {{user.answeredresponserate}} per day.</p>
-            <p>{{user.answeredresponsesrank}} users have answered more questions than you.</p>
-            <p class="expanderHead2">Questions Answered ({{user.userprofile.selection.count}}) <span class="right expanderSign">+</span></p>
-            <div class="expanderContent2">
-            <!-- Begin Insert of User-Submitted Answers -->
-			{% for answer in user.userprofile.selection.all %}
-			Answer: {{answer}}<br>
-			Question: {{answer.question}}<br>
-			{%endfor%}
-            <!-- End Insert of User-Submitted Answers -->
-            </div>
-          </div>    
+      </div>
+    <!-- End Questions Submitted -->
+    <!-- Questions Answered -->
+      <div class="row">
+        <div class="large-12 columns">
+          <h2>Questions Answered ({{user.userprofile.selections.count}})</h2>       
+          <p>Rate: {{user.answeredresponserate}} per day.</p>
+          <!-- Begin Insert of User-Submitted Answers -->
+        		{% for answer in user.userprofile.selection.all %}
+        		Question: {{answer.question}}<br>
+            Answer: {{answer}}<br>
+        		{%endfor%}
+          <!-- End Insert of User-Submitted Answers -->
         </div>
-      <!-- End Questions Answered -->
+      </div>
     </div>
   </div>
 </div>

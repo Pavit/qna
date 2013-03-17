@@ -15,14 +15,14 @@
 <body>
 
 <form id = "1">
-  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat1" id="1" initial="initial">
+  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat" id="1" initial="initial">
 <option value="-" selected="selected">--</option>
 <option value="age">Age</option>
 <option value="gender">Gender</option>
 </select></td></tr>
 </form>
 <form id = "2">
-  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat2" id="2">
+  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat" id="2">
     <option value="-" selected="selected">--</option>
 <option value="age">Age</option>
 <option value="gender">Gender</option>
@@ -34,16 +34,18 @@ function loadStat(x) {
   var statitem = x;
   console.log(x.id);
   console.log(x.value);
-  console.log("value of first dropdown");
-  var dropdown1=$('#1 option:selected').val();
   $.ajax({
-    url: '/questions/details/'+{{question.id}}+'/',
-    data: {'stat':x.value, 'formnumber':x.id, 'dropdown1':dropdown1},
-    success: function(data) {
-      console.log(data);
-      draw(data);
-    }
+url: '/questions/details/'+{{question.id}}+'/',
+data: {'stat':x.value, 'formnumber':x.id},
+success: function(data) {
+ console.log(data);
+draw(data);
+
+}
+
   });
+
+
 }
 </script>
 
@@ -93,33 +95,20 @@ var arc = d3.svg.arc()
 
 var paths = d3.selectAll("path").attr("opacity", 1);
   $("path").tipsy({ gravity: 's'});
+  paths.on("mouseover", function(d) {
+    paths.filter(function(d2) { if (!d.parent) return false; return d != d2 })
+      .attr("opacity", 0.3);
+      if (d.size == undefined) {
+$("#tooltip").html("<B>QUESTION:</b>"+d.name);
+      }
+      else{
+         $("#tooltip").html(d.name + ":"+ d.size);
+      };
+      $("#tooltip").show();
+         })
+    .on("mouseout", function() { paths.attr("opacity", 1); $("#tooltip").hide(); })
 
-
-paths.on("mouseover", function(d) {
-
-  paths.filter(function(d2) {
-    while (d2 == d.parent.parent) {
-      return true;
-    }
-  }).transition().duration(100).attr("opacity", 0.2);
-  paths.filter(function(d2) {
-    while (d2 == d.parent) {
-      return true;
-    }
-  }).transition().duration(100).attr("opacity", 0.2);
-
-  d3.select(this).transition().duration(100).attr("opacity", 0.1);
-  if (d.size == undefined) {
-    $("#tooltip").html("<B>QUESTION:</b>" + d.name);
-  } else {
-    $("#tooltip").html(d.name + ":" + d.size);
-  };
-  $("#tooltip").show();
-})
-  .on("mouseout", function() {
-  paths.attr("opacity", 1);
-  $("#tooltip").hide();
-})
+/*});*/
   
 
 
