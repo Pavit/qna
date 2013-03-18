@@ -1,25 +1,20 @@
 {% load staticfiles %}
-<div id = "previous_question">
-<div id="previous_question" class="row">
-  <div class="twelve columns">
-    <div class="panel gray">
+<div class="row">
+  <div class="large-9 large-centered columns">
+    <div class="panel gray previous">
       <div class="row">
-        <div class="twelve columns">
-          <p class="previous_question text-center">{{previous_question.question}}</p>
+        <div class="large-12 columns">
+          <h1 class="text-center">{{previous_question.question}}</h1>
         </div>
       </div>
       <div class="row">
-          <div class="eight columns centered">
-          <div align = "center" id="stat_chart">
-          </div>
-      </div>
+        <div class="large-12 columns">
+        <div id="stat_chart"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-
-
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -34,70 +29,75 @@ $(function() {
     chart: {
       renderTo: 'stat_chart',
       type: 'bar',
-      backgroundColor: 'rgba(255, 255, 255, 0.0)',
-      height:150
+      backgroundColor: null,
+      height:75,
+      spacingBottom: -80,
+      spacingLeft: 0,
+      spacingRight: 0,
+      spacingTop: -150
     },
-    colors: ['#f15c22', '#eb4f68', '#eb62ca', '#9567eb', '#73a1d5'],
-    legend: {
-      align: 'center',
-      verticalAlign: 'bottom',
-      borderWidth: 0,
-      itemStyle: {
-        color: 'black',
-        fontFamily: 'Bree Serif'
-      }
-    },
+    legend: {enabled: false},
+    colors: ['#ff7f66', '#fff6e5', '#7ecefd', '#2185c5', '#3e454c'],
     credits: false,
-    title: {text: null},
+    title: null,
+    //{
+      //text: ['{{previous_question.question}}'],
+      //style: {
+        //fontFamily: 'Georgia',
+        //fontSize: '24px',
+      //},
+    //},
     xAxis: {
       labels: {enabled: false},
-      gridLineWidth: 0
+      gridLineWidth: 0,
+      groupPadding: 0,
+      pointPadding: 0,
+      lineWidth: 0,
+      tickWidth: 0,
+      tickLength: 0
     },
     yAxis: {
       title: {text: null},
       labels: {enabled: false},
-      gridLineWidth: 0
+      gridLineWidth: 0,
+      groupPadding: 0,
+      pointPadding: 0,
+      lineWidth: 0,
+      tickWidth: 0,
+      tickLength: 0,
+      reversed: true,
+      opposite: true
     },
     tooltip: {
       formatter: function() {
         return '' + this.series.name + ': ' + this.y + ' (' + Math.round(this.percentage) + '%)';
-      }
+      },
+      positioner: function () {
+              return { x: 0, y: 25 };
+            },
+      backgroundColor: null,
+      borderRadius: 0,
+      borderWidth: 0,
+      shadow: false,
+      useHTML: true
     },
     plotOptions: {
       series: {
         stacking: 'percent',
-        colorByPoint: false,
-        pointWidth:50,
-        dataLabels: {
-          enabled: false,
-          align: 'center',
-          style: {
-            color: 'black',
-            fontFamily: 'Bree Serif',
-          },
-          formatter: function() {
-            if (this.y == 0) {
-              return '';
-            } else {
-              if (this.y == 1) {
-                return this.y + ' vote (' + Highcharts.numberFormat(this.percentage, 2, '.') + '%)';
-              } else {
-                return this.y + ' votes (' + Highcharts.numberFormat(this.percentage, 2, '.') + '%)';
-              }
-            }
-          }
-        }
+        borderWidth: 0,
+        pointWidth: 25,
+        animation: {duration: 500},
       }
     },
-      series: [
-        {% for answer in previous_question.answer_set.all %}
-          {
-            name: '{{answer}}',
-            data: [{{answer.votes}}]
-          }
-          {% if not forloop.last %},{%else%}{%endif%}
-        {%endfor%}
-      ]
+    series: [
+      {% for answer in previous_question.answer_set.all %}
+        {
+          name: '{{answer}}',
+          data: [{{answer.votes}}]
+        }
+        {% if not forloop.last %},{%else%}{%endif%}
+      {%endfor%}
+    ]
   });
 });
 </script>

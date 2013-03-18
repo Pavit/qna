@@ -16,24 +16,23 @@
 <body>
 
 <form id = "1">
-  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat1" id="1" initial="initial">
+  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat" id="1" initial="initial">
 <option value="-" selected="selected">--</option>
 <option value="agegroup">Age</option>
 <option value="gender">Gender</option>
 </select></td></tr>
 </form>
 <form id = "2">
-  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat2" id="2">
+  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat" id="2">
     <option value="-" selected="selected">--</option>
 <option value="agegroup">Age</option>
 <option value="gender">Gender</option>
 </select></td></tr>
 </form>
 
+
  <div id="chart1"></div>
  <div id = "tooltip"></div>
-
-
 
 
 
@@ -44,8 +43,6 @@
 
   <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
     <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
-
- <div id="chart1"></div>
 
     <script type="text/javascript">
         var chart1 = document.getElementById("chart1");
