@@ -44,6 +44,7 @@ class UserProfile(models.Model):
 	work_location_name = models.CharField(max_length=200, blank=True, null=True)
 	work_employer_id = models.CharField(max_length=200, blank=True, null=True)
 	work_employer_name = models.CharField(max_length=200, blank=True, null=True)
+	# age_group = models.CharField(max_length=200, blank=True, null=True)
 	email = models.EmailField(blank=True, null=True)
 	updated_time = models.DateTimeField(blank=True, null=True)
 	birthday = models.DateTimeField(blank=True, null=True)
@@ -51,6 +52,7 @@ class UserProfile(models.Model):
 	educations = models.ManyToManyField(Education)
 	friends = models.ManyToManyField('self')
 	age = models.IntegerField(blank=True, null=True)
+	agegroup = models.CharField(max_length=200, blank=True, null=True)
 	
 	def populate_graph_info(self, request):
 		self.fb_access_token = request.user.social_auth.get(provider='facebook').extra_data["access_token"]

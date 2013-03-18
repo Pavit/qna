@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
-from django.db.models import Q
+from django.db.models import Q, Count
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -37,138 +37,41 @@ def previous_question(request, previous_question_id):
     previous_question = get_object_or_404(Question, pk=previous_question_id)
     return render_to_response("previous_question.html", {"previous_question":previous_question})
 
+
+
 def question_details(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    resp_dict=dict()
+    resp_dict = dict()
     resp_dict["name"] = question.question
-    resp_dict["children"]=[]
+    resp_dict["children"] = []
+    for a in question.answer_set.all():
+        resp_dict["children"].append({"name":a.answer, "size":a.votes })
     if request.is_ajax():
-        print request.GET.get('formnumber')
-        if request.GET.get('formnumber') == '1':
-            print "ok"
-            selected_stat = request.GET.get('stat')
-            print selected_stat
-            if selected_stat == "gender":
-                print "ok"
-                for answer in question.answer_set.all():
-                    resp_dict["children"].append(
-                                        {"name": answer.answer,
-                                        "size": answer.votes,
-                                        "children": [
-                                            {"name": "males", "size": answer.selected_by.filter(gender="M").count()}, 
-                                            {"name": "females", "size": answer.selected_by.filter(gender="F").count()}
-                                            ]
-                                        })
-                print resp_dict
-            if selected_stat == "age":
-                for answer in question.answer_set.all():
-                    resp_dict["children"].append( {"name": answer.answer,
-                                                    "size": answer.votes,
-                                                    "children": [
-                                                        {"name":"< 15", "size": answer.selected_by.filter(age__lt=16).count() },
-                                                        {"name": "16 - 25", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).count()},
-                                                        {"name": "26 - 35", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).count()},
-                                                        {"name": "36+", "size": answer.selected_by.filter(age__gt=35).count()}
-                                                        ]
-                                                    })
-        else:
-            selected_stat = request.GET.get('stat')
-            if request.GET.get('dropdown1') == 'gender':
-                if selected_stat == "age":
-                    print "ok"
-                    for answer in question.answer_set.all():
-                        resp_dict["children"].append( {"name": answer.answer,
-                                                    "size": answer.votes,
-                                                    "children": [
-                                                    { 
-                                                    "name": "males",
-                                                    "size": answer.selected_by.filter(gender="M").count(),
-                                                    "children":[
-                                                        {"name":"< 15", "size": answer.selected_by.filter(gender="M").filter(age__lt=16).count() },
-                                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="M").filter(age__gte=16).filter(age__lte=25).count()},
-                                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="M").filter(age__gt=26).filter(age__lte=35).count()},
-                                                        {"name": "36+", "size": answer.selected_by.filter(gender="M").filter(age__gt=35).count()}
-                                                        ]
-                                                    }, 
-                                                    {
-                                                    "name": "females",
-                                                    "size": answer.selected_by.filter(gender="F").count(),
-                                                    "children": [
-                                                        {"name":"< 15", "size": answer.selected_by.filter(gender="F").filter(age__lt=16).count() },
-                                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="F").filter(age__gte=16).filter(age__lte=25).count()},
-                                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="F").filter(age__gt=26).filter(age__lte=35).count()},
-                                                        {"name": "36+", "size": answer.selected_by.filter(gender="F").filter(age__gt=35).count()}
-                                                        ]
-                                                    }]
-                                                    })
-            if request.GET.get('dropdown1') == 'age':
-                if selected_stat == "gender":
-                    print "ok"
-                    for answer in question.answer_set.all():
-                            resp_dict["children"].append( {"name": answer.answer,
-                                                            "size": answer.votes,
-                                                            "children": [
-                                                                {"name":"< 15", "size": answer.selected_by.filter(age__lt=16).count(),
-                                                                      "children": [
-                                            {"name": "males", "size": answer.selected_by.filter(age__lt=16).filter(gender="M").count()}, 
-                                            {"name": "females", "size": answer.selected_by.filter(age__lt=16).filter(gender="F").count()}
-                                            ]},
-                                                                {"name": "16 - 25", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).count(),
-                                                                   "children": [
-                                            {"name": "males", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).filter(gender="M").count()}, 
-                                            {"name": "females", "size": answer.selected_by.filter(age__gte=16).filter(age__lte=25).filter(gender="F").count()}
-                                            ]},
-                                                                {"name": "26 - 35", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).count(),
-                                                                   "children": [
-                                            {"name": "males", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).filter(gender="M").count()}, 
-                                            {"name": "females", "size": answer.selected_by.filter(age__gt=26).filter(age__lte=35).filter(gender="F").count()}
-                                            ]},
-                                                                {"name": "36+", "size": answer.selected_by.filter(age__gt=35).count(),
-                                                                   "children": [
-                                            {"name": "males", "size": answer.selected_by.filter(age__gt=35).filter(gender="M").count()}, 
-                                            {"name": "females", "size": answer.selected_by.filter(age__gt=35).filter(gender="F").count()}
-                                            ]}
-                                                                ]
-                                                            })
+        dropdownlist = request.GET.getlist('dropdowns[]')
+        dropdowns=[]
+        for x in dropdownlist:
+            if x != '-' and x not in dropdowns:
+                dropdowns.append(x)
+        if len(dropdowns)==0:
+            return HttpResponse(simplejson.dumps(resp_dict), mimetype="application/json")
+        for child in resp_dict["children"]:
+            answer = Answer.objects.get(answer=child["name"])
+            layer = answer.selected_by.values(dropdowns[0]).annotate(size=Count(dropdowns[0]))
+            for item in layer:
+                item["name"] = item[dropdowns[0]]
+                if len(dropdowns) > 1:
+                    filter = dropdowns[0]
+                    layer2 = layer.filter(**{filter:item["name"]}).values(dropdowns[1]).annotate(size=Count(dropdowns[1]))
+                    for item2 in layer2:
+                        item2["name"] = item2[dropdowns[1]]
+                    item["children"] = list(layer2)
+            child["children"] = list(layer)
         json = simplejson.dumps(resp_dict)
-        stat_form = StatForm()
-        print json
         return HttpResponse(json, mimetype="application/json")
-        # return render_to_response("question_details.html", {"question":question, "json":json, "stat_form":stat_form})
-    question = get_object_or_404(Question, pk=question_id)
-    resp_dict=dict()
-    resp_dict["name"] = question.question
-    resp_dict["children"]=[]
-    for answer in question.answer_set.all():
-        resp_dict["children"].append( {"name": answer.answer,
-                                    "size": answer.votes,
-                                    "children": [
-                                    { 
-                                    "name": "males",
-                                    "size": answer.selected_by.filter(gender="M").count(),
-                                    "children":[
-                                        {"name":"< 15", "size": answer.selected_by.filter(gender="M").filter(age__lt=16).count() },
-                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="M").filter(age__gte=16).filter(age__lte=25).count()},
-                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="M").filter(age__gt=26).filter(age__lte=35).count()},
-                                        {"name": "36+", "size": answer.selected_by.filter(gender="M").filter(age__gt=35).count()}
-                                        ]
-                                    }, 
-                                    {
-                                    "name": "females",
-                                    "size": answer.selected_by.filter(gender="F").count(),
-                                    "children": [
-                                        {"name":"< 15", "size": answer.selected_by.filter(gender="F").filter(age__lt=16).count() },
-                                        {"name": "16 - 25", "size": answer.selected_by.filter(gender="F").filter(age__gte=16).filter(age__lte=25).count()},
-                                        {"name": "26 - 35", "size": answer.selected_by.filter(gender="F").filter(age__gt=26).filter(age__lte=35).count()},
-                                        {"name": "36+", "size": answer.selected_by.filter(gender="F").filter(age__gt=35).count()}
-                                        ]
-                                    }]
-                                    })
-    json = simplejson.dumps(resp_dict).replace("'", r"\'")
-    # return HttpResponse(json)
+    initialjson = simplejson.dumps(resp_dict).replace("'", r"\'")
     stat_form1 = StatForm(initial = {'stat':'--'})
     stat_form2 = StatForm(initial = {'stat':'--'})
-    return render_to_response("question_details.html", {"question":question, "json":json, "stat_form1":stat_form1, "stat_form2":stat_form2})
+    return render_to_response("question_details.html", {"question":question, "initialjson":initialjson, "stat_form1":stat_form1, "stat_form2":stat_form2})
     
 
 def vote(request, answer_id):

@@ -3,6 +3,7 @@
 <head>
   {% load staticfiles %}
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="{% static 'javascripts/sunburst.js' %}"></script>
 <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script> -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
@@ -17,132 +18,25 @@
 <form id = "1">
   <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat1" id="1" initial="initial">
 <option value="-" selected="selected">--</option>
-<option value="age">Age</option>
+<option value="agegroup">Age</option>
 <option value="gender">Gender</option>
 </select></td></tr>
 </form>
 <form id = "2">
   <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat2" id="2">
     <option value="-" selected="selected">--</option>
-<option value="age">Age</option>
+<option value="agegroup">Age</option>
 <option value="gender">Gender</option>
 </select></td></tr>
 </form>
 
-<script type = "text/javascript">
-function loadStat(x) {
-  var statitem = x;
-  console.log(x.id);
-  console.log(x.value);
-  console.log("value of first dropdown");
-  var dropdown1=$('#1 option:selected').val();
-  $.ajax({
-    url: '/questions/details/'+{{question.id}}+'/',
-    data: {'stat':x.value, 'formnumber':x.id, 'dropdown1':dropdown1},
-    success: function(data) {
-      console.log(data);
-      draw(data);
-    }
-  });
-}
-</script>
-
-
-<div id = "chart" width: "500"></div><br/>
+ <div id="chart1"></div>
  <div id = "tooltip"></div>
 
 
-<script>
-
-function draw(data) {
-
-$("#chart").empty();
-var width = 400,
-    height = 400,
-    radius = Math.min(width, height) / 2,
-    color = d3.scale.category20c();
-
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
-
-var partition = d3.layout.partition()
-    .sort(null)
-    .size([2 * Math.PI, radius * radius])
-    .value(function(d) { return d.size; });
-
-var arc = d3.svg.arc()
-    .startAngle(function(d) { return d.x; })
-    .endAngle(function(d) { return d.x + d.dx; })
-    .innerRadius(function(d) { return Math.sqrt(d.y); })
-    .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-
-/*d3.json("{{ json|safe }}", function(root) {*/
-  root = data;
-  var path = svg.datum(root).selectAll("path")
-      .data(partition.nodes)
-    .enter().append("path")
-      .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-      .attr("d", arc)
-      .style("stroke", "#fff")
-      .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
-      .style("fill-rule", "evenodd")
-      .each(stash);
-
-var paths = d3.selectAll("path").attr("opacity", 1);
-  $("path").tipsy({ gravity: 's'});
 
 
-paths.on("mouseover", function(d) {
 
-  paths.filter(function(d2) {
-    while (d2 == d.parent.parent) {
-      return true;
-    }
-  }).transition().duration(100).attr("opacity", 0.2);
-  paths.filter(function(d2) {
-    while (d2 == d.parent) {
-      return true;
-    }
-  }).transition().duration(100).attr("opacity", 0.2);
-
-  d3.select(this).transition().duration(100).attr("opacity", 0.1);
-  if (d.size == undefined) {
-    $("#tooltip").html("<B>QUESTION:</b>" + d.name);
-  } else {
-    $("#tooltip").html(d.name + ":" + d.size);
-  };
-  $("#tooltip").show();
-})
-  .on("mouseout", function() {
-  paths.attr("opacity", 1);
-  $("#tooltip").hide();
-})
-  
-
-
-// Stash the old values for transition.
-function stash(d) {
-  d.x0 = d.x;
-  d.dx0 = d.dx;
-}
-
-// Interpolate the arcs in data space.
-function arcTween(a) {
-  var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
-  return function(t) {
-    var b = i(t);
-    a.x0 = b.x;
-    a.dx0 = b.dx;
-    return arc(b);
-  };
-}
-
-d3.select(self.frameElement).style("height", height + "px");
-}
-</script>
   <script src="{% static 'javascripts/modernizr.foundation.js' %}"></script>
   <script src="{% static 'javascripts/jquery.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
@@ -151,5 +45,41 @@ d3.select(self.frameElement).style("height", height + "px");
   <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
     <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
 
+ <div id="chart1"></div>
+
+    <script type="text/javascript">
+        var chart1 = document.getElementById("chart1");
+        d3.sunburst(chart1, {
+          'radius': 200,
+          'width' : 500,
+          'height' : 500,
+          'padding': 1,
+          'dataUrl' : null,
+          'data': JSON.parse('{{initialjson|safe}}'),
+          'dataType' : 'json',
+          'chartType' : 'bubble',
+          'dataStructure' : {
+            'name' : 'name',
+            'children' : 'children',
+            'value' : 'size'
+          }
+        });
+
+
+      </script>
+      <script type = "text/javascript">
+function loadStat(x) {
+  var dropdown1=$('#1 option:selected').val();
+  var dropdown2=$('#2 option:selected').val();
+  $.ajax({
+    url: '/questions/details/'+{{question.id}}+'/',
+    data: {'stat':x.value, 'formnumber':x.id, 'dropdowns':[dropdown1, dropdown2]},
+    success: function(data) {
+      d3.sunburst(chart1, "updateData", data);
+      /*draw(data);*/
+    }
+  });
+}
+</script>
 </body>
 </html>
