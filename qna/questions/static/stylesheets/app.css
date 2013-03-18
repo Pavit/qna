@@ -1,122 +1,116 @@
-/* Artfully masterminded by ZURB  */
+body 	{
+		background-image:url('../images/background.png');
+		padding-top: 0.5em;
+		}
 
-/* -------------------------------------------------- 
-   Table of Contents
------------------------------------------------------
-:: Shared Styles
-:: Page Name 1
-:: Page Name 2
-*/
+h1, h2, h3, h4, h5, h6 {
+  		font-family: 'Georgia', 'Times New Roman', 'Times', serif;
+  		font-weight: normal;
+  		font-style: normal;
+		text-rendering: optimizeLegibility;
+		margin-top: 0;
+		margin-bottom: 0;
+		line-height: 1.2125em; }
+			h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+				font-size: 60%;
+				color: #bdbdbd;
+				line-height: 0; }
+
+.current h1 {font-size: 1.6875em;}
+.previous h1 {font-size: 1.375em;}
+
+.profile h1	{font-size: 3em; margin-bottom: 0;}
+.profile h2	{font-size: 2.25em; margin-bottom: 0;}
+.profile p	{
+	font-size:1.375em;
+	line-height: 1.375em;
+	margin-bottom: .125em;
+		}
+.profile .subheader	{font-size:1.375em; line-height: 1em; margin-bottom: 1em;}
+
+.question h1	{font-size: 2.25em; margin-bottom: 0;}
+.question h2	{font-size: 2em; margin-bottom: 0;}
+.question p	{
+	font-size:1.375em;
+	line-height: 1.375em;
+	margin-bottom: .125em;
+		}
+.question .subheader	{font-size:1.125em; line-height: 1em; padding-left: 35%;}
+.question .subheader2	{font-size:.875em; line-height: 1em; padding-left: 35%}
 
 
-/* -----------------------------------------
-   Layout Styles
------------------------------------------ */
 
-body 	{background-image:url('../images/qna/pattern.png'); font-family: 'Georgia', serif;}
+.red,
+.blue,	
+.gray	{
+		overflow: auto;
+		}
 
 .red	{
 		background-color: #f15c22;
 		color: #ffffff;
-		overflow: auto;
-}
+		}
+
+.red a,
+.blue a {
+		color: #ffffff;
+		}
+
+.red a:hover,
+.blue a:hover {
+		color: #c4c4c4;
+		}
 
 .blue	{
 		background-color: #73a1d5;
 		color: #ffffff;
-		overflow: auto;
-}
+		}
 
 .gray	{
-		background-color: #cccbc7;
-		color: #707070;
-		overflow: auto;
-}
+		background-color: #b6b7ba;
+		color: #444444;
+		}
+
+.darkgray
+		{
+		background-color: #494949;
+		}
+
+.empty	{
+		background-color: inherit;
+		color: inherit;
+		padding: 0;
+		}
+
+.current,
+.previous	{
+		padding: 2em;
+		}
+
+.profile,
+.question	{
+		padding: 4em 10% 4em 10%;
+		}
+
+.singular	{
+
+		}
 
 .current_answers	{
-		font-family: 'Bree Serif', 'Georgia', serif;
-		font-size: 18px;
-		line-height: 1;
-		margin-top: 20px;
-}
+		font-size: 1.375em;
+		line-height: 2em; 
+		margin-bottom: 0;
+		}
 
-.current_question,
+.current_question	{
+		font-family: inherit;
+		font-size: 1.5em;
+		}
+
 .previous_question	{
-		font-family: 'Bree Serif', 'Georgia', serif;
-		font-size: 24px;
-		line-height: 1;
-		margin-top: 18px;
-}
+		font-family: inherit;
+		font-size: 1.125em;
+		}
 
-.followup	{
-		font-size: 14px;
-		font-style: italic;}
-
-.panel	{margin:0 0 10px 0;}
-
-/* -----------------------------------------
-   Text Styles
------------------------------------------ */
-
-a	{color: inherit;}
-
-a:hover	{color: #cccbc7;}
-
-h1, h2, h3, h4, h5, h6 {font-family: 'Bree Serif', 'Georgia', serif; color: inherit;}
-
-.followup	{
-		font-size: 14px;
-		font-style: italic;}
-
-/* -----------------------------------------
-   Header
------------------------------------------ */
-
-.top-bar	{
-		background-color: #494949;
-		margin: 0 0 10px 0;
-}
-
-/* -----------------------------------------
-   Other
------------------------------------------ */
-
-#visualization	{
-		height: 300px;
-		width: 500px;
-}
-
-.button{
-		width:auto;
-		background:#73a1d5;
-		border:1px solid #3a7ac1;
-			-webkit-box-shadow:0 rgba(255,255,255,0.5) inset;
-			-moz-box-shadow:0 rgba(255,255,255,0.5) inset;
-		box-shadow:0 rgba(255,255,255,0.5) inset;
-		color:#fff;
-		cursor:pointer;
-		display:inline-block;
-		font-family:inherit;
-		font-size:14px;
-		font-weight:bold;
-		line-height:1;
-		margin:0;
-		padding:8px 15px 10px;
-		position:relative;
-		text-align:center;
-		text-decoration:none;
-		transition:background-color 0.15s ease-in-out;
-			-webkit-transition:background-color 0.15s ease-in-out;
-			-moz-transition:background-color 0.15s ease-in-out;
-			-o-transition:background-color 0.15s ease-in-out;
-}
-
-.h1_offset	{margin-top: 17px;}
-
-.top-bar ul>li.search form input[type=search]{margin-bottom:4px;}
-
-.top-bar ul>li.search:hover,.top-bar ul>li.search:focus{background:#494949}
-
-.top-bar>ul .name h1 a{font-weight:normal;padding:0 22.5px;font-size:20px !important}
-
-.top-bar ul>li.toggle-topbar{cursor:pointer;display:inlineblock;height:45px;position:absolute;right:0;top:0;width:50%}
+.panel,
+.top-bar	{margin:0 0 0.5em 0; border: 0;}
