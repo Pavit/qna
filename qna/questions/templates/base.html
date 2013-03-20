@@ -17,9 +17,10 @@
   <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/foundation.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/app.css' %}">
+  <link rel="stylesheet" href="{% static 'stylesheets/tipsy.css' %}">
 {% endblock stylesheets %}
 
-  <script src="js/vendor/custom.modernizr.js"></script>
+  
 </head>
 {% endblock head %}
 
@@ -60,6 +61,8 @@
 {% block submit_question %}{% endblock submit_question %}
 
 {% block profile %}{% endblock profile %}
+
+{% block question_details %}{% endblock question_details %}
 
 {% block current_question %}
 <div id="current_question"></div>
@@ -112,7 +115,11 @@
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
 
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="{% static 'javascripts/sunburst.js' %}"></script>
+  
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+  <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
 
     <script>
     $(document).foundation().foundation('joyride', 'start');
