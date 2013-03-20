@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block question_details %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,24 +17,63 @@
 </head>
 <body>
 
-<form id = "1">
-  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat" id="1" initial="initial">
-<option value="-" selected="selected">--</option>
-<option value="agegroup">Age</option>
-<option value="gender">Gender</option>
-</select></td></tr>
-</form>
-<form id = "2">
-  <tr><th><label for="id_stat">Stat:</label></th><td><select onchange="loadStat(this)" name="stat" id="2">
-    <option value="-" selected="selected">--</option>
-<option value="agegroup">Age</option>
-<option value="gender">Gender</option>
-</select></td></tr>
-</form>
+<div class="row">
+  <div class="large-9 large-centered columns">
+    <div class="panel gray question">
+      <div class="row">
+        <div class="large-12 columns">
+          <div class="panel empty">
+          <h1>Which do you like better, dogs or cats?</h1>
+          <p class="subheader">Submitted on December 4, 2012, 8:06 p.m.</p>
+          <p class="subheader2">Last Answered on March 4, 2013, 4:06 p.m.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-4 columns">
+          <div class="panel empty">
+           <!-- INSERT DROPDOWNS -->
+          <form id="1" class="custom">
+              <select onchange="loadStat(this)" name="stat" id="1" initial="initial">
+              <option value="-" selected="selected">STAT</option>
+              <option value="agegroup">Age</option>
+              <option value="gender">Gender</option>
+              </select>
+          </form>
+          <form id ="2" class="custom">
+              <select onchange="loadStat(this)" name="stat" id="2">
+              <option value="-" selected="selected">STAT</option>
+              <option value="agegroup">Age</option>
+              <option value="gender">Gender</option>
+              </select>
+          </form>
+          <!-- INSERT SLIDER -->
+          </div>
+        </div>
+        <div class="large-8 columns">
+          <div class="panel empty">
+            <div id="chart1"></div>
+            <div id="tooltip"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-6 columns">
+          <div class="panel empty">
+          <!--INSERT STATS-->
+          </div>
+        </div>
+        <div class="large-6 columns">
+          <div class="panel empty">
+          <!--INSERT STATS-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
- <div id="chart1"></div>
- <div id = "tooltip"></div>
 
 
 
@@ -48,8 +89,8 @@
         var chart1 = document.getElementById("chart1");
         d3.sunburst(chart1, {
           'radius': 200,
-          'width' : 500,
-          'height' : 500,
+          'width' : 400,
+          'height' : 400,
           'padding': 1,
           'dataUrl' : null,
           'data': JSON.parse('{{initialjson|safe}}'),
@@ -80,3 +121,4 @@ function loadStat(x) {
 </script>
 </body>
 </html>
+{% endblock question_details %}
