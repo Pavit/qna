@@ -4,7 +4,7 @@
     <div class="panel gray previous">
       <div class="row">
         <div class="large-12 columns">
-          <h1 class="text-center">{{previous_question.question}}</h1>
+          <h1 class="text-center"><a href="{%url question_details previous_question.id %}">{{previous_question.question}}</a></h1>
         </div>
       </div>
       <div class="row">
@@ -93,7 +93,7 @@ $(function() {
       {% for answer in previous_question.answer_set.all %}
         {
           name: '{{answer}}',
-          data: [{{answer.votes}}]
+          data: [{{answer.votes.count}}]
         }
         {% if not forloop.last %},{%else%}{%endif%}
       {%endfor%}

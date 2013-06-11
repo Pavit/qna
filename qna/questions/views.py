@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.forms.formsets import formset_factory, BaseFormSet
 from django.core.context_processors import csrf
-from questions.models import Question, Answer
+from questions.models import Question, Answer, Vote
 from questions.forms import QuestionForm, AnswerForm, StatForm
 from questions.utils import *
 
@@ -45,7 +45,7 @@ def question_details(request, question_id):
     resp_dict["name"] = question.question
     resp_dict["children"] = []
     for a in question.answer_set.all():
-        resp_dict["children"].append({"name":a.answer, "size":a.votes })
+        resp_dict["children"].append({"name":a.answer, "size":a.votes.count() })
     if request.is_ajax():
         dropdownlist = request.GET.getlist('dropdowns[]')
         dropdowns=[]
@@ -72,22 +72,23 @@ def question_details(request, question_id):
     stat_form1 = StatForm(initial = {'stat':'--'})
     stat_form2 = StatForm(initial = {'stat':'--'})
     return render_to_response("question_details.html", {"question":question, "initialjson":initialjson, "stat_form1":stat_form1, "stat_form2":stat_form2})
-    
+
 
 def vote(request, answer_id):
     selected_answer = Answer.objects.get(pk=answer_id)
-    selected_answer.votes += 1
     previous_question = selected_answer.question
     if request.user.is_authenticated():
         userprofile = request.user.userprofile
-        previous_question.answered_by.add(userprofile)
         selected_answer.selected_by.add(userprofile)
-        selected_answer.save()
-        previous_question.save()
+        previous_question.answered_by.add(userprofile)
         userprofile.save()
-        print selected_answer.selected_by.all()
-        print userprofile.answered.all()
-        print userprofile.selections.all()
+    else:
+        userprofile = None
+    vote = Vote.objects.create(answer_id=selected_answer.id)
+    vote.voter = userprofile
+    vote.save()
+    selected_answer.save()
+    previous_question.save()
     current_question = Question.objects.filter(~Q(id=previous_question.id)).order_by('?')[:1].get()
     data = {
         "previous_question_pk": previous_question.id,
@@ -119,7 +120,7 @@ def submit(request):
             if len(blanks) >= 4:
                 raise forms.ValidationError("Must have at least two answer choices")
 
-    
+
     AnswerFormSet = formset_factory(AnswerForm, max_num=5, extra = 5, formset = BaseAnswerFormSet)
     user = request.user.userprofile
     if request.method == 'POST': # If the form has been submitted...
