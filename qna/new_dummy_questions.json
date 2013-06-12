@@ -515,7 +515,6 @@
     {
         "pk": 30,
         "model": "questions.question",
-        "modified": "2013-06-10",
         "fields": {
             "submitter": null,
             "answered_by": [
@@ -1022,7 +1021,8 @@
             ],
             "question": "Would you have the balls to punch a shark in the face?",
             "slug": "would-you-have-the-balls-to-punch-a-shark-in-the-face",
-            "created": "2013-06-10"
+            "created": "2013-06-10",
+            "modified": "2013-06-10"
         }
     },
     {

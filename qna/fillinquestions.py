@@ -6,7 +6,7 @@ import csv
 from questions.models import *
 
 newlist=[]
-data=csv.reader(open('qna_question_data.csv'))
+data=csv.reader(open('qna/qna_question_data.csv'))
 for row in data:
   newlist.append(row)
 for x in newlist:
