@@ -1,5 +1,43 @@
 [
     {
+        "pk": 1,
+        "model": "core.education",
+        "fields": {
+            "school_type": "High School",
+            "year": "2002",
+            "school_id": "107945585905288",
+            "school_name": "South Brunswick High School"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "core.education",
+        "fields": {
+            "school_type": "College",
+            "year": "2006",
+            "school_id": "228863897157991",
+            "school_name": "Rutgers University - College Avenue Campus"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "core.concentration",
+        "fields": {
+            "education": 2,
+            "conc_name": "Mathematics",
+            "conc_id": "103966102974293"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "core.concentration",
+        "fields": {
+            "education": 2,
+            "conc_name": "Economics",
+            "conc_id": "108180979203954"
+        }
+    },
+    {
         "pk": 4,
         "model": "core.userprofile",
         "fields": {
@@ -18997,6 +19035,47 @@
             "work_location_name": null,
             "gender": "F",
             "age": 23
+        }
+    },
+    {
+        "pk": 502,
+        "model": "core.userprofile",
+        "fields": {
+            "last_name": null,
+            "relationship_status": null,
+            "locale": null,
+            "hometown": null,
+            "fb_id": null,
+            "timezone": null,
+            "work_position_name": null,
+            "first_name": null,
+            "work_employer_id": null,
+            "fb_access_token": null,
+            "political": null,
+            "religion": null,
+            "last_login": null,
+            "location": null,
+            "email": null,
+            "username": null,
+            "work_start_date": null,
+            "educations": [
+                1,
+                2
+            ],
+            "birthday": null,
+            "user": 2,
+            "work_employer_name": null,
+            "region": null,
+            "friends": [],
+            "work_position_id": null,
+            "agegroup": null,
+            "name": null,
+            "work_location_id": null,
+            "created_at": "2013-06-11T03:22:42.296Z",
+            "updated_time": null,
+            "work_location_name": null,
+            "gender": null,
+            "age": null
         }
     }
 ]
