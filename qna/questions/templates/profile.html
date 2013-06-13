@@ -34,14 +34,14 @@
       <div class="row">
         <div class="large-12 columns">
           <h2>Questions Submitted ({{user.userprofile.submissions.count}})</h2>
-          <p>{{totalvotes}} people have answered your questions at a rate of {{user.submittedresponserate}} per day.</p>
+          <p>{{user.userprofile.total_votes}} people have answered your questions at a rate of {{user.submittedresponserate}} per day.</p>
           <!-- Begin Insert of User-Submitted Questions -->
             {%for question in user.userprofile.submissions.all %}
             {{question.question}}<br/>
             Answers: <br>
             {% for answer in question.answer_set.all %}
-            {{answer}} : {{answer.get_vote_count}}<br>
-            {%endfor%}  
+            {{answer}} : {{answer.votes.count}}<br>
+            {%endfor%}
             {%endfor%}
           <!-- End Insert of User-Submitted Questions -->
           </div>
@@ -50,7 +50,7 @@
     <!-- Questions Answered -->
       <div class="row">
         <div class="large-12 columns">
-          <h2>Questions Answered ({{user.userprofile.selections.count}})</h2>       
+          <h2>Questions Answered ({{user.userprofile.selections.count}})</h2>
           <p>Rate: {{user.answeredresponserate}} per day.</p>
           <!-- Begin Insert of User-Submitted Answers -->
         		{% for answer in user.userprofile.selection.all %}

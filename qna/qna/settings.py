@@ -10,7 +10,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-if bool(os.environ.get('LOCAL_DEV', False)):
+if not os.environ.get("HEROKU_DEV", False):  ### LOCAL DATABASE SETTINGS / FACEBOOK INFO
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -24,6 +24,7 @@ if bool(os.environ.get('LOCAL_DEV', False)):
     FACEBOOK_APP_ID = '343120432448964'
     FACEBOOK_API_SECRET  = 'f43073165e02ef728f31a315cd9fa6de'
 else:
+    # HEROKU DATABASE SETTINGS / FACEBOOK INFO
     DATABASES = {'default': dj_database_url.config()}
     FACEBOOK_API_SECRET  = "924a5a01f43de7d991cd1c17edf4469b"
     FACEBOOK_APP_ID = "406831919365032"

@@ -59,6 +59,13 @@ class UserProfile(models.Model):
     #placeholder for region
     region = models.CharField(max_length=200, blank=True, null=True)
 
+    def _get_total_votes(self):
+    	total=0
+    	for q in user.submissions.all():
+    		total+=q.total_vote.count
+    	return total
+    total_votes=property(_get_total_votes)
+
     def populate_graph_info(self, request):
 	    self.fb_access_token = request.user.social_auth.get(provider='facebook').extra_data["access_token"]
 	    graphinfo = GraphAPI(self.fb_access_token).get('me/')
