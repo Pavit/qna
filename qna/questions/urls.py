@@ -15,6 +15,8 @@ urlpatterns = patterns('',
     url(r'^previous_question/(?P<previous_question_id>\d+)/$', 'questions.views.previous_question', name='previous_question'),
     url(r'^(?P<answer_id>\d+)/vote/$', 'questions.views.vote', name='vote'),
     url(r'^search/$', 'questions.views.search', name='search'),
+    url(r'^search_test/$', 'questions.views.search_test', name='search_test'),
+    url(r'^search_results/(?P<searchtext>\w+)/$', 'questions.views.search_results', name='search_results'),
     url(r'^submit/$', 'questions.views.submit', name='submit'),
 )
 

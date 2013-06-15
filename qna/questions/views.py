@@ -12,6 +12,7 @@ from django.core.context_processors import csrf
 from questions.models import Question, Answer, Vote
 from questions.forms import QuestionForm, AnswerForm, StatForm
 from questions.utils import *
+from django.core import serializers
 
 def index(request):
     if request.user.is_authenticated():
@@ -165,5 +166,18 @@ def profile(request):
     #     totalvotes += q.answer_set.get_vote_count()
     return render_to_response("profile.html", {}, context_instance = RequestContext(request))
 
+def search_test(request):
+    return render_to_response("search_test.html")
+
+def search_results(request, searchtext):
+    print "Search results"
+    response_dict = {
+    'results':Question.objects.filter(Q(question__icontains=searchtext)).order_by('question'),
+        }
+    return render_to_response("search_results.html", response_dict)
+
 def search(request):
-	return HttpResponse("hi")
+    if 'searchtext' in request.GET:
+        q = request.GET.get('searchtext')
+        json = serializers.serialize('json', Question.objects.filter(Q(question__icontains=q)).order_by('question')[0:6])
+        return HttpResponse(json, mimetype='application/json')

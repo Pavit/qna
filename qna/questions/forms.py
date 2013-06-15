@@ -1,6 +1,7 @@
 from models import *
 from django.forms import ModelForm
 from django import forms
+from questions.lookups import *
 
 stat_choices = (
 ('age', 'Age'),
@@ -29,3 +30,4 @@ class StatForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		super(StatForm, self).__init__(*args, **kwargs)
 		self.fields['stat'].choices.insert(0, ('','---------' ) )
+

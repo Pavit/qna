@@ -95,7 +95,7 @@ var data = JSON.parse('{{initialjson|safe}}');
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .style("stroke", "#fff")
-      .style("fill", function(d) { 
+      .style("fill", function(d) {
         return color((d.children ? d : d.parent).name); })
       .style("fill-rule", "evenodd")
       .each(stash);
@@ -130,7 +130,7 @@ paths.on("mouseover", function(d) {
   paths.attr("opacity", 1);
   $("#tooltip").hide();
 })
-  
+
 
 
 d3.select(self.frameElement).style("height", height + "px");
@@ -181,8 +181,8 @@ function arcTween(a) {
             'value' : 'size'
           }
         });
-        
-        
+
+
         function updateChartA() {
           d3.sunburst(chart1, "updateData", "{% static 'json/testdata.json' %}");
         };
@@ -190,7 +190,7 @@ function arcTween(a) {
         function updateChartB() {
           d3.sunburst(chart1, "updateData", "{% static 'json/testdata2.json' %}");
         };
-        
+
         function updateChartC() {
           d3.sunburst(chart1, "updateData", "flare3.json");
         };

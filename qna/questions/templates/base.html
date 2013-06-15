@@ -12,21 +12,22 @@
 {% block stylesheets %}
 
   <!-- Include CSS Files -->
-  
-  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" type="text/css" />
-  <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
+
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/foundation.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/app.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/tipsy.css' %}">
 {% endblock stylesheets %}
 
-  
+
 </head>
 {% endblock head %}
 
 <body>
 
 {% block navbar %}
+
 <div class="row">
   <div class="large-9 large-centered columns">
     <div class="panel darkgray">
@@ -70,10 +71,11 @@
 
 
 <div id="previous_question"></div>
-
+<div id = "search_results"></div>
 {%block highcharts %}
 <script src="{% static 'javascripts/vendor/jquery.js' %}"></script>
 <script src="{% static 'javascripts/highcharts.js' %}"></script>
+
 {%endblock%}
 
 {% block javascript %}
@@ -93,7 +95,7 @@
             $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/");
             $('#current_question').fadeIn(300);
             $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/");
-            $("#previous_question").fadeIn(300);    
+            $("#previous_question").fadeIn(300);
         }
       });
       e.preventDefault();
@@ -105,7 +107,7 @@
   <!--
   <script src="javascripts/jquery.js"></script><script src="javascripts/jquery.foundation.mediaQueryToggle.js"></script><script src="javascripts/jquery.foundation.forms.js"></script><script src="javascripts/jquery.foundation.reveal.js"></script><script src="javascripts/jquery.foundation.orbit.js"></script><script src="javascripts/jquery.foundation.navigation.js"></script><script src="javascripts/jquery.foundation.buttons.js"></script><script src="javascripts/jquery.foundation.tabs.js"></script><script src="javascripts/jquery.foundation.tooltips.js"></script><script src="javascripts/jquery.foundation.accordion.js"></script><script src="javascripts/jquery.placeholder.js"></script><script src="javascripts/jquery.foundation.alerts.js"></script><script src="javascripts/jquery.foundation.topbar.js"></script><script src="javascripts/jquery.foundation.joyride.js"></script><script src="javascripts/jquery.foundation.clearing.js"></script><script src="javascripts/jquery.foundation.magellan.js"></script>
   -->
-  
+
   <!-- Included JS Files (Compressed) -->
 
   <!-- DO NOT CHANGE. The order matters for the autocomplete to work with foundation -->
@@ -114,10 +116,10 @@
   <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
-
+  <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="{% static 'javascripts/sunburst.js' %}"></script>
-  
+
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
 
