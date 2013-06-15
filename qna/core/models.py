@@ -67,7 +67,7 @@ class UserProfile(models.Model):
     total_votes=property(_get_total_votes)
 
     def populate_graph_info(self, request):
-        self.fb_access_token = request.user.social_auth.get(provider='facebook').extra_data["access_token"]
+        # self.fb_access_token = request.user.social_auth.get(provider='facebook').extra_data["access_token"]
         graphinfo = GraphAPI(self.fb_access_token).get('me/')
         print graphinfo
         if "id" in graphinfo: self.fb_id = graphinfo["id"]

@@ -26,3 +26,12 @@ a.votes.count() [no property added for total votes since Vote is child model]
 For userprofile objects..
 
 u.total_votes [tally the grand total of votes for a user's submissions]
+
+*************************************
+6/15/2013
+
+Removed django-social-auth plug-in and manually added facebook login using the javascript sdk.
+
+TO DO:
+      -additional permissions
+      -further testing

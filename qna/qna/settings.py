@@ -131,7 +131,7 @@ INSTALLED_APPS = (
     # 'south',
     'core',
     'questions',
-    'social_auth',
+    # 'social_auth',
     'facepy',
     'wadofstuff.django.serializers',
 )
@@ -144,8 +144,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    'social_auth.context_processors.social_auth_login_redirect',
-    'social_auth.context_processors.social_auth_backends',
+    # 'social_auth.context_processors.social_auth_login_redirect',
+    # 'social_auth.context_processors.social_auth_backends',
 
 )
 
@@ -154,7 +154,7 @@ SERIALIZATION_MODULES = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.facebook.FacebookBackend',
+    # 'social_auth.backends.facebook.FacebookBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

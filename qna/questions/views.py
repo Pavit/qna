@@ -13,14 +13,44 @@ from questions.models import Question, Answer, Vote
 from questions.forms import QuestionForm, AnswerForm, StatForm
 from questions.utils import *
 from django.core import serializers
+from qna.settings import FACEBOOK_APP_ID, FACEBOOK_API_SECRET
+from facepy import GraphAPI
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+
 
 def index(request):
     if request.user.is_authenticated():
         current_question = Question.objects.all().order_by('?')[:1].get()
         return HttpResponseRedirect(reverse('questions.views.current_question', args=(current_question.id,)))
     else:
-        current_question = Question.objects.all().order_by('?')[:1].get()
-        return render_to_response("index.html", {"current_question": current_question,}, context_instance = RequestContext(request))
+        return render_to_response("index.html", {"FACEBOOK_APP_ID": FACEBOOK_APP_ID})
+
+def facebook_login_success(request):
+    access_token = request.GET.get("access_token")
+    fb_id=GraphAPI(access_token).get('me/')["id"]
+    try:
+        user = User.objects.get(username=fb_id)
+        user.useprofile.fb_access_token=access_token
+    except:
+        user = User.objects.create_user(GraphAPI(access_token).get('me/')["id"])
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+    user.save()
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, user)
+    print user.userprofile
+    current_question = Question.objects.all().order_by('?')[:1].get()
+    return HttpResponseRedirect(reverse('questions.views.current_question', args=(current_question.id,)))
+
+
+# def index(request):
+#     if request.user.is_authenticated():
+#         current_question = Question.objects.all().order_by('?')[:1].get()
+#         return HttpResponseRedirect(reverse('questions.views.current_question', args=(current_question.id,)))
+#     else:
+#         current_question = Question.objects.all().order_by('?')[:1].get()
+#         return render_to_response("index.html", {"current_question": current_question,}, context_instance = RequestContext(request))
 
 def sunburstplay(request):
     return render_to_response("sunburstplay.html")
