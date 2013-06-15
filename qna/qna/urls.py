@@ -13,7 +13,6 @@ urlpatterns = patterns('',
     url(r'^questions/', include('questions.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    (r'^selectable/', include('selectable.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
