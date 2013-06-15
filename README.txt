@@ -1,5 +1,17 @@
 CHANGELOG
-6/11/2013
+
+
+----------------6/15/2013-------------------------------------------------------
+
+Removed django-social-auth plug-in and manually added facebook login using the javascript sdk.
+
+TO DO:
+      -additional permissions
+      -further testing
+
+
+
+----------------6/11/2013-------------------------------------------------------
 
 Added some model properties to make pulling info faster and cleaner.
 
@@ -28,10 +40,3 @@ For userprofile objects..
 u.total_votes [tally the grand total of votes for a user's submissions]
 
 *************************************
-6/15/2013
-
-Removed django-social-auth plug-in and manually added facebook login using the javascript sdk.
-
-TO DO:
-      -additional permissions
-      -further testing
