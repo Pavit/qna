@@ -180,4 +180,20 @@ def search(request):
     if 'searchtext' in request.GET:
         q = request.GET.get('searchtext')
         json = serializers.serialize('json', Question.objects.filter(Q(question__icontains=q)).order_by('question')[0:6])
+        print json
+        resp_dict=[]
+        for x in Question.objects.filter(Q(question__icontains=q)):
+            newdict=dict()
+            newdict["label"]=x.question
+            newdict["category"]="Questions"
+            resp_dict.append(newdict)
+        for y in Answer.objects.filter(Q(answer__icontains=q)):
+            newdict=dict()
+            newdict["label"]=y.answer
+            newdict["category"]="Answers"
+            resp_dict.append(newdict)
+        print resp_dict
+        # json = serializers.serialize('json', resp_dict)
+        print "attempt at split:"
+        print json
         return HttpResponse(json, mimetype='application/json')
