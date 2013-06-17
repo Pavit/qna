@@ -1,7 +1,6 @@
 from models import *
 from django.forms import ModelForm
 from django import forms
-from questions.lookups import *
 
 stat_choices = (
 ('age', 'Age'),

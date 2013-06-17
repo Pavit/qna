@@ -7,7 +7,7 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-    url(r'^$', 'questions.views.index', name='index'),
+    # url(r'^$', 'questions.views.index', name='index'),
     url(r'^(?P<current_question_id>\d+)/$', 'questions.views.current_question', name='current_question'),
     url(r'^sunburstplay/$', 'questions.views.sunburstplay', name='sunburstplay'),
     url(r'^details/(?P<question_id>\d+)/', 'questions.views.question_details', name='question_details'),

@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^facebook_login_success/$', 'questions.views.facebook_login_success'),
+    url(r'^logout/$', 'core.views.logout_view', name='logout'),
 )

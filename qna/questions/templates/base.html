@@ -45,7 +45,7 @@
       <ul class="right">
         <li><a href="/questions/submit/">SUBMIT</a></li>
         <li><a href="/profile/">PROFILE</a></li>
-        <li><a href="#">{% if user.is_authenticated %} LOG OUT {%else%} LOGIN {%endif%}</a></li>
+        <li><a href="#">{% if user.is_authenticated %} <a href="/logout/">LOGOUT</a> {%else%} LOGIN {%endif%}</a></li>
         <li class="search">
           <form>
             <input id="search" type="search" class="search-query" placeholder="Search..." />

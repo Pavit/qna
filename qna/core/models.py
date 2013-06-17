@@ -61,12 +61,12 @@ class UserProfile(models.Model):
 
     def _get_total_votes(self):
         total=0
-        for q in user.submissions.all():
+        for q in self.submissions.all():
             total+=q.total_vote.count
         return total
     total_votes=property(_get_total_votes)
 
-    def populate_graph_info(self, request):
+    def populate_graph_info(self):
         # self.fb_access_token = request.user.social_auth.get(provider='facebook').extra_data["access_token"]
         graphinfo = GraphAPI(self.fb_access_token).get('me/')
         print graphinfo
@@ -142,14 +142,15 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+        user.userprofile.populate_graph_info()
 
 post_save.connect(create_user_profile, sender=User)
 
 
 def update_user_profile(sender, request, user, **kwargs):
-    user.userprofile.populate_graph_info(request)
+    user.userprofile.populate_graph_info()
     user.userprofile.check_friends()
     print "signal went through"
     user.save()
 
-user_logged_in.connect(update_user_profile)
+user_logged_in.connect(update_user_profile, sender=User)

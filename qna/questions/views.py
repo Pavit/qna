@@ -15,7 +15,7 @@ from questions.utils import *
 from django.core import serializers
 from qna.settings import FACEBOOK_APP_ID, FACEBOOK_API_SECRET
 from facepy import GraphAPI
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 
@@ -31,11 +31,12 @@ def facebook_login_success(request):
     fb_id=GraphAPI(access_token).get('me/')["id"]
     try:
         user = User.objects.get(username=fb_id)
-        user.useprofile.fb_access_token=access_token
+        print "got use"
     except:
-        user = User.objects.create_user(GraphAPI(access_token).get('me/')["id"])
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(request, user)
+        user = User.objects.create_user(fb_id)
+    user.userprofile.fb_access_token=access_token
+    print "ok"
+    user.userprofile.populate_graph_info()
     user.save()
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
@@ -191,7 +192,6 @@ def profile(request):
     user.save()
     uservotes = user.selections.count()
     pollcount = Question.objects.all().count()
-    totalvotes = 0
     # for q in user.submissions.all():
     #     totalvotes += q.answer_set.get_vote_count()
     return render_to_response("profile.html", {}, context_instance = RequestContext(request))

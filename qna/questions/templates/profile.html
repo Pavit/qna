@@ -9,7 +9,7 @@
 <div class="row">
   <div class="large-9 large-centered columns">
     <div class="panel gray profile">
-      <h1>{{user.first_name}} {{user.last_name}}</h1>
+      <h1>{{user.userprofile.first_name}} {{user.userprofile.last_name}}</h1>
       <p class="subheader text-right">Member Since {{user.userprofile.created_at}}</p>
       <p>Age: {{user.userprofile.age}}</p>
       <div class="row">
@@ -34,7 +34,7 @@
       <div class="row">
         <div class="large-12 columns">
           <h2>Questions Submitted ({{user.userprofile.submissions.count}})</h2>
-          <p>{{user.userprofile.total_votes}} people have answered your questions at a rate of {{user.submittedresponserate}} per day.</p>
+          <p>{{user.userprofile.total_votes}} people have answered your questions at a rate of {{user.userprofile.submittedresponserate}} per day.</p>
           <!-- Begin Insert of User-Submitted Questions -->
             {%for question in user.userprofile.submissions.all %}
             {{question.question}}<br/>
@@ -51,7 +51,7 @@
       <div class="row">
         <div class="large-12 columns">
           <h2>Questions Answered ({{user.userprofile.selections.count}})</h2>
-          <p>Rate: {{user.answeredresponserate}} per day.</p>
+          <p>Rate: {{user.userprofile.answeredresponserate}} per day.</p>
           <!-- Begin Insert of User-Submitted Answers -->
         		{% for answer in user.userprofile.selection.all %}
         		Question: {{answer.question}}<br>
