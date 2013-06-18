@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load questions_tags %}
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html class="no-js" lang="en"> <!--<![endif]-->
@@ -25,7 +26,41 @@
 {% endblock head %}
 
 <body>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '{% settings_value "FACEBOOK_APP_ID" %}', // App ID
+    channelUrl : '//WWW.qnaproject.COM/channel.html', // Channel File
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true  // parse XFBML
+  });
 
+  FB.Event.subscribe('auth.authResponseChange', function(response) {
+    if (response.status === 'connected') {
+    } else if (response.status === 'not_authorized') {
+      console.log("logged into fb, not app");
+    } else {
+        console.log("not logged into fb");
+        {% if user.is_authenticated %}
+        console.log("logged into app");
+        {%else%}
+        console.log("not logged into app");
+        {%endif%}
+      }
+  });
+  };
+
+  // Load the SDK asynchronously
+  (function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+  }(document));
+</script>
 {% block navbar %}
 
 <div class="row">
@@ -45,7 +80,7 @@
       <ul class="right">
         <li><a href="/questions/submit/">SUBMIT</a></li>
         <li><a href="/profile/">PROFILE</a></li>
-        <li><a href="#">{% if user.is_authenticated %} <a href="/logout/">LOGOUT</a> {%else%} LOGIN {%endif%}</a></li>
+        <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
         <li class="search">
           <form>
             <input id="search" type="search" class="search-query" placeholder="Search..." />
@@ -84,6 +119,23 @@
 
 
 <script type="text/javascript">
+
+  $('.login').click(function(e) {
+    e.preventDefault();
+    FB.login(function(response) {
+      var access_token=response.authResponse.accessToken;
+      window.location.href =  '/facebook_login_success?access_token=' + access_token;
+}, {scope: 'email,user_birthday,user_education_history,user_hometown,user_location,user_questions,user_relationships,user_religion_politics,user_work_history,user_interests,user_activities'});
+  });
+
+  $('.logout').click(function(e){
+    e.preventDefault();
+    FB.logout(function(response){
+      window.location.href = '/logout/';
+    });
+
+  });
+
   $('.answer').click(function(e) {
     e.preventDefault();
     $('#previous_question').fadeOut(300);

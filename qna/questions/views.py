@@ -20,11 +20,8 @@ from django.contrib.auth.models import User
 
 
 def index(request):
-    if request.user.is_authenticated():
-        current_question = Question.objects.all().order_by('?')[:1].get()
-        return HttpResponseRedirect(reverse('questions.views.current_question', args=(current_question.id,)))
-    else:
-        return render_to_response("index.html", {"FACEBOOK_APP_ID": FACEBOOK_APP_ID})
+    current_question = Question.objects.all().order_by('?')[:1].get()
+    return HttpResponseRedirect(reverse('questions.views.current_question', args=(current_question.id,)))
 
 def facebook_login_success(request):
     access_token = request.GET.get("access_token")

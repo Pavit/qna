@@ -78,6 +78,16 @@ class UserProfile(models.Model):
         if "email" in graphinfo: self.email = graphinfo["email"]
         if "birthday" in graphinfo:
             self.birthday = datetime.strptime(graphinfo["birthday"], "%m/%d/%Y")
+            today = date.today()
+            self.age = today.year - self.birthday.year
+            if today.month < self.birthday.month or today.month == self.birthday.month and today.day < self.birthday.day:
+                self.age -= 1
+            self.agegroup = ">56"
+            if self.age<56:  self.agegroup="46-55"
+            if self.age<46:  self.agegroup="36-45"
+            if self.age<36:  self.agegroup="26-35"
+            if self.age<26:  self.agegroup="16-25"
+            if self.age<16:  self.agegroup="<15"
         if "timezone" in graphinfo: self.timezone = graphinfo["timezone"]
         if "hometown" in graphinfo: self.hometown = graphinfo["hometown"]
         if "location" in graphinfo: self.location = graphinfo["location"]
@@ -106,17 +116,6 @@ class UserProfile(models.Model):
                             newconc.save()
                     newed.save()
                     self.educations.add(newed)
-        today = date.today()
-        y = today.year - self.birthday.year
-        if today.month < self.birthday.month or today.month == self.birthday.month and today.day < self.birthday.day:
-            y -= 1
-        self.age = y
-        self.agegroup = ">56"
-        if self.age<56:  self.agegroup="46-55"
-        if self.age<46:  self.agegroup="36-45"
-        if self.age<36:  self.agegroup="26-35"
-        if self.age<26:  self.agegroup="16-25"
-        if self.age<16:  self.agegroup="<15"
         self.save()
         return self
 
