@@ -226,7 +226,7 @@
             }
           else
           {
-            var url = "/questions/" + ui.item.value;
+            var url = "/questions/" + ui.item.value + "/";
             $('#previous_question').fadeOut(300);
             $('#current_question').delay(200).fadeOut(300);
             $('#current_question').html('&nbsp;').load(url);
