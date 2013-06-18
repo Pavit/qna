@@ -82,9 +82,9 @@
         <li><a href="/profile/">PROFILE</a></li>
         <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
         <li class="search">
-          <form>
+            <div class="ui-widget">
             <input id="search" type="search" class="search-query" placeholder="Search..." />
-            </form>
+            </div>
           </li>
         </ul>
       </section>
@@ -155,25 +155,88 @@
   });
 </script>
 
-  <!-- Included JS Files (Uncompressed) -->
-  <!--
-  <script src="javascripts/jquery.js"></script><script src="javascripts/jquery.foundation.mediaQueryToggle.js"></script><script src="javascripts/jquery.foundation.forms.js"></script><script src="javascripts/jquery.foundation.reveal.js"></script><script src="javascripts/jquery.foundation.orbit.js"></script><script src="javascripts/jquery.foundation.navigation.js"></script><script src="javascripts/jquery.foundation.buttons.js"></script><script src="javascripts/jquery.foundation.tabs.js"></script><script src="javascripts/jquery.foundation.tooltips.js"></script><script src="javascripts/jquery.foundation.accordion.js"></script><script src="javascripts/jquery.placeholder.js"></script><script src="javascripts/jquery.foundation.alerts.js"></script><script src="javascripts/jquery.foundation.topbar.js"></script><script src="javascripts/jquery.foundation.joyride.js"></script><script src="javascripts/jquery.foundation.clearing.js"></script><script src="javascripts/jquery.foundation.magellan.js"></script>
-  -->
-
-  <!-- Included JS Files (Compressed) -->
-
   <!-- DO NOT CHANGE. The order matters for the autocomplete to work with foundation -->
   <script src="{% static 'javascripts/vendor/custom.modernizr.js' %}"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
-  <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="{% static 'javascripts/sunburst.js' %}"></script>
 
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
+   <script type = "text/javascript">
+    $(function() {
+
+      $.ui.autocomplete.prototype._renderItem = function(ul, item) {
+
+        if (!((item.label=="Show All Search Results") || (item.label=="Submit New Question"))) {
+  item.label = item.label.replace(RegExp(this.term, "i"), "<span style='color:Blue;'>" + this.term + "</span>");
+};
+        return $("<li></li>").data("item.autocomplete", item).append($("<a></a>").html(item.label)).appendTo(ul);
+      };
+
+
+      $("#search").autocomplete({
+        source: function(request, response) {
+          var pavdude = request.term;
+          $.ajax({
+            url: "{% url search %}?searchtext=" + request.term,
+            type: "GET",
+            success: function(data) {
+
+              response($.map(data, function(item) {
+                return {
+                  label: item.fields.question,
+                  value: item.pk
+                }
+              }));
+            },
+            data: request.term,
+            dataType: "json"
+          });
+          var searchtext = request.term;
+        },
+
+        response: function(event, ui) {
+          ui.content.push({
+            label:  "Show All Search Results",
+            value: ui
+          });
+          ui.content.push({
+            label:  "Submit New Question",
+            value: ui
+          });
+        },
+        select: function(event, ui) {
+          event.preventDefault()
+          if (ui.item.label == "Show All Search Results")
+          {
+            var searchtext = $("#search").val();
+            $('#previous_question').fadeOut(300);
+            $('#current_question').fadeOut(300);
+            $('#search_results').html('&nbsp;').load('/questions/search_results/'+searchtext+"/");
+          }
+          else if (ui.item.label == "Submit New Question")
+            {
+              $('#previous_question').fadeOut(300);
+              $('#current_question').fadeOut(300);
+              window.open("/questions/submit/","_self");
+            }
+          else
+          {
+            var url = "/questions/" + ui.item.value;
+            $('#previous_question').fadeOut(300);
+            $('#current_question').delay(200).fadeOut(300);
+            $('#current_question').html('&nbsp;').load(url);
+            $('#current_question').fadeIn(300);
+            $('#previous_question').fadeIn(300);
+          };
+        }
+      })
+    });
+</script>
 
     <script>
     $(document).foundation().foundation('joyride', 'start');
