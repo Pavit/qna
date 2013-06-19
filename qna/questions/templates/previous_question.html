@@ -1,4 +1,7 @@
+<!DOCTYPE html>
 {% load staticfiles %}
+{% load questions_tags %}
+
 <div class="row">
   <div class="large-9 large-centered columns">
     <div class="panel gray previous">
@@ -9,95 +12,19 @@
       </div>
       <div class="row">
         <div class="large-12 columns">
-        <div id="stat_chart"></div>
+        <div id="stat_chart">
+              <ul>
+{% for answer in previous_question.answer_set.all %}
+<li>{{ answer.answer }}: <b>{% filter floatformat %}{% percentage previous_question answer %}{% endfilter %}%</b><br>
+<div style="background: #D1B692; border: 1px solid #AD8346; height: 8px; width: {% percentage previous_question answer %}%;"></div>
+</li>
+{% endfor %}
+</ul>
+<p>Total votes: <b>{{ previous_question.total_vote_count }}</b></p><br>
+
+        </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  if (!window.Highcharts) {
-    $.getScript("{% static 'javascripts/highcharts.js' %}", function() {});
-  };
-});
-
-$(function() {
-  var chart;
-  chart = new Highcharts.Chart({
-    chart: {
-      renderTo: 'stat_chart',
-      type: 'bar',
-      backgroundColor: null,
-      height:75,
-      spacingBottom: -80,
-      spacingLeft: 0,
-      spacingRight: 0,
-      spacingTop: -150
-    },
-    legend: {enabled: false},
-    colors: ['#ff7f66', '#fff6e5', '#7ecefd', '#2185c5', '#3e454c'],
-    credits: false,
-    title: null,
-    //{
-      //text: ['{{previous_question.question}}'],
-      //style: {
-        //fontFamily: 'Georgia',
-        //fontSize: '24px',
-      //},
-    //},
-    xAxis: {
-      labels: {enabled: false},
-      gridLineWidth: 0,
-      groupPadding: 0,
-      pointPadding: 0,
-      lineWidth: 0,
-      tickWidth: 0,
-      tickLength: 0
-    },
-    yAxis: {
-      title: {text: null},
-      labels: {enabled: false},
-      gridLineWidth: 0,
-      groupPadding: 0,
-      pointPadding: 0,
-      lineWidth: 0,
-      tickWidth: 0,
-      tickLength: 0,
-      reversed: true,
-      opposite: true
-    },
-    tooltip: {
-      formatter: function() {
-        return '' + this.series.name + ': ' + this.y + ' (' + Math.round(this.percentage) + '%)';
-      },
-      positioner: function () {
-              return { x: 0, y: 25 };
-            },
-      backgroundColor: null,
-      borderRadius: 0,
-      borderWidth: 0,
-      shadow: false,
-      useHTML: true
-    },
-    plotOptions: {
-      series: {
-        stacking: 'percent',
-        borderWidth: 0,
-        pointWidth: 25,
-        animation: {duration: 500},
-      }
-    },
-    series: [
-      {% for answer in previous_question.answer_set.all %}
-        {
-          name: '{{answer}}',
-          data: [{{answer.votes.count}}]
-        }
-        {% if not forloop.last %},{%else%}{%endif%}
-      {%endfor%}
-    ]
-  });
-});
-</script>

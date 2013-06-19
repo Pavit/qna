@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load url from future %}
+
 {% block current_question %}
-{% load url from future %}
 <div id ="current_question">
   <div class="row">
     <div class="large-9 large-centered columns">
@@ -16,18 +15,17 @@
     <div class="large-9 large-centered columns">
       <div class="panel blue current">
         {% for a in current_question.answer_set.all %} {%csrf_token%}
-        <a href = '' id="{{a.id}}" type="int" class="answer"><p class="current_answers text-center">{{a.answer}}</p></a>
-        {%endfor%}
+        <a href="#" id="{{a.id}}" type="int" class="answer"><p class="current_answers text-center">{{a.answer}}</p></a>
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
-
 <!--<script type="text/javascript">
 
   pageurl = '/questions/'+ '{{current_question.id}}' + '/';
   window.history.pushState({path:pageurl},'',pageurl);
 
-</script>--> 
+</script>-->
 
 {% endblock current_question %}

@@ -11,17 +11,12 @@
   <meta name="viewport" content="width=device-width" />
   <title>QNA</title>
 {% block stylesheets %}
-
   <!-- Include CSS Files -->
-
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" />
+  <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/foundation.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/app.css' %}">
-  <link rel="stylesheet" href="{% static 'stylesheets/tipsy.css' %}">
 {% endblock stylesheets %}
-
-
 </head>
 {% endblock head %}
 
@@ -62,8 +57,7 @@
   }(document));
 </script>
 {% block navbar %}
-
-<div class="row">
+<div id="navbar" class="row">
   <div class="large-9 large-centered columns">
     <div class="panel darkgray">
     <nav class="top-bar">
@@ -106,7 +100,7 @@
 
 
 <div id="previous_question"></div>
-<div id = "search_results"></div>
+<div id="search_results"></div>
 {%block highcharts %}
 <script src="{% static 'javascripts/vendor/jquery.js' %}"></script>
 <script src="{% static 'javascripts/highcharts.js' %}"></script>
@@ -158,15 +152,15 @@
   <!-- DO NOT CHANGE. The order matters for the autocomplete to work with foundation -->
   <script src="{% static 'javascripts/vendor/custom.modernizr.js' %}"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script type="text/javascript" src="{% static 'javascripts/sunburst.js' %}"></script>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-  <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
-   <script type = "text/javascript">
+  <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
+
+  <script type = "text/javascript">
     $(function() {
 
       $.ui.autocomplete.prototype._renderItem = function(ul, item) {
@@ -214,8 +208,8 @@
           if (ui.item.label == "Show All Search Results")
           {
             var searchtext = $("#search").val();
-            $('#previous_question').fadeOut(300);
-            $('#current_question').fadeOut(300);
+            $('#previous_question').remove();
+            $('#current_question').remove();
             $('#search_results').html('&nbsp;').load('/questions/search_results/'+searchtext+"/");
           }
           else if (ui.item.label == "Submit New Question")
@@ -235,15 +229,6 @@
           };
         }
       })
-    });
-</script>
-
-    <script>
-    $(document).foundation().foundation('joyride', 'start');
-  </script>
-  <script type="text/javascript">
-    $(window).load(function() {
-      $('#featured').orbit({ fluid: '2x1' });
     });
   </script>
 {% endblock javascript %}

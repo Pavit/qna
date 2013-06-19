@@ -26,7 +26,7 @@ class Question(models.Model):
     anonymous_vote_count=property(_get_anonymous_vote_count)
 
     def _get_total_vote_count(self):
-        return q.answer_set.all().aggregate(Count('votes')).values()[0]
+        return self.answer_set.all().aggregate(Count('votes')).values()[0]
     total_vote_count=property(_get_total_vote_count)
 
     def _get_registered_vote_count(self):
