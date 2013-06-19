@@ -141,13 +141,12 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-        instance.userprofile.populate_graph_info()
-        instance.save()
 
 post_save.connect(create_user_profile, sender=User)
 
 
 def update_user_profile(sender, request, user, **kwargs):
+    user.userprofile.fb_access_token = request.GET.get("access_token")
     user.userprofile.populate_graph_info()
     user.userprofile.check_friends()
     print "signal went through"
