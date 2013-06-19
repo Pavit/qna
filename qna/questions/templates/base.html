@@ -176,7 +176,7 @@
         source: function(request, response) {
           var pavdude = request.term;
           $.ajax({
-            url: "{% url search %}?searchtext=" + request.term,
+            url: "{% url search %}?searchtext=" + request.term + "/",
             type: "GET",
             success: function(data) {
 
@@ -210,6 +210,9 @@
             var searchtext = $("#search").val();
             $('#previous_question').remove();
             $('#current_question').remove();
+            $('#submit_question ').remove();
+            $('#profile').remove();
+            $('#question_details').remove();
             $('#search_results').html('&nbsp;').load('/questions/search_results/'+searchtext+"/");
           }
           else if (ui.item.label == "Submit New Question")

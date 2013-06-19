@@ -100,7 +100,7 @@ def question_details(request, question_id):
     initialjson = simplejson.dumps(resp_dict).replace("'", r"\'")
     stat_form1 = StatForm(initial = {'stat':'--'})
     stat_form2 = StatForm(initial = {'stat':'--'})
-    return render_to_response("question_details.html", {"question":question, "initialjson":initialjson, "stat_form1":stat_form1, "stat_form2":stat_form2})
+    return render_to_response("question_details.html", {"question":question, "initialjson":initialjson, "stat_form1":stat_form1, "stat_form2":stat_form2}, context_instance=RequestContext(request))
 
 
 def vote(request, answer_id):
@@ -201,7 +201,7 @@ def search_results(request, searchtext):
     response_dict = {
     'results':Question.objects.filter(Q(question__icontains=searchtext)).order_by('question'),
         }
-    return render_to_response("search_results.html", response_dict)
+    return render_to_response("search_results.html", response_dict, context_instance=RequestContext(request))
 
 def search(request):
     if 'searchtext' in request.GET:
