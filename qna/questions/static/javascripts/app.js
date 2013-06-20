@@ -42,15 +42,12 @@
 $(document).ready(function(){
   $('.answer').click(function(e) {
     e.preventDefault();
-    $('#previous_question').fadeOut(300);
-    $('#current_question').fadeOut(300);
+    $('#previous_question, #current_question').fadeOut(300);
       $.ajax({
         url: '/questions/' + this.id + '/vote' + '/',
         success: function(data) {
-            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/");
-            $('#current_question').fadeIn(300);
-            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/");
-            $("#previous_question").fadeIn(300);
+            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(300);
+            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/").hide().fadeIn(400);
         }
       });
   });
