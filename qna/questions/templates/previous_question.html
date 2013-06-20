@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-{% load staticfiles %}
 {% load questions_tags %}
 
 <div class="row">
@@ -12,18 +10,12 @@
       </div>
       <div class="row">
         <div class="large-12 columns">
-        <div id="stat_chart">
-              <ul>
-{% for answer in previous_question.answer_set.all %}
-<li>{{ answer.answer }}: <b>{% filter floatformat %}{% percentage previous_question answer %}{% endfilter %}%</b><br>
-<div style="background: #D1B692; border: 1px solid #AD8346; height: 8px; width: {% percentage previous_question answer %}%;"></div>
-</li>
-{% endfor %}
-</ul>
-<p>Total votes: <b>{{ previous_question.total_vote_count }}</b></p><br>
-
-        </div>
-        </div>
+          {% for answer in previous_question.answer_set.all %}
+          {{ answer.answer }} ({% filter floatformat %}{% percentage previous_question answer %}{% endfilter %}%)
+          <div style="background: #444444; border: 0px; height: 16px; width: {% percentage previous_question answer %}%;"></div>
+          {% endfor %}
+          <p>{{ previous_question.total_vote_count }} Votes</p><br>
+          </div>
       </div>
     </div>
   </div>

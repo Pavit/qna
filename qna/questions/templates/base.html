@@ -56,6 +56,7 @@
    ref.parentNode.insertBefore(js, ref);
   }(document));
 </script>
+
 {% block navbar %}
 <div id="navbar" class="row">
   <div class="large-9 large-centered columns">
@@ -72,8 +73,8 @@
      <section class="top-bar-section">
       <!-- Right Nav Section -->
       <ul class="right">
-        <li><a href="/questions/submit/">SUBMIT</a></li>
-        <li><a href="/profile/">PROFILE</a></li>
+        <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} {%endif%}</li>
+        <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%}  {%endif%}</li>
         <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
         <li class="search">
             <div class="ui-widget">
@@ -101,53 +102,10 @@
 
 <div id="previous_question"></div>
 <div id="search_results"></div>
-{%block highcharts %}
-<script src="{% static 'javascripts/vendor/jquery.js' %}"></script>
-<script src="{% static 'javascripts/highcharts.js' %}"></script>
-
-{%endblock%}
 
 {% block javascript %}
 {# --------- LOAD JQUERY AND GOOGLE CHART API -------------#}
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-
-
-<script type="text/javascript">
-
-  $('.login').click(function(e) {
-    e.preventDefault();
-    FB.login(function(response) {
-      var access_token=response.authResponse.accessToken;
-      window.location.href =  '/facebook_login_success?access_token=' + access_token;
-}, {scope: 'email,user_birthday,user_education_history,user_hometown,user_location,user_questions,user_relationships,user_religion_politics,user_work_history,user_interests,user_activities'});
-  });
-
-  $('.logout').click(function(e){
-    e.preventDefault();
-    FB.logout(function(response){
-      window.location.href = '/logout/';
-    });
-
-  });
-
-  $('.answer').click(function(e) {
-    e.preventDefault();
-    $('#previous_question').fadeOut(300);
-    $('#current_question').fadeOut(300);
-      $.ajax({
-        url: '/questions/' + this.id + '/vote' + '/',
-        success: function(data) {
-            $('#previous_question').fadeOut(300);
-            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/");
-            $('#current_question').fadeIn(300);
-            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/");
-            $("#previous_question").fadeIn(300);
-        }
-      });
-      e.preventDefault();
-      return false;
-  });
-</script>
 
   <!-- DO NOT CHANGE. The order matters for the autocomplete to work with foundation -->
   <script src="{% static 'javascripts/vendor/custom.modernizr.js' %}"></script>
@@ -208,8 +166,7 @@
           if (ui.item.label == "Show All Search Results")
           {
             var searchtext = $("#search").val();
-            $('#previous_question').remove();
-            $('#current_question').remove();
+            $('#previous_question, #current_question').fadeOut(300);
             $('#search_results').html('&nbsp;').load('/questions/search_results/'+searchtext+"/");
           }
           else if (ui.item.label == "Submit New Question")

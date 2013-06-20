@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-{% load url from future %}
 {% block navbar %}
 {% endblock navbar %}
 
@@ -15,6 +13,7 @@ $(document).ready(function() {
   <div class="row">
     <div class="large-9 large-centered columns">
       <div class="panel red current">
+        <h1 class="text-center">THIS IS VIEW_QUESTION</h1>
         <h1 class="text-center">{{current_question.question}}</h1>
       </div>
     </div>
@@ -30,12 +29,4 @@ $(document).ready(function() {
     </div>
   </div>
 </div>
-
-<div id="previous_question"></div>
 {%endblock current_question%}
-
-
-
-{%block highcharts%}
-
-{%endblock highcharts%}

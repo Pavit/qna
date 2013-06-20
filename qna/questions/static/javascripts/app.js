@@ -37,7 +37,7 @@
 
 })(jQuery, this);
 
-// Answer
+// Controls what happens when you click on an answer.
 
 $(document).ready(function(){
   $('.answer').click(function(e) {
@@ -56,7 +56,7 @@ $(document).ready(function(){
   });
 });
 
-// Submit
+// Controls addition of new boxes to submit form.
 
 $(document).ready(function() {
   // Code adapted from http://djangosnippets.org/snippets/1389/
@@ -142,3 +142,22 @@ $(document).ready(function() {
     return deleteForm(this, 'form');
   });
 });
+
+// Facebook Login and Logout.
+
+
+  $('.login').click(function(e) {
+    e.preventDefault();
+    FB.login(function(response) {
+      var access_token=response.authResponse.accessToken;
+      window.location.href =  '/facebook_login_success?access_token=' + access_token;
+}, {scope: 'email,user_birthday,user_education_history,user_hometown,user_location,user_questions,user_relationships,user_religion_politics,user_work_history,user_interests,user_activities'});
+  });
+
+  $('.logout').click(function(e){
+    e.preventDefault();
+    FB.logout(function(response){
+      window.location.href = '/logout/';
+    });
+
+  });
