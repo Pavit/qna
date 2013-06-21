@@ -223,4 +223,14 @@ def search(request):
         # json = serializers.serialize('json', resp_dict)
         print "attempt at split:"
         print json
-        return HttpResponse(json, mimetype='application/json')
+    else:
+        resp=[]
+        for q in Question.objects.all():
+            resp.append(q.question)
+        print resp
+        json = simplejson.dumps(resp)
+        print json
+    return HttpResponse(json, mimetype='application/json')
+
+def typeahead_test(requiest):
+    return render_to_response("typeahead_test.html")

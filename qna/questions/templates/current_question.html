@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-
 {% block current_question %}
 <div id ="current_question">
   <div class="row">
     <div class="large-9 large-centered columns">
       <div class="panel red current">
+        <h1 class="text-center">THIS IS CURRENT_QUESTION</h1>
         <h1 class="text-center">{{current_question.question}}</h1>
       </div>
     </div>
@@ -21,10 +20,4 @@
     </div>
   </div>
 </div>
-<!-- <script type="text/javascript">
-
-  pageurl = '/questions/'+ '{{current_question.id}}' + '/';
-  window.history.pushState({path:pageurl},'',pageurl);
-
-</script>-->
 {% endblock current_question %}

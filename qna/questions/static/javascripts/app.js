@@ -37,26 +37,23 @@
 
 })(jQuery, this);
 
-// Answer
+// Controls what happens when you click on an answer.
 
 $(document).ready(function(){
   $('.answer').click(function(e) {
     e.preventDefault();
-    $('#previous_question').fadeOut(300);
-    $('#current_question').fadeOut(300);
+    $('#previous_question, #current_question').fadeOut(300);
       $.ajax({
         url: '/questions/' + this.id + '/vote' + '/',
         success: function(data) {
-            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/");
-            $('#current_question').fadeIn(300);
-            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/");
-            $("#previous_question").fadeIn(300);
+            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(300);
+            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/").hide().fadeIn(400);
         }
       });
   });
 });
 
-// Submit
+// Controls addition of new boxes to submit form.
 
 $(document).ready(function() {
   // Code adapted from http://djangosnippets.org/snippets/1389/
@@ -142,3 +139,22 @@ $(document).ready(function() {
     return deleteForm(this, 'form');
   });
 });
+
+// Facebook Login and Logout.
+
+
+  $('.login').click(function(e) {
+    e.preventDefault();
+    FB.login(function(response) {
+      var access_token=response.authResponse.accessToken;
+      window.location.href =  '/facebook_login_success?access_token=' + access_token;
+}, {scope: 'email,user_birthday,user_education_history,user_hometown,user_location,user_questions,user_relationships,user_religion_politics,user_work_history,user_interests,user_activities'});
+  });
+
+  $('.logout').click(function(e){
+    e.preventDefault();
+    FB.logout(function(response){
+      window.location.href = '/logout/';
+    });
+
+  });

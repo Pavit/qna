@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+
+</head>
+<body>
+{% load staticfiles%}
+<div class="container">
+      <h1 class="title">examples</h1>
+
+
+      <div class="example example-sports">
+        <h2 class="example-name">NBA and NHL Teams</h2>
+        <p class="example-description">Two datasets that are prefetched, stored, and searched on the client</p>
+
+        <div class="demo">
+          <input class="typeahead" type="text" placeholder="NBA and NHL teams">
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="{% static 'javascripts/vendor/jquery.js' %}"></script>
+<script src=" {% static 'javascripts/typeahead.js' %}"></script>
+
+
+<script type = "text/javascript">
+$(document).ready(function() {
+
+$('.example-sports .typeahead').typeahead([
+{
+name: 'nba-teams',
+prefetch: 'http://qnaproject.com:8000/questions/search/',
+},
+]);
+
+
+});
+</script>
+</body>
+</html>
+
