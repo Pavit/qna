@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^facebook_login_success/$', 'questions.views.facebook_login_success'),
     url(r'^logout/$', 'core.views.logout_view', name='logout'),
+    url(r'^typeahead_test.html/$', 'questions.views.typeahead_test', name='typeahead_test'),
 )

@@ -134,7 +134,7 @@
         source: function(request, response) {
           var pavdude = request.term;
           $.ajax({
-            url: "{% url search %}?searchtext=" + request.term,
+            url: "{% url search %}?searchtext=" + request.term + "/",
             type: "GET",
             success: function(data) {
 
