@@ -8,21 +8,11 @@
 </head>
 <body>
 {% load staticfiles%}
-<div class="container">
-      <h1 class="title">examples</h1>
 
 
-      <div class="example example-sports">
-        <h2 class="example-name">NBA and NHL Teams</h2>
-        <p class="example-description">Two datasets that are prefetched, stored, and searched on the client</p>
-
-        <div class="demo">
+        <div class="search">
           <input class="typeahead" type="text" placeholder="NBA and NHL teams">
         </div>
-
-      </div>
-    </div>
-</div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="{% static 'javascripts/vendor/jquery.js' %}"></script>
@@ -32,16 +22,29 @@
 <script type = "text/javascript">
 $(document).ready(function() {
 
-$('.example-sports .typeahead').typeahead([
+$('.search .typeahead').typeahead([
 {
-name: 'nba-teams',
-prefetch: 'http://qnaproject.com:8000/questions/search/',
+name: 'questions',
+prefetch: '/questions/search_questions/',
+ header: '<h3>Questions</h3>',
+ limit: 6
 },
-]);
+{
+  name: 'answers',
+  prefetch: '/questions/search_answers/',
+  header:'<h3>Answers</h3>',
+  limit: 6
+}
+]).on('typeahead:selected', function(query){
+  console.log(query.currentTarget.value);
+    $('#current_question').html('&nbsp;').load('/questions/search?searchtext='+query.currentTarget.value+"/");
+});
 
 
 });
 </script>
+
+<div id = "current_question"></div>
 </body>
 </html>
 

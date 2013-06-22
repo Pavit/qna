@@ -203,34 +203,64 @@ def search_results(request, searchtext):
         }
     return render_to_response("search_results.html", response_dict, context_instance=RequestContext(request))
 
+############## THIS IS THE OLD SEARCH WITH JQUERY UI AUTOCOMPLETE#########################
+# def search(request):
+#     if 'searchtext' in request.GET:
+#         q = request.GET.get('searchtext')
+#         json = serializers.serialize('json', Question.objects.filter(Q(question__icontains=q)).order_by('question')[0:6])
+#         print json
+#         resp_dict=[]
+#         for x in Question.objects.filter(Q(question__icontains=q)):
+#             newdict=dict()
+#             newdict["label"]=x.question
+#             newdict["category"]="Questions"
+#             resp_dict.append(newdict)
+#         for y in Answer.objects.filter(Q(answer__icontains=q)):
+#             newdict=dict()
+#             newdict["label"]=y.answer
+#             newdict["category"]="Answers"
+#             resp_dict.append(newdict)
+#         print resp_dict
+#         # json = serializers.serialize('json', resp_dict)
+#         print "attempt at split:"
+#         print json
+#     else:
+#         resp=[]
+#         for q in Question.objects.all():
+#             resp.append(q.question)
+#         print resp
+#         json = simplejson.dumps(resp)
+#         print json
+#     return HttpResponse(json, mimetype='application/json')
+
+############ THIS IS THAT NEW SHIT #######################
 def search(request):
+    print request.GET
     if 'searchtext' in request.GET:
-        q = request.GET.get('searchtext')
-        json = serializers.serialize('json', Question.objects.filter(Q(question__icontains=q)).order_by('question')[0:6])
-        print json
-        resp_dict=[]
-        for x in Question.objects.filter(Q(question__icontains=q)):
-            newdict=dict()
-            newdict["label"]=x.question
-            newdict["category"]="Questions"
-            resp_dict.append(newdict)
-        for y in Answer.objects.filter(Q(answer__icontains=q)):
-            newdict=dict()
-            newdict["label"]=y.answer
-            newdict["category"]="Answers"
-            resp_dict.append(newdict)
-        print resp_dict
-        # json = serializers.serialize('json', resp_dict)
-        print "attempt at split:"
-        print json
-    else:
-        resp=[]
-        for q in Question.objects.all():
-            resp.append(q.question)
-        print resp
-        json = simplejson.dumps(resp)
-        print json
-    return HttpResponse(json, mimetype='application/json')
+        q=request.GET.get('searchtext')
+        try:
+            current_question=Question.objects.get(question=q)
+        except:
+            result=Answer.objects.get(answer=q)
+            current_question=answer.question
+        return render_to_response("view_question.html", {"current_question":current_question}, context_instance = RequestContext(request))
+
+
+
 
 def typeahead_test(requiest):
     return render_to_response("typeahead_test.html")
+
+def search_questions(request):
+    resp=[]
+    for q in Question.objects.all():
+        resp.append(q.question)
+    json = simplejson.dumps(resp)
+    return HttpResponse(json, mimetype='application/json')
+
+def search_answers(request):
+    resp=[]
+    for a in Answer.objects.all():
+        resp.append(a.answer)
+    json=simplejson.dumps(resp)
+    return HttpResponse(json, mimetype='application/json')
