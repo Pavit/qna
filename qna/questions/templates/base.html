@@ -79,7 +79,7 @@
         <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
         <li class="search">
             <div class="ui-widget">
-            <input id="search" type="search" class="search-query" placeholder="Search..." />
+            <input id="search" type="search" class="typeahead" placeholder="Search..." />
             </div>
           </li>
         </ul>
@@ -117,10 +117,33 @@
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
+<script src=" {% static 'javascripts/typeahead.js' %}"></script>
+<script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
 
+
+<script type = "text/javascript">
+$(document).ready(function() {
+
+$('#search').typeahead([
+{
+name: 'questions',
+remote: '{% url search %}?q=%QUERY',
+template: '<strong>\{\{value\}\}</strong>',
+engine: Hogan
+}]).on('typeahead:selected', function(evt, item){
+  console.log(evt);
+  console.log(item);
+  var z = item.value;
+  console.log(z);
+    $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/");
+});
+
+
+});
+</script>
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
 
-  <script type = "text/javascript">
+  <!--<script type = "text/javascript">
     $(function() {
 
       $.ui.autocomplete.prototype._renderItem = function(ul, item) {
@@ -189,7 +212,7 @@
         }
       })
     });
-  </script>
+  </script>-->
 {% endblock javascript %}
 </body>
 </html>

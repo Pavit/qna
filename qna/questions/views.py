@@ -17,6 +17,21 @@ from qna.settings import FACEBOOK_APP_ID, FACEBOOK_API_SECRET
 from facepy import GraphAPI
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from ajax_blocks import TemplateResponse
+import ajax_blocks
+from django.template import loader
+from questions.utils import render_block_to_string
+
+# def current_question(request, current_question_id):
+#     p = int(request.GET.get('page', 1))
+#     if p == 1:
+#         title = 'Welcome to my site'
+#         content = mark_safe('Hi, <a href="/?page=2">Click me</a>')
+#     else:
+#         title = 'Loaded via AJAX'
+#         content = 'Impressive, now try forward and back buttons'
+#     c = {'title': title, 'content': content}
+#     return TemplateResponse(request, 'page.html', c, ajax_blocks=('title', 'content'))
 
 
 def index(request):
@@ -53,12 +68,26 @@ def facebook_login_success(request):
 def sunburstplay(request):
     return render_to_response("sunburstplay.html")
 
+def ajax_view(request):
+    # some random context
+    context = Context({'items': range(100)})
+    # passing the template_name + block_name + context
+    return_str = render_block_to_string('current_question.html', 'current_question', context)
+    return HttpResponse(return_str)
+
+
 def current_question(request, current_question_id):
     current_question = get_object_or_404(Question, pk=current_question_id)
     next_question = Question.objects.filter(~Q(id = current_question.id)).order_by('?')[:1].get()
+    print "WTF"
     if request.is_ajax():
         print "vote is ajax"
-        return render_to_response("view_question.html", {"current_question":current_question}, context_instance = RequestContext(request))
+        print current_question
+        context = Context({'current_question': current_question})
+        return_str = render_block_to_string('current_question.html', 'current_question', context)
+        return HttpResponse(return_str)
+        # return TemplateResponse(request, 'current_question.html', {"current_question": current_question.question}, ajax_blocks=('current_question'))
+        # return render_to_response("view_question.html", {"current_question":current_question}, context_instance = RequestContext(request))
     return render_to_response("current_question.html", {"current_question": current_question, "next_question": next_question}, context_instance = RequestContext(request))
 
 
@@ -234,33 +263,25 @@ def search_results(request, searchtext):
 #     return HttpResponse(json, mimetype='application/json')
 
 ############ THIS IS THAT NEW SHIT #######################
-def search(request):
-    print request.GET
-    if 'searchtext' in request.GET:
-        q=request.GET.get('searchtext')
-        try:
-            current_question=Question.objects.get(question=q)
-        except:
-            result=Answer.objects.get(answer=q)
-            current_question=answer.question
-        return render_to_response("view_question.html", {"current_question":current_question}, context_instance = RequestContext(request))
-
-
-
-
-def typeahead_test(requiest):
+def typeahead_test(request):
     return render_to_response("typeahead_test.html")
 
-def search_questions(request):
+def search(request):
     resp=[]
-    for q in Question.objects.all():
-        resp.append(q.question)
+    if 'q' in request.GET:
+        q=request.GET.get('q')
+        queryset=Question.objects.filter(Q(question__icontains=q))
+    else:
+        queryset=Question.objects.all()
+    for question in queryset:
+        newdict=dict()
+        wordlist=[]
+        for word in question.question.split():
+            wordlist.append(word)
+        newdict["value"]=question.question
+        newdict["id"]=question.id
+        newdict["tokens"]=wordlist
+        resp.append(newdict)
     json = simplejson.dumps(resp)
-    return HttpResponse(json, mimetype='application/json')
-
-def search_answers(request):
-    resp=[]
-    for a in Answer.objects.all():
-        resp.append(a.answer)
-    json=simplejson.dumps(resp)
+    print json
     return HttpResponse(json, mimetype='application/json')

@@ -28,15 +28,9 @@ name: 'questions',
 prefetch: '/questions/search_questions/',
  header: '<h3>Questions</h3>',
  limit: 6
-},
-{
-  name: 'answers',
-  prefetch: '/questions/search_answers/',
-  header:'<h3>Answers</h3>',
-  limit: 6
 }
-]).on('typeahead:selected', function(query){
-  console.log(query.currentTarget.value);
+]).on('typeahead:selected', function(evt, item){
+  console.log(item);
     $('#current_question').html('&nbsp;').load('/questions/search?searchtext='+query.currentTarget.value+"/");
 });
 
