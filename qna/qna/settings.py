@@ -134,7 +134,6 @@ INSTALLED_APPS = (
     # 'social_auth',
     'facepy',
     'wadofstuff.django.serializers',
-    'ajax_blocks',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

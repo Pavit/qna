@@ -17,8 +17,6 @@ from qna.settings import FACEBOOK_APP_ID, FACEBOOK_API_SECRET
 from facepy import GraphAPI
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from ajax_blocks import TemplateResponse
-import ajax_blocks
 from django.template import loader
 from questions.utils import render_block_to_string
 
