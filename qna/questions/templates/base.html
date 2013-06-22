@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" />
   <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/foundation.css' %}">
+  <link rel="stylesheet" href="{% static 'stylesheets/jquery.powertip.min.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/app.css' %}">
 {% endblock stylesheets %}
 </head>
@@ -73,8 +74,8 @@
      <section class="top-bar-section">
       <!-- Right Nav Section -->
       <ul class="right">
-        <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} {%endif%}</li>
-        <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%}  {%endif%}</li>
+        <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href="#" class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
+        <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href="#" class="south"  value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
         <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
         <li class="search">
             <div class="ui-widget">
@@ -114,6 +115,7 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
+  <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
 
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
