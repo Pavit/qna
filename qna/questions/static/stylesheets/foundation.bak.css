@@ -2279,8 +2279,7 @@ form.custom {
     padding-bottom: .5em;
     margin-bottom: 0; }
   .top-bar .title-area {
-    position: relative;
-    margin: 0; }
+    position: relative; }
   .top-bar .name {
     height: 45px;
     margin: 0;

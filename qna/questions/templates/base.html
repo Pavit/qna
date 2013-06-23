@@ -73,14 +73,12 @@
 
      <section class="top-bar-section">
       <!-- Right Nav Section -->
-      <ul class="right">
-        <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href="#" class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
-        <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href="#" class="south"  value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
-        <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
-        <li class="search">
-            <div class="ui-widget">
-            <input id="search" type="search" class="typeahead" placeholder="Search..." />
-            </div>
+        <ul class="right">
+          <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href="#" class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href="#" class="south"  value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
+          <li>
+            <input id="search" type="search" placeholder="Search..." />
           </li>
         </ul>
       </section>
@@ -89,6 +87,8 @@
   </div>
 </div>
 {% endblock navbar %}
+
+<div id="content">
 
 {% block submit_question %}{% endblock submit_question %}
 
@@ -104,6 +104,8 @@
 <div id="previous_question"></div>
 <div id="search_results"></div>
 
+</div>
+
 {% block javascript %}
 {# --------- LOAD JQUERY AND GOOGLE CHART API -------------#}
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -116,11 +118,9 @@
   <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
+  <script src=" {% static 'javascripts/typeahead.js' %}"></script>
+  <script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
-<script src=" {% static 'javascripts/typeahead.js' %}"></script>
-<script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
-
-
 <script type = "text/javascript">
 $(document).ready(function() {
 
@@ -128,19 +128,19 @@ $('#search').typeahead([
 {
 name: 'questions',
 remote: '{% url search %}?q=%QUERY',
-template: '<strong>\{\{value\}\}</strong>',
+template: '<p>\{\{value\}\}</p>',
 engine: Hogan
 }]).on('typeahead:selected', function(evt, item){
   console.log(evt);
   console.log(item);
   var z = item.value;
   console.log(z);
-    $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/");
+    $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/").hide().fadeIn(200);
 });
 
 
-});
-</script>
+})
+;</script>-->
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
 
   <!--<script type = "text/javascript">

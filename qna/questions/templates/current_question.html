@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 
 {% block current_question %}
+
 {%load staticfiles%}
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
 $(document).ready(function() {
   pageurl = '/questions/'+ '{{current_question.id}}' + '/';
   window.history.pushState({path:pageurl},'',pageurl);
 });
 </script>
 <script type="text/javascript">
-
 $(document).ready(function(){
   $('.answer').click(function(e) {
     e.preventDefault();
-    $('#previous_question, #current_question').fadeOut(300);
+    $('#content div').empty();
       $.ajax({
         url: '/questions/' + this.id + '/vote' + '/',
         success: function(data) {
-            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(300);
-            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/").hide().fadeIn(400);
+            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(200);
+            $('#previous_question').html('&nbsp;').load("/questions/previous_question/" + data.previous_question_pk + "/").hide().fadeIn(200);
         }
       });
   });
 });
 </script>
+
 <div id ="current_question">
   <div class="row">
     <div class="large-9 large-centered columns">
       <div class="panel red current">
-        <h1 class="text-center">THIS IS CURRENT_QUESTION</h1>
         <h1 class="text-center">{{current_question.question}}</h1>
       </div>
     </div>

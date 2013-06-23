@@ -37,9 +37,6 @@
 
 })(jQuery, this);
 
-// Controls what happens when you click on an answer.
-
-
 // Controls addition of new boxes to submit form.
 
 $(document).ready(function() {
@@ -146,8 +143,9 @@ $(document).ready(function() {
 
   });
 
-  $(function() {
-// placement examples
+//PowerTip Placement Code
+
+$(function() {
   $('.north').powerTip({ placement: 'n' });
   $('.east').powerTip({ placement: 'e' });
   $('.south').powerTip({ placement: 's' });
@@ -162,7 +160,12 @@ $(document).ready(function() {
   $('.south-east-alt').powerTip({ placement: 'se-alt' });
 });
 
+//Activates Foundation Javascript
+
 $(function(){
         $(document).foundation();
 
 })
+
+//Typeahead
+
