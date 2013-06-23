@@ -1,5 +1,28 @@
 CHANGELOG
 
+----------------6/22/2013-------------------------------------------------------
+
+In the midst of my coke bender I forgot to update the changelog. So here's are the recent changes
+made by Cho and I:
+
+1. I found a snippet that allows ajax views rendering individual blocks.  See questions/utils.py.
+      - This means that view_question is now obsolete.
+      - When a vote is clicked, the current_question.html template is called again, which would
+      normally result in double nav bars, but the snippet only re-renders the current_block question
+      in the template.
+      - One drawback is that the scripts referenced in base don't propragate down into the re-rendered
+      block, so I have the jquery script tag in there.
+      - This should suffice until the next version of the site.  Django 1.5 has some changes that may
+      help us out with this issue.
+
+2. JQueryUI Autocomplete ditched for Typeahead.js.  It still looks like butt^2 so it will
+      need to be styled and whatnot.
+
+3. Tooltip for SUBMIT and PROFILE links if you're not logged in.
+
+4. Some javascript moved from base.html into app.js for tidiness.
+
+
 
 ----------------6/15/2013-------------------------------------------------------
 
