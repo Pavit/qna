@@ -283,3 +283,10 @@ def search(request):
     json = simplejson.dumps(resp)
     print json
     return HttpResponse(json, mimetype='application/json')
+
+def search_results(request):
+    q=request.GET.get('q')
+    response_dict = {
+        'results':Question.objects.filter(Q(question__icontains=q)).order_by('question'),
+        }
+    return render_to_response("search_results.html", response_dict, context_instance=RequestContext(request))

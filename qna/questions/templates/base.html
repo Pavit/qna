@@ -124,7 +124,9 @@
 
 
 <div id="previous_question"></div>
-<div id="search_results"></div>
+{% block search_results %}{% endblock search_results %}
+
+
 
 </div>
 
@@ -145,22 +147,30 @@
   <script src="{% static 'javascripts/app.js' %}"></script>
 <script type = "text/javascript">
 $(document).ready(function() {
-
 $('#search').typeahead([
 {
 name: 'questions',
 remote: '{% url search %}?q=%QUERY',
+footer: '<div class = "searchresults"><a href="{% url search_results %}?q=%QUERY"><p>See all search results</p></a></div><a href="{% url submit %}"><p>Submit new question</p></a>',
 template: '<p>\{\{value\}\}</p>',
-engine: Hogan
-}]).on('typeahead:selected', function(evt, item){
-  console.log(evt);
-  console.log(item);
-  var z = item.value;
-  console.log(z);
+engine: Hogan,
+limit: 5
+}]).on('typeahead:closed', function(evt) {
+  console.log("CLOSED");
+  $('#search').typeahead('setQuery', '');
+}).
+  on('typeahead:selected', function(evt, item) {
     $('#content div').empty();
     $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/").hide().fadeIn(200);
+    $('#search').typeahead('setQuery', '');
 });
 });
+
+  $(document).on('click', '.searchresults a', function()
+    {
+        var $this = $(this), query = $('#search').val();
+        $this.attr('href', $this.attr('href').replace('%QUERY', query));
+    });
 </script>
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
 
