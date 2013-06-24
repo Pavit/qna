@@ -4,6 +4,12 @@ CHANGELOG
 
 Styled Typeahead.js. Replaced Foundation CSS. Also added shit like dropdowns, restyled some things.
 
+Known Bugs:
+
+1. Typeahead dropdown is not on top when the layout is shrunken (i.e. in responsive mobile mode).
+
+2. Signup modal from login dropdown doesn't work.
+
 ----------------6/22/2013-------------------------------------------------------
 
 In the midst of my coke bender I forgot to update the changelog. So here's are the recent changes
