@@ -73,8 +73,8 @@
      <section class="top-bar-section">
       <!-- Right Nav Section -->
         <ul class="right">
-          <li>{% if user.is_authenticated %} <a href="/questions/submit/">ASK</a> {%else%} {%endif%}</li>
-          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href class="south" value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
           <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href data-dropdown="login_drop">LOG IN</a> {%endif%}</li>
           <li><div class="large-12 columns"><input id="search" type="text" placeholder="Search..." /></div></li>
         </ul>
@@ -147,30 +147,29 @@
   <script src="{% static 'javascripts/app.js' %}"></script>
 <script type = "text/javascript">
 $(document).ready(function() {
-$('#search').typeahead([
-{
-name: 'questions',
-remote: '{% url search %}?q=%QUERY',
-footer: '<div class = "searchresults"><a href="{% url search_results %}?q=%QUERY"><p>See all search results</p></a></div><a href="{% url submit %}"><p>Submit new question</p></a>',
-template: '<p>\{\{value\}\}</p>',
-engine: Hogan,
-limit: 5
-}]).on('typeahead:closed', function(evt) {
-  console.log("CLOSED");
-  $('#search').typeahead('setQuery', '');
-}).
-  on('typeahead:selected', function(evt, item) {
+  $('#search').typeahead([
+  {
+    name: 'questions',
+    remote: '{% url search %}?q=%QUERY',
+    footer: '<div class = "searchresults"><a href="{% url search_results %}?q=%QUERY"><p>See all search results</p></a></div> {% if user.is_authenticated %} <a href="{% url submit %}"> {%else%} <a href class="south" value="south" title="Log in to ask your own questions."> {%endif%}<p>Submit new question</p></a>',
+    template: '<p>\{\{value\}\}</p>',
+    engine: Hogan,
+    limit: 5
+  }])
+  .on('typeahead:closed', function(evt) {
+    $('#search').typeahead('setQuery', '');
+  })
+  .on('typeahead:selected', function(evt, item) {
     $('#content div').empty();
     $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/").hide().fadeIn(200);
     $('#search').typeahead('setQuery', '');
-});
+  });
 });
 
-  $(document).on('click', '.searchresults a', function()
-    {
-        var $this = $(this), query = $('#search').val();
-        $this.attr('href', $this.attr('href').replace('%QUERY', query));
-    });
+$(document).on('click', '.searchresults a', function() {
+  var $this = $(this), query = $('#search').val();
+  $this.attr('href', $this.attr('href').replace('%QUERY', query));
+});
 </script>
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
 
