@@ -156,13 +156,18 @@ $(document).ready(function() {
     engine: Hogan,
     limit: 5
   }])
-  .on('typeahead:closed', function(evt) {
-    $('#search').typeahead('setQuery', '');
+  .on('typeahead:closed', function() {
+    $('#search').val('');
   })
   .on('typeahead:selected', function(evt, item) {
     $('#content div').empty();
-    $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/").hide().fadeIn(200);
-    $('#search').typeahead('setQuery', '');
+    $.ajax({
+      url: "/questions/" + item.id + "/",
+      type: "GET",
+      success: function(data) {
+        $('#search').val('');
+        $('#current_question').html(data).hide().fadeIn(200);
+      }});
   });
 });
 
