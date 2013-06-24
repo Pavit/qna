@@ -1,6 +1,12 @@
+{% extends "base.html" %}
+
+{% block search_results %}
+
 {% for q in results %}
 <style type="text/css">
 p {color:black;}
 </style>
 <p>{{q}}</p>
 {%endfor%}
+
+{% endblock search_results %}

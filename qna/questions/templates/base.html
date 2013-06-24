@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" />
   <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/foundation.css' %}">
-  <link rel="stylesheet" href="{% static 'stylesheets/jquery.powertip.min.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/app.css' %}">
 {% endblock stylesheets %}
 </head>
@@ -68,27 +67,50 @@
         <li class="name">
           <h1><a href="{%url index%}"><img src="{% static 'images/logo.png' %}" width="94px" height="45px"></a></h1>
         </li>
-        <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
 
      <section class="top-bar-section">
       <!-- Right Nav Section -->
-      <ul class="right">
-        <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href="#" class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
-        <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href="#" class="south"  value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
-        <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
-        <li class="search">
-            <div class="ui-widget">
-            <input id="search" type="search" class="search-query" placeholder="Search..." />
-            </div>
-          </li>
+        <ul class="right">
+          <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href class="south" value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href data-dropdown="login_drop">LOG IN</a> {%endif%}</li>
+          <li><div class="large-12 columns"><input id="search" type="text" placeholder="Search..." /></div></li>
         </ul>
       </section>
     </nav>
     </div>
   </div>
 </div>
+
+<!--Login Dropdown Content-->
+<div id="login_drop" class="f-dropdown content" data-dropdown-content>
+<div class="row"><div class="large-12 columns"><p class="text-justify">Log in to ask your own questions and keep track of your activity and friends.</p></div></div>
+<form class="login">
+  <div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
+  <div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
+  <div class="row">
+    <div class="large-8 columns">
+      <label for="rememberlogin">
+      <input type="checkbox" id="rememberlogin"><span class="custom checkbox"></span> Remember Me</label>
+    </div>
+    <div class="large-4 columns">
+      <a href class="small button secondary">Login</a>
+    </div>
+  </div>
+</form>
+
+<div class="row">
+  <div class="large-12 columns">
+    <p class="text-justify">You can also sign up with <a href class="fblogin">Facebook</a>, <a href>Twitter</a>, or <a href data-reveal-id="loginModal">email.</a></p>
+  </div>
+</div>
+
+</div>
 {% endblock navbar %}
+
+<div id="content">
 
 {% block submit_question %}{% endblock submit_question %}
 
@@ -102,7 +124,11 @@
 
 
 <div id="previous_question"></div>
-<div id="search_results"></div>
+{% block search_results %}{% endblock search_results %}
+
+
+
+</div>
 
 {% block javascript %}
 {# --------- LOAD JQUERY AND GOOGLE CHART API -------------#}
@@ -116,11 +142,38 @@
   <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
   <script src="{% static 'javascripts/foundation.min.js' %}"></script>
   <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
+  <script src=" {% static 'javascripts/typeahead.js' %}"></script>
+  <script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
   <script src="{% static 'javascripts/app.js' %}"></script>
+<script type = "text/javascript">
+$(document).ready(function() {
+  $('#search').typeahead([
+  {
+    name: 'questions',
+    remote: '{% url search %}?q=%QUERY',
+    footer: '<div class = "searchresults"><a href="{% url search_results %}?q=%QUERY"><p>See all search results</p></a></div> {% if user.is_authenticated %} <a href="{% url submit %}"> {%else%} <a href class="south" value="south" title="Log in to ask your own questions."> {%endif%}<p>Submit new question</p></a>',
+    template: '<p>\{\{value\}\}</p>',
+    engine: Hogan,
+    limit: 5
+  }])
+  .on('typeahead:closed', function(evt) {
+    $('#search').typeahead('setQuery', '');
+  })
+  .on('typeahead:selected', function(evt, item) {
+    $('#content div').empty();
+    $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/").hide().fadeIn(200);
+    $('#search').typeahead('setQuery', '');
+  });
+});
 
+$(document).on('click', '.searchresults a', function() {
+  var $this = $(this), query = $('#search').val();
+  $this.attr('href', $this.attr('href').replace('%QUERY', query));
+});
+</script>
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
 
-  <script type = "text/javascript">
+  <!--<script type = "text/javascript">
     $(function() {
 
       $.ui.autocomplete.prototype._renderItem = function(ul, item) {
@@ -189,7 +242,24 @@
         }
       })
     });
-  </script>
+  </script>-->
 {% endblock javascript %}
+
+<!--Signup Modal-->
+<div id="loginModal" class="reveal-modal medium">
+
+<div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
+<div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
+<div class="row"><div class="large-12 columns"><a href class="small button secondary">Login</a></div></div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <p><a href="" class="fblogin">Login with Facebook</a></p>
+    <p><a href="" class="login">Login with Google</a></p>
+    <p><a href="" class="login">Login with Twitter</a></p>
+  </div>
+</div>
+<a class="close-reveal-modal">&#215;</a>
+</div>
 </body>
 </html>

@@ -1,3 +1,7 @@
+//Activates Foundation Javascript
+
+$(function(){$(document).foundation();});
+
 ;(function ($, window, undefined) {
   'use strict';
 
@@ -36,22 +40,6 @@
   }
 
 })(jQuery, this);
-
-// Controls what happens when you click on an answer.
-
-$(document).ready(function(){
-  $('.answer').click(function(e) {
-    e.preventDefault();
-    $('#previous_question, #current_question').fadeOut(300);
-      $.ajax({
-        url: '/questions/' + this.id + '/vote' + '/',
-        success: function(data) {
-            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(300);
-            $('#previous_question').html('&nbsp;').load('/questions/previous_question/' + data.previous_question_pk + "/").hide().fadeIn(400);
-        }
-      });
-  });
-});
 
 // Controls addition of new boxes to submit form.
 
@@ -143,7 +131,7 @@ $(document).ready(function() {
 // Facebook Login and Logout.
 
 
-  $('.login').click(function(e) {
+  $('.fblogin').click(function(e) {
     e.preventDefault();
     FB.login(function(response) {
       var access_token=response.authResponse.accessToken;
@@ -159,8 +147,9 @@ $(document).ready(function() {
 
   });
 
-  $(function() {
-// placement examples
+//PowerTip Placement Code
+
+$(function() {
   $('.north').powerTip({ placement: 'n' });
   $('.east').powerTip({ placement: 'e' });
   $('.south').powerTip({ placement: 's' });
@@ -175,7 +164,3 @@ $(document).ready(function() {
   $('.south-east-alt').powerTip({ placement: 'se-alt' });
 });
 
-$(function(){
-        $(document).foundation(); 
-
-})
