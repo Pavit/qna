@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" />
   <link rel="stylesheet" href="{% static 'stylesheets/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/foundation.css' %}">
-  <link rel="stylesheet" href="{% static 'stylesheets/jquery.powertip.min.css' %}">
   <link rel="stylesheet" href="{% static 'stylesheets/app.css' %}">
 {% endblock stylesheets %}
 </head>
@@ -68,23 +67,45 @@
         <li class="name">
           <h1><a href="{%url index%}"><img src="{% static 'images/logo.png' %}" width="94px" height="45px"></a></h1>
         </li>
-        <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
 
      <section class="top-bar-section">
       <!-- Right Nav Section -->
         <ul class="right">
-          <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href="#" class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
-          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href="#" class="south"  value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
-          <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href="" class="login">LOG IN</a> {%endif%}</li>
-          <li>
-            <input id="search" type="search" placeholder="Search..." />
-          </li>
+          <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href class="south" value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href data-dropdown="login_drop">LOG IN</a> {%endif%}</li>
+          <li><div class="large-12 columns"><input id="search" type="text" placeholder="Search..." /></div></li>
         </ul>
       </section>
     </nav>
     </div>
   </div>
+</div>
+
+<!--Login Dropdown Content-->
+<div id="login_drop" class="f-dropdown content" data-dropdown-content>
+<form class="login">
+  <div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
+  <div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
+  <div class="row">
+    <div class="large-8 columns">
+      <label for="rememberlogin">
+      <input type="checkbox" id="rememberlogin"><span class="custom checkbox"></span> Remember Me</label>
+    </div>
+    <div class="large-4 columns">
+      <a href class="small button secondary">Login</a>
+    </div>
+  </div>
+</form>
+
+<div class="row">
+  <div class="large-12 columns">
+    <p>Login with <a href class="fblogin">Facebook</a> or <a href>Twitter</a>, or <a href data-reveal-id="loginModal">sign up now.</a></p>
+  </div>
+</div>
+
 </div>
 {% endblock navbar %}
 
@@ -137,10 +158,8 @@ engine: Hogan
   console.log(z);
     $('#current_question').html('&nbsp;').load("/questions/"+item.id+"/").hide().fadeIn(200);
 });
-
-
-})
-;</script>-->
+});
+</script>
   <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
 
   <!--<script type = "text/javascript">
@@ -214,5 +233,22 @@ engine: Hogan
     });
   </script>-->
 {% endblock javascript %}
+
+<!--Signup Modal-->
+<div id="loginModal" class="reveal-modal medium">
+
+<div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
+<div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
+<div class="row"><div class="large-12 columns"><a href class="small button secondary">Login</a></div></div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <p><a href="" class="fblogin">Login with Facebook</a></p>
+    <p><a href="" class="login">Login with Google</a></p>
+    <p><a href="" class="login">Login with Twitter</a></p>
+  </div>
+</div>
+<a class="close-reveal-modal">&#215;</a>
+</div>
 </body>
 </html>

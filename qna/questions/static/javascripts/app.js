@@ -1,3 +1,7 @@
+//Activates Foundation Javascript
+
+$(function(){$(document).foundation();});
+
 ;(function ($, window, undefined) {
   'use strict';
 
@@ -127,7 +131,7 @@ $(document).ready(function() {
 // Facebook Login and Logout.
 
 
-  $('.login').click(function(e) {
+  $('.fblogin').click(function(e) {
     e.preventDefault();
     FB.login(function(response) {
       var access_token=response.authResponse.accessToken;
@@ -159,13 +163,4 @@ $(function() {
   $('.south-west-alt').powerTip({ placement: 'sw-alt' });
   $('.south-east-alt').powerTip({ placement: 'se-alt' });
 });
-
-//Activates Foundation Javascript
-
-$(function(){
-        $(document).foundation();
-
-})
-
-//Typeahead
 

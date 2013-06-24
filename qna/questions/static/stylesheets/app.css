@@ -1,11 +1,24 @@
-body 	{
-		background-image:url('../images/background.png');
-		padding-top: 0.5em;
-		}
+html, body	{height: 100%;}
 
-#search {
-	font-family: 'Georgia', 'Times New Roman', 'Times', serif;
-}
+body	{background-image:url('../images/background.png');font-family: 'Georgia', 'Times New Roman', 'Times', serif;padding-top: 0.5em;}
+
+/* Nav Bar */
+
+.top-bar,
+.top-bar-section,
+.top-bar * a,
+.top-bar-section * a,
+.top-bar > ul,
+.top-bar-section > ul,
+.top-bar > li,
+.top-bar-section > li { background-color: #494949!important;
+						font-size: inherit!important;
+						font-weight: normal!important;}
+
+.top-bar * a:hover,
+.top-bar-section * a:hover { color: #b6b7ba}
+
+/* Typography */
 
 h1, h2, h3, h4, h5, h6 {
   		font-family: 'Georgia', 'Times New Roman', 'Times', serif;
@@ -19,6 +32,8 @@ h1, h2, h3, h4, h5, h6 {
 				font-size: 60%;
 				color: #bdbdbd;
 				line-height: 0; }
+
+.panel h1, .panel h2, .panel h3, .panel h4, .panel h5, .panel h6, .panel p {color: inherit; }
 
 .current h1 {font-size: 1.6875em;}
 .previous h1 {font-size: 1.375em;}
@@ -42,7 +57,7 @@ h1, h2, h3, h4, h5, h6 {
 .question .subheader	{font-size:1.125em; line-height: 1em; padding-left: 35%;}
 .question .subheader2	{font-size:.875em; line-height: 1em; padding-left: 35%}
 
-
+/* Panelling */
 
 .red,
 .blue,	
@@ -102,8 +117,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .current_answers	{
 		font-size: 1.375em;
-		line-height: 1.2125em; }
-		margin-bottom: 0;
+		line-height: 1.2125em;
+		margin-bottom: 1.125em;
 		}
 
 .current_question	{
@@ -134,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
 	}
 
 .tt-hint {
-	color: #999
+	color: #b6b7ba;
 	}
 
 .tt-dropdown-menu {
@@ -154,13 +169,14 @@ h1, h2, h3, h4, h5, h6 {
 		}
 
 	.tt-dropdown-menu a {
-		color: #444;
+		color: #494949;
 		border: 0;
 		display: block;
 		text-decoration: none;
 		}
 
 .tt-suggestion {
+	color: #494949;;
 	padding: 3px 10px;
 	font-size: 14px;
 	line-height: 18px;
@@ -188,3 +204,39 @@ h1, h2, h3, h4, h5, h6 {
 	left: auto;
 	right: 0;
 	}
+
+/* Dropdown */
+
+.f-dropdown.content {
+	border: 0;
+	padding: 1em;
+	width: 100%;
+	font-size: 14px;
+	max-width: 300px; }
+
+/* Tooltip */
+
+#powerTip{cursor:default;background-color:#ffffff;background-color:rgba(255,255,255,1);color:#494949;display:none;padding:10px;position:absolute;white-space:nowrap;z-index:2147483647;	font-size: 14px;}
+#powerTip:before{content:"";position:absolute}
+#powerTip.n:before,#powerTip.s:before{border-right:5px solid transparent;border-left:5px solid transparent;left:50%;margin-left:-5px}
+#powerTip.e:before,#powerTip.w:before{border-bottom:5px solid transparent;border-top:5px solid transparent;margin-top:-5px;top:50%}
+#powerTip.n:before{border-top:10px solid #ffffff;border-top:10px solid rgba(255,255,255,1);bottom:-10px}
+#powerTip.e:before{border-right:10px solid #ffffff;border-right:10px solid rgba(255,255,255,1);left:-10px}
+#powerTip.s:before{border-bottom:10px solid #ffffff;border-bottom:10px solid rgba(255,255,255,1);top:-10px}
+#powerTip.w:before{border-left:10px solid #ffffff;border-left:10px solid rgba(255,255,255,1);right:-10px}
+#powerTip.ne:before,#powerTip.se:before{border-right:10px solid transparent;border-left:0;left:10px}
+#powerTip.nw:before,#powerTip.sw:before{border-left:10px solid transparent;border-right:0;right:10px}
+#powerTip.ne:before,#powerTip.nw:before{border-top:10px solid #ffffff;border-top:10px solid rgba(255,255,255,1);bottom:-10px}
+#powerTip.se:before,#powerTip.sw:before{border-bottom:10px solid #ffffff;border-bottom:10px solid rgba(255,255,255,1);top:-10px}
+#powerTip.nw-alt:before,#powerTip.ne-alt:before,#powerTip.sw-alt:before,#powerTip.se-alt:before{border-top:10px solid #ffffff;border-top:10px solid rgba(255,255,255,1);bottom:-10px;border-left:5px solid transparent;border-right:5px solid transparent;left:10px}
+#powerTip.ne-alt:before{left:auto;right:10px}
+#powerTip.sw-alt:before,#powerTip.se-alt:before{border-top:0;border-bottom:10px solid #ffffff;border-bottom:10px solid rgba(255,255,255,1);bottom:auto;top:-10px}
+#powerTip.se-alt:before{left:auto;right:10px}
+
+/* Buttons */
+
+button, .button {
+  	border: 0!important;
+    	-webkit-box-shadow: 0 0 0 0!important;
+    	box-shadow: 0 0 0 0!important;
+   	font-weight: normal;}

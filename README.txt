@@ -1,5 +1,9 @@
 CHANGELOG
 
+----------------6/23/2013-------------------------------------------------------
+
+Styled Typeahead.js.
+
 ----------------6/22/2013-------------------------------------------------------
 
 In the midst of my coke bender I forgot to update the changelog. So here's are the recent changes
