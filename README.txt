@@ -2,7 +2,7 @@ CHANGELOG
 
 ----------------6/23/2013-------------------------------------------------------
 
-Styled Typeahead.js.
+Styled Typeahead.js. Replaced Foundation CSS. Also added shit like dropdowns, restyled some things.
 
 ----------------6/22/2013-------------------------------------------------------
 
