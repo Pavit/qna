@@ -10,6 +10,8 @@ Known Bugs:
 
 2. Signup modal from login dropdown doesn't work.
 
+3. Heading in "Previous Question" box is currently invisible.
+
 ----------------6/22/2013-------------------------------------------------------
 
 In the midst of my coke bender I forgot to update the changelog. So here's are the recent changes

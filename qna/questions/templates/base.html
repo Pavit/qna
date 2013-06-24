@@ -73,8 +73,8 @@
      <section class="top-bar-section">
       <!-- Right Nav Section -->
         <ul class="right">
-          <li>{% if user.is_authenticated %} <a href="/questions/submit/">SUBMIT</a> {%else%} <a href class="south" value="south" title="Log in to ask your own questions.">SUBMIT</a> {%endif%}</li>
-          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} <a href class="south" value="south" title="Log in to keep track of your activity.">PROFILE</a> {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/questions/submit/">ASK</a> {%else%} {%endif%}</li>
+          <li>{% if user.is_authenticated %} <a href="/profile/">PROFILE</a> {%else%} {%endif%}</li>
           <li>{% if user.is_authenticated %} <a href="" class="logout">LOGOUT</a> {%else%} <a href data-dropdown="login_drop">LOG IN</a> {%endif%}</li>
           <li><div class="large-12 columns"><input id="search" type="text" placeholder="Search..." /></div></li>
         </ul>
@@ -86,6 +86,7 @@
 
 <!--Login Dropdown Content-->
 <div id="login_drop" class="f-dropdown content" data-dropdown-content>
+<div class="row"><div class="large-12 columns"><p class="text-justify">Log in to ask your own questions and keep track of your activity and friends.</p></div></div>
 <form class="login">
   <div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
   <div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
@@ -102,7 +103,7 @@
 
 <div class="row">
   <div class="large-12 columns">
-    <p>Log in with <a href class="fblogin">Facebook</a> or <a href>Twitter</a>, or <a href data-reveal-id="loginModal">sign up now.</a></p>
+    <p class="text-justify">You can also sign up with <a href class="fblogin">Facebook</a>, <a href>Twitter</a>, or <a href data-reveal-id="loginModal">email.</a></p>
   </div>
 </div>
 
