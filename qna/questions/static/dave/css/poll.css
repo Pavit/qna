@@ -1,0 +1,111 @@
+body {
+ font-family:sans-serif;   
+}
+h2 {
+ text-align:center;  
+ margin-bottom:0; 
+}
+.pollChart p {
+ text-align:center;
+ margin-top:0;   
+}
+
+.gridSquare {
+    width:50px;
+    height:50px;
+    display:inline-block;
+}
+
+div.tooltip {
+    width: 100px;
+    background-color: rgb(199, 199, 199);
+    height: 70px;
+    padding:10px;
+    position:absolute;
+    z-index:10;
+}
+path.tooltip {
+    fill:rgb(199, 199, 199);
+}
+
+.legend {
+  display:inline-block; 
+  margin-right:15px;
+}
+.legend .key {
+  display:inline-block;
+  width:25px;
+  height:25px;
+  margin-right:7px;
+  vertical-align:top;
+}
+
+.pollChart {
+    margin:15px;
+    margin-bottom: 40px;
+}
+
+.legend2 {
+ display:block;
+ padding:7px;
+ margin-bottom:5px;   
+}
+.legend2 span {
+    margin-right:5px;
+}
+h4 {
+ display:inline-block;   
+ margin:10px;
+ font-size:20px;
+}
+.pollChart .filter {
+    display:inline-block;
+    margin-right:10px;
+ 
+}
+.pollChart .poll-label {
+     display:block;
+     text-align:right;   
+     margin-bottom: 5px;
+}
+.pollChart .filter select {
+     width:180px;
+     font-size:20px;   
+}
+.pollChart tspan {
+    fill: grey;
+}
+.pollChart .switcher {
+    display:inline-block;
+    background:white;
+    padding:1px 3px;
+    position:relative;
+}
+.pollChart .switcher span {
+    vertical-align:middle;
+}
+.pollChart .switcher .offText {
+    visibility:visible;
+}
+.pollChart .switcher .onText {
+    visibility:hidden;
+}
+.pollChart .switcher.active .offText {
+    visibility:hidden;
+}
+.pollChart .switcher.active .onText {
+    visibility:visible;
+}
+.pollChart .switcher .blackRect {
+  display:inline-block;
+  width:5px;
+  background:black;
+  height:15px;
+  position:absolute;
+  left:3px;
+  top:2px; 
+}
+.pollChart .switcher.active .blackRect {
+  right:3px;
+  left:inherit;  
+}
