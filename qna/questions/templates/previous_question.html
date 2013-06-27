@@ -34,10 +34,6 @@
           <div style="background: #444444; border: 0px; height: 16px; width: {% percentage previous_question answer %}%;"></div>
           {% endfor %}
           <p>{{ previous_question.total_vote_count }} Votes</p><br>
-          <p>{{ json2 }} </p><br>
-          <p>{{ votes_array }} </p><br>
-          <p>{{ percent_array }} </p><br>
-          <p>{{ final_array }} </p><br>
           <p> Alternate Previous Question Charts.vSA</p>
           <script type="text/javascript">
           var data = {{ json2|safe }}
