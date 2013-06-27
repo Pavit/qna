@@ -1,22 +1,76 @@
 {% load questions_tags %}
-
-<div class="row">
-  <div class="large-9 large-centered columns">
-    <div class="panel gray previous">
-      <div class="row">
-        <div class="large-12 columns">
+{% load staticfiles%}
+<script type="text/javascript" src="{% static 'javascripts/d3/d3.v3.min.js' %}" charset="utf-8"></script>
+<!-- <script type="text/javascript" src="http://d3js.org/d3.v3.min.js' %}" charset="utf-8"></script> -->
+<style type="text/css">
+.chart rect {
+  stroke:black;
+  fill:#404040;
+}
+.chart text {
+  font-size:"16px";
+}
+</style>
+<div class="row" style="width: 720px">
+    <div class="panel gray previous" style="width: 720px">
+      <div class="row" style="width: 720px">
+        <div class="large-12 columns" style="width: 720px">
           <h1 class="text-center"><a href="{%url question_details previous_question.id %}">{{previous_question.question}}</a></h1>
         </div>
       </div>
       <div class="row">
-        <div class="large-12 columns">
+        <div class="large-12 columns" id="vis" style="width: 720px">
           {% for answer in previous_question.answer_set.all %}
           {{ answer.answer }} ({% filter floatformat %}{% percentage previous_question answer %}{% endfilter %}%)
           <div style="background: #444444; border: 0px; height: 16px; width: {% percentage previous_question answer %}%;"></div>
           {% endfor %}
           <p>{{ previous_question.total_vote_count }} Votes</p><br>
-          </div>
+          
+          <<p> Alternate Previous Question Charts.vSA</p>
+          <script type="text/javascript">
+          var data = {{ json2|safe }}
+
+          var chart = d3.select("#vis")
+            .append("svg")
+            .attr("class", "chart")
+            .attr("height", 50*data.length)
+            .attr("width", 800);
+
+          var x = d3.scale.linear()
+            .domain([0,100])
+            .range([0,800]);
+
+          chart.selectAll("rect")
+            .data(data)
+            .enter().append("rect")
+            .attr("y", function(d,i) {return 20 + i*45;})
+            .attr("width", function(d) {return x(d.num);})
+            .attr("height", 20);
+
+          chart.selectAll("text")
+            .data(data)
+            .enter().append("text")
+              .attr("x", function(d) {return x(d.num);})
+                    .attr("y", function(d,i) {return 20+ i*45;})
+                    .attr("dx", -3)
+                    .attr("dy", "1em")
+                    .attr("text-anchor", "end")
+                    .style("fill", "#FFFFFF")
+                    .text(function(d) {return d.num + "%";});
+          
+          chart.selectAll("text.labels")
+            .data(data)
+            .enter().append("text")
+              .attr("x", 5)
+                    .attr("y", function(d,i) {return i*45;})
+                    .attr("dx", -3)
+                    .attr("dy", "1em")
+                    .attr("text-anchor", "start")
+                    .style("font-size", "16px")
+                    .text(function(d) {return d.answer;});
+          </script>
       </div>
     </div>
+    {{ previous_question.total_vote_count }} Total Votes
   </div>
 </div>

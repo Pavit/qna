@@ -1,9 +1,58 @@
 <html>
 <title> Samir's D3 Playground </title>
 <head>
-	<script src="http://d3.js.org/d3.v4.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js" charset="utf-8"></script>
 </head>
 <body>
-<p> I will post d3 progress here. </p>
+	<div id="viz"></div>
+	<script type="text/javascript">
+
+	var sampleSVG = d3.select("#viz")
+		.append("svg")
+		.attr("width", 200)
+		.attr("height", 200);
+
+	sampleSVG.append("circle")
+		.style("stroke", "gray")
+		.style("fill", "white")
+		.attr("r", 40)
+		.attr("cx", 50)
+		.attr("cy", 50)
+		.on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+		.on("mouseout", function(){d3.select(this).style("fill", "white");})
+    
+	sampleSVG.append("circle")
+    	.style("stroke", "gray")
+    	.style("fill", "white")
+		.attr("r", 40)
+    	.attr("cx", 100)
+    	.attr("cy", 50)
+  		.transition()
+    		.delay(500)
+    		.duration(1000)    
+    		.attr("r", 10)
+    		.attr("cx", 100)
+    		.style("fill", "black");
+
+    sampleSVG.append("circle")
+    	.style("stroke", "gray")
+    	.style("fill", "white")
+    	.attr("r", 40)
+    	.attr("cx", 150)
+    	.attr("cy", 50)
+    	.on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+    	.on("mouseout", function(){d3.select(this).style("fill", "white");})
+    	.on("mousedown", animate);
+
+	function animate() {
+    	d3.select(this).transition()
+        	.duration(1000)
+        	.attr("r", 10)
+      	.transition()
+        	.delay(1000)
+       	 	.attr("r", 40);
+	};
+
+	</script>
 </body>
 </html>

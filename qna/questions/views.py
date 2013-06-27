@@ -19,6 +19,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.template import loader
 from questions.utils import render_block_to_string
+import math
 
 # def current_question(request, current_question_id):
 #     p = int(request.GET.get('page', 1))
@@ -91,7 +92,32 @@ def current_question(request, current_question_id):
 
 def previous_question(request, previous_question_id):
     previous_question = get_object_or_404(Question, pk=previous_question_id)
-    return render_to_response("previous_question.html", {"previous_question":previous_question})
+    resp_array = []
+    votes_array = []
+    final_array = []
+    total = 0.0
+    x = 0
+    percent_array = []
+    resp_dict = {}
+    for a in previous_question.answer_set.all():
+        resp_array.append(a.answer)
+        votes_array.append(a.votes.count())
+    for a in votes_array:
+        total = total + a
+    for a in votes_array:
+        percent_array.append(int(math.ceil((a/total) *100)*100/100))
+    
+    for i in resp_array:
+        info = {
+            'answer': resp_array[x],
+            'num': percent_array[x],
+        }
+        final_array.append(info)
+        x = x+1
+
+    json = simplejson.dumps(resp_array)
+    json2 = simplejson.dumps(final_array)
+    return render_to_response("previous_question.html", {"final_array":final_array, "json2":json2, "resp_dict":resp_dict, "percent_array":percent_array, "total":total,"json":json, "previous_question":previous_question, "votes_array":votes_array, "resp_array":resp_array})
 
 
 
