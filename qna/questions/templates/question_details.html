@@ -1,124 +1,45 @@
 {% extends "base.html" %}
+
 {% block question_details %}
-<!DOCTYPE html>
-<html>
-<head>
-  {% load staticfiles %}
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script type="text/javascript" src="{% static 'javascripts/sunburst.js' %}"></script>
-<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script> -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+{% load staticfiles %}
 
-<link rel="stylesheet" href="{% static 'stylesheets/tipsy.css' %}" type="text/css" />
-<meta charset="utf-8">
-
-</head>
-<body>
-
-<div class="row">
-  <div class="large-9 large-centered columns">
-    <div class="panel gray question">
-      <div class="row">
-        <div class="large-12 columns">
-          <div class="panel empty">
-          <h1>{{question.question}}</h1>
-          <p class="subheader">Submitted on {{question.created}}</p>
-          <p class="subheader2">Last Answered on {{question.modified}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="large-4 columns">
-          <div class="panel empty">
-           <!-- INSERT DROPDOWNS -->
-          <form id="1" class="custom">
-              <select onchange="loadStat(this)" name="stat" id="1" initial="initial">
-              <option value="-" selected="selected">STAT</option>
-              <option value="agegroup">Age</option>
-              <option value="gender">Gender</option>
-              </select>
-          </form>
-          <form id ="2" class="custom">
-              <select onchange="loadStat(this)" name="stat" id="2">
-              <option value="-" selected="selected">STAT</option>
-              <option value="agegroup">Age</option>
-              <option value="gender">Gender</option>
-              </select>
-          </form>
-          <!-- INSERT SLIDER -->
-          </div>
-        </div>
-        <div class="large-8 columns">
-          <div class="panel empty">
-            <div id="chart1"></div>
-            <div id="tooltip"></div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="large-6 columns">
-          <div class="panel empty">
-          <!--INSERT STATS-->
-          </div>
-        </div>
-        <div class="large-6 columns">
-          <div class="panel empty">
-          <!--INSERT STATS-->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  <script src="{% static 'javascripts/modernizr.foundation.js' %}"></script>
-  <script src="{% static 'javascripts/jquery.js' %}"></script>
-  <script src="{% static 'javascripts/foundation.min.js' %}"></script>
-  <script src="{% static 'javascripts/app.js' %}"></script>
-
-  <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
-    <script type='text/javascript' src='{% static "javascripts/jquery.tipsy.js" %}'></script>
-
-    <script type="text/javascript">
-        var chart1 = document.getElementById("chart1");
-        d3.sunburst(chart1, {
-          'radius': 200,
-          'width' : 400,
-          'height' : 400,
-          'padding': 1,
-          'dataUrl' : null,
-          'data': JSON.parse('{{initialjson|safe}}'),
-          'dataType' : 'json',
-          'chartType' : 'bubble',
-          'dataStructure' : {
-            'name' : 'name',
-            'children' : 'children',
-            'value' : 'size'
-          }
-        });
-
-
-      </script>
-      <script type = "text/javascript">
-function loadStat(x) {
-  var dropdown1=$('#1 option:selected').val();
-  var dropdown2=$('#2 option:selected').val();
-  $.ajax({
-    url: '/questions/details/'+{{question.id}}+'/',
-    data: {'stat':x.value, 'formnumber':x.id, 'dropdowns':[dropdown1, dropdown2]},
-    success: function(data) {
-      d3.sunburst(chart1, "updateData", data);
-      /*draw(data);*/
-    }
-  });
-}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  pageurl = "{% url question_details question.id %}"
+  window.history.pushState({path:pageurl},'',pageurl);
+});
 </script>
-</body>
-</html>
+
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
+
+<h3>Sunburst Charts</h3>
+<form>
+    <label>Please select the question</label>
+    <select name="question" id="question">
+        {% for q in allquestions %}
+        <option value="{{q.pk}}">Question {{q.pk}}</option>
+        {% endfor %}
+    </select>
+</form>
+<div class="pollChart" id="sunburst"></div>
+<script src="{% static 'javascripts/vendor/d3.js' %}"></script>
+<script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
+<script src="{% static 'javascripts/chart.js' %}"></script>
+<script>
+    (function(){
+        var pollChart = window.pollChart;
+        d3.select("form select").on("change", function() {
+            console.log(this.options[this.selectedIndex].value);
+            url = "/questions/getjson/"+this.options[this.selectedIndex].value+"/";
+            pollChart.showSunburst(url);
+        });
+        pollChart.showSunburst('{% url getjson question.id %}');
+
+    })();
+
+</script>
+
+
 {% endblock question_details %}

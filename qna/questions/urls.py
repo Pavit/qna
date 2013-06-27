@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # url(r'^search_results/(?P<searchtext>\w+)/$', 'questions.views.search_results', name='search_results'),
     url(r'^search_results/$', 'questions.views.search_results', name='search_results'),
     url(r'^submit/$', 'questions.views.submit', name='submit'),
+    url(r'^getjson/(?P<question_id>\d+)/', 'questions.views.getjson', name='getjson'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
