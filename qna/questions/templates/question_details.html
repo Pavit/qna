@@ -1,56 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-  {% load staticfiles %}
-  <title>Poll Charts</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF8">
-  <link rel="stylesheet" href="{% static 'dave/css/poll.css' %}" />
-</head>
-<body>
-<h3>Sunburst Charts</h3>
+{% extends "base.html" %}
 
+{% block question_details %}
+{% load staticfiles %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  pageurl = "{% url question_details question.id %}"
+  window.history.pushState({path:pageurl},'',pageurl);
+});
+</script>
+
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
+
+<h3>Sunburst Charts</h3>
+<form>
+    <label>Please select the question</label>
+    <select name="question" id="question">
+        {% for q in allquestions %}
+        <option value="{{q.pk}}">Question {{q.pk}}</option>
+        {% endfor %}
+    </select>
+</form>
 <div class="pollChart" id="sunburst"></div>
-<script src="{% static 'dave/javascripts/d3.js' %}"></script>
-<script src="{% static 'dave/javascripts/underscore.js' %}"></script>
+<script src="{% static 'javascripts/vendor/d3.js' %}"></script>
+<script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
+<script src="{% static 'javascripts/chart.js' %}"></script>
 <script>
     (function(){
-        var pollChart, showSunburst;
-
-        require("init");
-
-        pollChart = window.pollChart;
-
-        showSunburst = function(data) {
-            d3.select("#sunburst").html("");
-            pollChart.sunburst({
-                el: "#sunburst",
-                src: data,
-                fields: ["gender", "agegroup", "political"],
-                labels: ["Gender", "Age Group", "Politics"],
-                width: 600,
-                height: 600,
-                colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
-                margin: {
-                    top: 10,
-                    right: 10,
-                    bottom: 10,
-                    left: 10
-                }
-            });
-        };
-
+        var pollChart = window.pollChart;
         d3.select("form select").on("change", function() {
-            showSunburst({{json|safe}});
+            console.log(this.options[this.selectedIndex].value);
+            url = "/questions/getjson/"+this.options[this.selectedIndex].value+"/";
+            pollChart.showSunburst(url);
         });
-        showSunburst({{json|safe}});
+        pollChart.showSunburst('{% url getjson question.id %}');
 
     })();
-
-
 
 </script>
 
 
-
-</body>
-</html>
+{% endblock question_details %}

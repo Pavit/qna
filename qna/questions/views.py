@@ -91,7 +91,10 @@ def current_question(request, current_question_id):
 
 def previous_question(request, previous_question_id):
     previous_question = get_object_or_404(Question, pk=previous_question_id)
-    return render_to_response("previous_question.html", {"previous_question":previous_question})
+    context = Context({'previous_question': previous_question})
+    return_str = render_block_to_string('previous_question.html', 'previous_question', context)
+    return HttpResponse(return_str)
+    # return render_to_response("previous_question.html", {"previous_question":previous_question})
 
 
 ############### OLD SUNBURST #########################################################
@@ -132,6 +135,15 @@ def previous_question(request, previous_question_id):
 ###################### THIS IS DAT NEW SHIT - BASED ON GAYVE'S 6/25 FILES ###################################
 def question_details(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
+    allquestions = Question.objects.all().values("pk").order_by("pk")
+    context = {
+        "question":question,
+        "allquestions":allquestions,
+    }
+    return render_to_response("question_details.html", context, context_instance=RequestContext(request))
+
+def getjson(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
     resp_dict={
         "question":question.question,
         "value":question.total_vote_count,
@@ -143,12 +155,8 @@ def question_details(request, question_id):
             "count":answer.votes.count(),
             "data":list(answer.selected_by.values('gender','agegroup','political').annotate(count=Count('id'))),
         })
-    json = simplejson.dumps(resp_dict).replace("'", r"\'")
-    context={
-        "question":question,
-        "json":json,
-    }
-    return render_to_response("question_details.html", context, context_instance=RequestContext(request))
+    json = simplejson.dumps(resp_dict).replace("'",r"\'")
+    return HttpResponse(json, mimetype="application/json")
 #####################################################################################################
 
 

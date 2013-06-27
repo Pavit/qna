@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+{% block previous_question %}
+
+{% load staticfiles %}
+
 {% load questions_tags %}
 
 <div class="row">
@@ -5,7 +11,7 @@
     <div class="panel gray previous">
       <div class="row">
         <div class="large-12 columns">
-          <h1 class="text-center"><a href="{%url question_details previous_question.id %}">{{previous_question.question}}</a></h1>
+          <h1 class="text-center"><a href="{% url question_details previous_question.id %}">{{previous_question.question}}</a></h1>
         </div>
       </div>
       <div class="row">
@@ -20,3 +26,6 @@
     </div>
   </div>
 </div>
+
+
+{% endblock previous_question %}
