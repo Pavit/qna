@@ -19,7 +19,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.template import loader
 from questions.utils import render_block_to_string
-import math
 
 # def current_question(request, current_question_id):
 #     p = int(request.GET.get('page', 1))
@@ -92,68 +91,74 @@ def current_question(request, current_question_id):
 
 def previous_question(request, previous_question_id):
     previous_question = get_object_or_404(Question, pk=previous_question_id)
-    resp_array = []
-    votes_array = []
-    final_array = []
-    total = 0.0
-    x = 0
-    percent_array = []
-    resp_dict = {}
-    for a in previous_question.answer_set.all():
-        resp_array.append(a.answer)
-        votes_array.append(a.votes.count())
-    for a in votes_array:
-        total = total + a
-    for a in votes_array:
-        percent_array.append(int(math.ceil((a/total) *100)*100/100))
-    
-    for i in resp_array:
-        info = {
-            'answer': resp_array[x],
-            'num': percent_array[x],
-        }
-        final_array.append(info)
-        x = x+1
-
-    json = simplejson.dumps(resp_array)
-    json2 = simplejson.dumps(final_array)
-    return render_to_response("previous_question.html", {"final_array":final_array, "json2":json2, "resp_dict":resp_dict, "percent_array":percent_array, "total":total,"json":json, "previous_question":previous_question, "votes_array":votes_array, "resp_array":resp_array})
+    context = Context({'previous_question': previous_question})
+    return_str = render_block_to_string('previous_question.html', 'previous_question', context)
+    return HttpResponse(return_str)
+    # return render_to_response("previous_question.html", {"previous_question":previous_question})
 
 
+############### OLD SUNBURST #########################################################
+# def question_details(request, question_id):
+#     question = get_object_or_404(Question, pk=question_id)
+#     resp_dict = dict()
+#     resp_dict["name"] = question.question
+#     resp_dict["children"] = []
+#     for a in question.answer_set.all():
+#         resp_dict["children"].append({"name":a.answer, "size":a.votes.count() })
+#     if request.is_ajax():
+#         dropdownlist = request.GET.getlist('dropdowns[]')
+#         dropdowns=[]
+#         for x in dropdownlist:
+#             if x != '-' and x not in dropdowns:
+#                 dropdowns.append(x)
+#         if len(dropdowns)==0:
+#             return HttpResponse(simplejson.dumps(resp_dict), mimetype="application/json")
+#         for child in resp_dict["children"]:
+#             answer = Answer.objects.get(answer=child["name"])
+#             layer = answer.selected_by.values(dropdowns[0]).annotate(size=Count(dropdowns[0]))
+#             for item in layer:
+#                 item["name"] = item[dropdowns[0]]
+#                 if len(dropdowns) > 1:
+#                     filter = dropdowns[0]
+#                     layer2 = layer.filter(**{filter:item["name"]}).values(dropdowns[1]).annotate(size=Count(dropdowns[1]))
+#                     for item2 in layer2:
+#                         item2["name"] = item2[dropdowns[1]]
+#                     item["children"] = list(layer2)
+#             child["children"] = list(layer)
+#         json = simplejson.dumps(resp_dict)
+#         return HttpResponse(json, mimetype="application/json")
+#     initialjson = simplejson.dumps(resp_dict).replace("'", r"\'")
+#     stat_form1 = StatForm(initial = {'stat':'--'})
+#     stat_form2 = StatForm(initial = {'stat':'--'})
+#     return render_to_response("question_details.html", {"question":question, "initialjson":initialjson, "stat_form1":stat_form1, "stat_form2":stat_form2}, context_instance=RequestContext(request))
 
+###################### THIS IS DAT NEW SHIT - BASED ON GAYVE'S 6/25 FILES ###################################
 def question_details(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    resp_dict = dict()
-    resp_dict["name"] = question.question
-    resp_dict["children"] = []
-    for a in question.answer_set.all():
-        resp_dict["children"].append({"name":a.answer, "size":a.votes.count() })
-    if request.is_ajax():
-        dropdownlist = request.GET.getlist('dropdowns[]')
-        dropdowns=[]
-        for x in dropdownlist:
-            if x != '-' and x not in dropdowns:
-                dropdowns.append(x)
-        if len(dropdowns)==0:
-            return HttpResponse(simplejson.dumps(resp_dict), mimetype="application/json")
-        for child in resp_dict["children"]:
-            answer = Answer.objects.get(answer=child["name"])
-            layer = answer.selected_by.values(dropdowns[0]).annotate(size=Count(dropdowns[0]))
-            for item in layer:
-                item["name"] = item[dropdowns[0]]
-                if len(dropdowns) > 1:
-                    filter = dropdowns[0]
-                    layer2 = layer.filter(**{filter:item["name"]}).values(dropdowns[1]).annotate(size=Count(dropdowns[1]))
-                    for item2 in layer2:
-                        item2["name"] = item2[dropdowns[1]]
-                    item["children"] = list(layer2)
-            child["children"] = list(layer)
-        json = simplejson.dumps(resp_dict)
-        return HttpResponse(json, mimetype="application/json")
-    initialjson = simplejson.dumps(resp_dict).replace("'", r"\'")
-    stat_form1 = StatForm(initial = {'stat':'--'})
-    stat_form2 = StatForm(initial = {'stat':'--'})
-    return render_to_response("question_details.html", {"question":question, "initialjson":initialjson, "stat_form1":stat_form1, "stat_form2":stat_form2}, context_instance=RequestContext(request))
+    allquestions = Question.objects.all().values("pk").order_by("pk")
+    context = {
+        "question":question,
+        "allquestions":allquestions,
+    }
+    return render_to_response("question_details.html", context, context_instance=RequestContext(request))
+
+def getjson(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    resp_dict={
+        "question":question.question,
+        "value":question.total_vote_count,
+        "answers":[],
+    }
+    for answer in question.answer_set.all():
+        resp_dict["answers"].append({
+            "answer":answer.answer,
+            "count":answer.votes.count(),
+            "data":list(answer.selected_by.values('gender','agegroup','political').annotate(count=Count('id'))),
+        })
+    json = simplejson.dumps(resp_dict).replace("'",r"\'")
+    return HttpResponse(json, mimetype="application/json")
+#####################################################################################################
+
 
 
 def vote(request, answer_id):
