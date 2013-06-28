@@ -34,8 +34,7 @@
           <div style="background: #444444; border: 0px; height: 16px; width: {% percentage previous_question answer %}%;"></div>
           {% endfor %}
           <p>{{ previous_question.total_vote_count }} Votes</p><br>
-          <p>{{ json2 }} </p><br>
-          <p>{{ json }} </p><br>
+          
           <p> Alternate Previous Question Charts.vSA</p>
           <script type="text/javascript">
           var data = {{json2|safe}}
@@ -62,12 +61,15 @@
             .enter().append("rect")
             .attr("x", barstart)
             .attr("y", function(d,i) {return i*45;})
+            .attr("width", 20)
+            .transition().duration(750)
             .attr("width", function(d) {return x(d.num);})
             .attr("height", 20);
 
           chart.selectAll("text")
             .data(data)
             .enter().append("text")
+              .transition().delay(750)
               .attr("x", function(d) {return barstart + x(d.num);})
               .attr("y", function(d,i) {return i*45;})
               .attr("dx", -3)
@@ -79,7 +81,7 @@
           chart.selectAll("text.labels")
             .data(data)
             .enter().append("text")
-              .attr("x", limit*4.5)
+              .attr("x", char_limit*4.5)
               .attr("y", function(d,i) {return i*45;})
               .attr("dx", -3)
               .attr("dy", "1em")
@@ -89,7 +91,7 @@
 
           chart.append("svg:text")
               .attr("x", barstart)
-              .attr("y", 45*data.length)
+              .attr("y", 42*data.length)
               .attr("dx", -3)
               .attr("dy", "1em")
               .attr("text-anchor", "start")
