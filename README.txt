@@ -1,5 +1,14 @@
 CHANGELOG
 
+----------------6/28/2013-------------------------------------------------------
+Modified previous questions graph to new layout.
+
+Known bugs:
+1. Text doesn't display well at 0% or 100%
+
+2. For answers greater than 30+ characters, space allocation is lacking.
+
+
 ----------------6/23/2013-------------------------------------------------------
 
 Styled Typeahead.js. Replaced Foundation CSS. Also added shit like dropdowns, restyled some things.
