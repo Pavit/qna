@@ -34,52 +34,72 @@
           <div style="background: #444444; border: 0px; height: 16px; width: {% percentage previous_question answer %}%;"></div>
           {% endfor %}
           <p>{{ previous_question.total_vote_count }} Votes</p><br>
+          <p>{{ json2 }} </p><br>
+          <p>{{ json }} </p><br>
           <p> Alternate Previous Question Charts.vSA</p>
           <script type="text/javascript">
-          var data = {{ json2|safe }}
+          var data = {{json2|safe}}
+          var total_votes = {{ json|safe }}
+
+          var width = 800
+          var char_limit = 60
+          stretch = 1.1
+          var buffer = 10
+          var barstart = char_limit*4.5 + buffer
 
           var chart = d3.select("#vis")
             .append("svg")
             .attr("class", "chart")
             .attr("height", 50*data.length)
-            .attr("width", 800);
+            .attr("width", width);
 
           var x = d3.scale.linear()
             .domain([0,100])
-            .range([0,800]);
+            .range([0,((stretch*width)-barstart)]);
 
           chart.selectAll("rect")
             .data(data)
             .enter().append("rect")
-            .attr("y", function(d,i) {return 20 + i*45;})
+            .attr("x", barstart)
+            .attr("y", function(d,i) {return i*45;})
             .attr("width", function(d) {return x(d.num);})
             .attr("height", 20);
 
           chart.selectAll("text")
             .data(data)
             .enter().append("text")
-              .attr("x", function(d) {return x(d.num);})
-                    .attr("y", function(d,i) {return 20+ i*45;})
-                    .attr("dx", -3)
-                    .attr("dy", "1em")
-                    .attr("text-anchor", "end")
-                    .style("fill", "#FFFFFF")
-                    .text(function(d) {return d.num + "%";});
+              .attr("x", function(d) {return barstart + x(d.num);})
+              .attr("y", function(d,i) {return i*45;})
+              .attr("dx", -3)
+              .attr("dy", "1em")
+              .attr("text-anchor", "end")
+              .style("fill", "#FFFFFF")
+              .text(function(d) {return d.num + "%";});
           
           chart.selectAll("text.labels")
             .data(data)
             .enter().append("text")
-              .attr("x", 5)
-                    .attr("y", function(d,i) {return i*45;})
-                    .attr("dx", -3)
-                    .attr("dy", "1em")
-                    .attr("text-anchor", "start")
-                    .style("font-size", "16px")
-                    .text(function(d) {return d.answer;});
+              .attr("x", limit*4.5)
+              .attr("y", function(d,i) {return i*45;})
+              .attr("dx", -3)
+              .attr("dy", "1em")
+              .attr("text-anchor", "end")
+              .style("font-size", "14px")
+              .text(function(d) {return d.answer;});
+
+          chart.append("svg:text")
+              .attr("x", barstart)
+              .attr("y", 45*data.length)
+              .attr("dx", -3)
+              .attr("dy", "1em")
+              .attr("text-anchor", "start")
+              .style("font-size", "14px")
+              .text(total_votes + " Total Votes");
+
           </script>
+
       </div>
     </div>
-    {{ previous_question.total_vote_count }} Total Votes
   </div>
 </div>
 

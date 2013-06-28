@@ -118,7 +118,8 @@ def previous_question(request, previous_question_id):
         x = x+1
 
     json2 = simplejson.dumps(final_array)
-    context = Context({'previous_question': previous_question, 'json2':json2, 'final_array':final_array, 'percent_array':percent_array, 'votes_array':votes_array})
+    json = simplejson.dumps(total)
+    context = Context({'previous_question': previous_question, 'json':json, 'json2':json2, 'final_array':final_array, 'percent_array':percent_array, 'votes_array':votes_array})
     return_str = render_block_to_string('previous_question.html', 'previous_question', context)
     return HttpResponse(return_str)
     # return render_to_response("previous_question.html", {"previous_question":previous_question})
