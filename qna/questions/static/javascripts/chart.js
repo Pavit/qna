@@ -89,7 +89,6 @@
     window.pollChart.legend3 = function(_arg) {
         var colorKey, colorScale, data, el, g, getChecked, handler, holder, labelKey, switcher, valueKey;
         colorScale = _arg.colorScale, el = _arg.el, data = _arg.data, labelKey = _arg.labelKey, colorKey = _arg.colorKey, valueKey = _arg.valueKey, handler = _arg.handler;
-        console.log(arguments);
         if (colorKey == null) {
             colorKey = labelKey;
         }
@@ -141,10 +140,17 @@
 
 
 (function() {
-    var defaults, get, getOptions, handle, log, sum, transformData,
+    /*
+
+     Sunburst Chart
+
+     Data should be of the form:
+     */
+
+    var defaults, get, getOptions, handle, insertLinebreaks, log, sum, textTransform, transformData, _ref,
         __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-    if (window.pollChart == null) {
+    if ((_ref = window.pollChart) == null) {
         window.pollChart = {};
     }
 
@@ -165,6 +171,7 @@
 
     sum = function(array, key) {
         var item, total, _i, _len;
+
         total = 0;
         for (_i = 0, _len = array.length; _i < _len; _i++) {
             item = array[_i];
@@ -176,6 +183,7 @@
     get = function(key, fn) {
         return function(d) {
             var a;
+
             a = d[key];
             if (fn) {
                 return fn(a);
@@ -185,12 +193,44 @@
         };
     };
 
+    insertLinebreaks = function(d) {
+        var i, textElem, tspan, word, words, _ref1, _ref2, _ref3, _results;
+
+        textElem = d3.select(this);
+        words = d.name.split(" ");
+        textElem.text("");
+        i = 0;
+        _results = [];
+        while (words.length) {
+            word = [(_ref1 = words.shift()) != null ? _ref1 : "", (_ref2 = words.shift()) != null ? _ref2 : "", (_ref3 = words.shift()) != null ? _ref3 : ""].join(" ");
+            tspan = textElem.append("tspan").text(word);
+            if (i > 0) {
+                tspan.attr("x", 0).attr("dy", "15");
+            }
+            _results.push(i++);
+        }
+        return _results;
+    };
+
+    textTransform = function(arc, radius) {
+        return function(d) {
+            var c, h, x, y;
+
+            c = arc.centroid(d);
+            x = c[0];
+            y = c[1];
+            h = Math.sqrt(x * x + y * y);
+            return "translate(" + (x / h * radius * 0.9) + "," + (y / h * radius * 0.9) + ")";
+        };
+    };
+
     handle = function(items, key, last, answer, total, parent) {
-        var children, name, o, out, _ref;
+        var children, name, o, out, _ref1;
+
         out = [];
-        _ref = _.groupBy(items, key);
-        for (name in _ref) {
-            children = _ref[name];
+        _ref1 = _.groupBy(items, key);
+        for (name in _ref1) {
+            children = _ref1[name];
             o = {
                 name: name,
                 answer: answer
@@ -208,6 +248,7 @@
 
     transformData = function(data, fields, answers) {
         var child, grandchild, item, o;
+
         if (fields == null) {
             fields = [];
         }
@@ -217,12 +258,13 @@
         return {
             name: data.question,
             children: (function() {
-                var _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3, _results;
-                _ref = data.answers;
+                var _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _ref3, _ref4, _results;
+
+                _ref1 = data.answers;
                 _results = [];
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                    item = _ref[_i];
-                    if (!((_ref1 = item.answer, __indexOf.call(answers, _ref1) >= 0))) {
+                for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+                    item = _ref1[_i];
+                    if (!((_ref2 = item.answer, __indexOf.call(answers, _ref2) >= 0))) {
                         continue;
                     }
                     o = {
@@ -235,14 +277,14 @@
                     if (fields.length) {
                         o.children = handle(item.data, fields[0], fields.length === 1, item.answer, item.count, item);
                         if (fields.length > 1) {
-                            _ref2 = o.children;
-                            for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-                                child = _ref2[_j];
+                            _ref3 = o.children;
+                            for (_j = 0, _len1 = _ref3.length; _j < _len1; _j++) {
+                                child = _ref3[_j];
                                 child.children = handle(child.children, fields[1], fields.length === 2, item.answer, child.size, child);
                                 if (fields.length > 2) {
-                                    _ref3 = child.children;
-                                    for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
-                                        grandchild = _ref3[_k];
+                                    _ref4 = child.children;
+                                    for (_k = 0, _len2 = _ref4.length; _k < _len2; _k++) {
+                                        grandchild = _ref4[_k];
                                         grandchild.children = handle(grandchild.children, fields[2], true, item.answer, grandchild.size, grandchild);
                                     }
                                 }
@@ -265,7 +307,8 @@
     };
 
     window.pollChart.sunburst = function(opts) {
-        var color, height, helpers, legend, margin, pollChart, radius, width;
+        var answers, arc, arc2, arc3, change, clearHighlights, clickHandler1, clickHandler2, clicked, clicked2, color, data, divs, draw, draw2, el, field, filters, getSize, height, helpers, index, innerRadius, label, legend, margin, old, options, outerRadius, partition, pollChart, radius, selected, selects, svg, update, width, writeLabel, writeLabel2, _i, _len, _ref1, _ref2;
+
         pollChart = window.pollChart;
         helpers = pollChart.helpers;
         get = helpers.get;
@@ -276,256 +319,299 @@
         height = height - margin.top - margin.bottom;
         radius = Math.min(width, height) / 2;
         color = d3.scale.ordinal().range(opts.colors);
-        return d3.json(opts.src, function(err, root) {
-            var answers, arc, change, clearHighlights, clickHandler1, clickHandler2, clicked, clicked2, data, divs, draw, el, field, filters, getSize, index, innerRadius, label, old, options, outerRadius, partition, selected, selects, svg, update, writeLabel, writeLabel2, _i, _len, _ref, _ref1;
-            answers = _.pluck(root.answers, "answer");
-            data = transformData(root, [], answers);
-            options = [];
-            _ref = opts.fields;
-            for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-                field = _ref[index];
-                label = (_ref1 = opts.labels[index]) != null ? _ref1 : field;
-                options.push({
-                    label: label,
-                    field: field
-                });
+        answers = _.pluck(opts.data.answers, "answer");
+        data = transformData(opts.data, [], answers);
+        options = [];
+        _ref1 = opts.fields;
+        for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+            field = _ref1[index];
+            label = (_ref2 = opts.labels[index]) != null ? _ref2 : field;
+            options.push({
+                label: label,
+                field: field
+            });
+        }
+        options = ["Blank"].concat(_.compact(options));
+        partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius * 0.5]).value(get("size"));
+        innerRadius = function(d) {
+            if (d.depth === 1) {
+                return 0;
+            } else {
+                return Math.sqrt(d.y);
             }
-            options = ["Blank"].concat(_.compact(options));
-            partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius * 0.5]).value(get("size"));
-            innerRadius = function(d) {
-                if (d.depth === 1) {
-                    return 0;
-                } else {
-                    return Math.sqrt(d.y);
+        };
+        outerRadius = function(d) {
+            return Math.sqrt(d.y + d.dy);
+        };
+        arc = d3.svg.arc().startAngle(function(d) {
+            return d.x;
+        }).endAngle(function(d) {
+                return d.x + d.dx;
+            }).innerRadius(innerRadius).outerRadius(outerRadius);
+        arc2 = d3.svg.arc().startAngle(function(d) {
+            return d.x + (d.dx / 2);
+        }).endAngle(function(d) {
+                return d.x + (d.dx / 2) + 0.01;
+            }).innerRadius(innerRadius).outerRadius(outerRadius);
+        arc3 = d3.svg.arc().startAngle(function(d) {
+            return d.x + d.dx - 0.01;
+        }).endAngle(function(d) {
+                return d.x + d.dx;
+            }).innerRadius(innerRadius).outerRadius(outerRadius);
+        el = d3.select(opts.el);
+        el.append("h2").text(opts.data.question);
+        el.append("p").text(opts.data.value + " Answers");
+        svg = el.append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
+        label = el.append("span").attr("class", "poll-label");
+        old = null;
+        clicked = [];
+        clicked2 = [];
+        clickHandler2 = function(d2) {
+            var $grandparent, $parent, $this, group, parents, turnOff, wrongParent;
+
+            $this = d3.select(this);
+            group = svg.selectAll("g");
+            $parent = group.filter(function(d) {
+                return d === d2.parent;
+            });
+            $grandparent = group.filter(function(d) {
+                return d === d2.parent.parent;
+            });
+            if (__indexOf.call(clicked2, d2) >= 0) {
+                clicked2 = _.without(clicked2, d2);
+                $this.attr("opacity", 1);
+            } else {
+                clicked2.push(d2);
+                $this.attr("opacity", 0.7);
+                wrongParent = _.filter(clicked2, function(d) {
+                    return d.parent.parent !== d2.parent.parent;
+                });
+                if (wrongParent.length) {
+                    clicked2 = _.difference(clicked2, wrongParent);
+                    group.filter(function(d) {
+                        return __indexOf.call(wrongParent, d) >= 0;
+                    }).attr("opacity", 1);
                 }
-            };
-            outerRadius = function(d) {
-                return Math.sqrt(d.y + d.dy);
-            };
-            arc = d3.svg.arc().startAngle(function(d) {
-                return d.x;
-            }).endAngle(function(d) {
-                    return d.x + d.dx;
-                }).innerRadius(innerRadius).outerRadius(outerRadius);
-            el = d3.select(opts.el);
-            el.append("h2").text(root.question);
-            el.append("p").text(root.value + " Answers");
-            svg = el.append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
-            label = el.append("span").attr("class", "poll-label");
-            old = null;
+                parents = _.pluck(clicked2, "parent");
+                turnOff = _.difference(clicked, parents);
+                if (turnOff.length) {
+                    turnOff = turnOff.concat(_.pluck(turnOff, "parent"));
+                    group.filter(function(d) {
+                        return __indexOf.call(turnOff, d) >= 0;
+                    }).attr("opacity", 1);
+                }
+                clicked = [d2.parent];
+                $parent.attr("opacity", 0.7);
+                $grandparent.attr("opacity", 0.7);
+            }
+            if (clicked2.length) {
+                return writeLabel2();
+            } else {
+                return writeLabel();
+            }
+        };
+        getSize = function(d) {
+            return d.size;
+        };
+        writeLabel = function() {
+            var grouped, key, keySum, out, total, vals;
+
+            out = "";
+            total = d3.sum(_.unique(_.pluck(clicked, "parent")), getSize);
+            grouped = _.groupBy(clicked, "name");
+            for (key in grouped) {
+                vals = grouped[key];
+                keySum = d3.sum(vals, getSize);
+                out += "" + key + " - (" + (Math.round(keySum / total * 100)) + "%) ";
+            }
+            return label.text(out);
+        };
+        writeLabel2 = function() {
+            var grouped, key, keySum, out, total, vals;
+
+            out = "";
+            total = d3.sum(_.unique(_.pluck(clicked2, "parent")), getSize);
+            grouped = _.groupBy(clicked2, "name");
+            for (key in grouped) {
+                vals = grouped[key];
+                keySum = d3.sum(vals, getSize);
+                out += "" + key + " - (" + (Math.round(keySum / total * 100)) + "%) ";
+            }
+            return label.text(out);
+        };
+        clickHandler1 = function(d1) {
+            var $parent, $this, _ref3;
+
+            $this = d3.select(this);
+            $parent = svg.selectAll("g").filter(function(d) {
+                return d === d1.parent;
+            });
+            if (__indexOf.call(clicked, d1) >= 0) {
+                clicked = _.without(clicked, d1, d1.parent);
+                $this.attr("opacity", 1);
+                if (_ref3 = d1.parent, __indexOf.call(_.pluck(clicked, "parent"), _ref3) < 0) {
+                    $parent.attr("opacity", 1);
+                }
+            } else {
+                clicked.push(d1);
+                $this.attr("opacity", 0.7);
+                $parent.attr("opacity", 0.7);
+            }
+            if (clicked2.length) {
+                svg.selectAll("g").filter(function(d) {
+                    return __indexOf.call(clicked2, d) >= 0;
+                }).attr("opacity", 1);
+                clicked2 = [];
+            }
+            return writeLabel();
+        };
+        clearHighlights = function() {
             clicked = [];
             clicked2 = [];
-            clickHandler2 = function(d2) {
-                var $grandparent, $parent, $this, group, parents, turnOff, wrongParent;
-                $this = d3.select(this);
-                group = svg.selectAll("g");
-                $parent = group.filter(function(d) {
-                    return d === d2.parent;
-                });
-                $grandparent = group.filter(function(d) {
-                    return d === d2.parent.parent;
-                });
-                if (__indexOf.call(clicked2, d2) >= 0) {
-                    clicked2 = _.without(clicked2, d2);
-                    $this.attr("opacity", 1);
-                } else {
-                    clicked2.push(d2);
-                    $this.attr("opacity", 0.7);
-                    wrongParent = _.filter(clicked2, function(d) {
-                        return d.parent.parent !== d2.parent.parent;
-                    });
-                    if (wrongParent.length) {
-                        clicked2 = _.difference(clicked2, wrongParent);
-                        group.filter(function(d) {
-                            return __indexOf.call(wrongParent, d) >= 0;
-                        }).attr("opacity", 1);
-                    }
-                    parents = _.pluck(clicked2, "parent");
-                    turnOff = _.difference(clicked, parents);
-                    if (turnOff.length) {
-                        turnOff = turnOff.concat(_.pluck(turnOff, "parent"));
-                        group.filter(function(d) {
-                            return __indexOf.call(turnOff, d) >= 0;
-                        }).attr("opacity", 1);
-                    }
-                    clicked = [d2.parent];
-                    $parent.attr("opacity", 0.7);
-                    $grandparent.attr("opacity", 0.7);
-                }
-                if (clicked2.length) {
-                    return writeLabel2();
-                } else {
-                    return writeLabel();
-                }
-            };
-            getSize = function(d) {
-                return d.size;
-            };
-            writeLabel = function() {
-                var grouped, key, keySum, out, total, vals;
-                out = "";
-                total = d3.sum(_.unique(_.pluck(clicked, "parent")), getSize);
-                grouped = _.groupBy(clicked, "name");
-                for (key in grouped) {
-                    vals = grouped[key];
-                    keySum = d3.sum(vals, getSize);
-                    out += "" + key + " - (" + (Math.round(keySum / total * 100)) + "%) ";
-                }
-                return label.text(out);
-            };
-            writeLabel2 = function() {
-                var grouped, key, keySum, out, total, vals;
-                out = "";
-                total = d3.sum(_.unique(_.pluck(clicked2, "parent")), getSize);
-                grouped = _.groupBy(clicked2, "name");
-                for (key in grouped) {
-                    vals = grouped[key];
-                    keySum = d3.sum(vals, getSize);
-                    out += "" + key + " - (" + (Math.round(keySum / total * 100)) + "%) ";
-                }
-                return label.text(out);
-            };
-            clickHandler1 = function(d1) {
-                var $parent, $this, _ref2;
-                $this = d3.select(this);
-                $parent = svg.selectAll("g").filter(function(d) {
-                    return d === d1.parent;
-                });
-                if (__indexOf.call(clicked, d1) >= 0) {
-                    clicked = _.without(clicked, d1, d1.parent);
-                    $this.attr("opacity", 1);
-                    if (_ref2 = d1.parent, __indexOf.call(_.pluck(clicked, "parent"), _ref2) < 0) {
-                        $parent.attr("opacity", 1);
-                    }
-                } else {
-                    clicked.push(d1);
-                    $this.attr("opacity", 0.7);
-                    $parent.attr("opacity", 0.7);
-                }
-                if (clicked2.length) {
-                    svg.selectAll("g").filter(function(d) {
-                        return __indexOf.call(clicked2, d) >= 0;
-                    }).attr("opacity", 1);
-                    clicked2 = [];
-                }
-                return writeLabel();
-            };
-            clearHighlights = function() {
-                clicked = [];
-                clicked2 = [];
-                label.text("");
-                return svg.selectAll("g").attr("opacity", 1);
-            };
-            draw = function(data) {
-                var group, insertLinebreaks, kuler, textTransform;
-                kuler = function(d) {
-                    return color(d.answer);
-                };
-                data = partition.nodes(data);
-                svg.selectAll("g").remove();
-                group = svg.selectAll("g").data(data, get("id")).enter().append("g");
-                group.filter(function(d) {
-                    return d.depth;
-                }).append("path").style("stroke", "#fff").style("fill", kuler).attr("d", arc);
-                textTransform = function(d) {
-                    var c, h, x, y;
-                    c = arc.centroid(d);
-                    x = c[0];
-                    y = c[1];
-                    h = Math.sqrt(x * x + y * y);
-                    return "translate(" + (x / h * radius * 0.9) + "," + (y / h * radius * 0.9) + ")";
-                };
-                insertLinebreaks = function(d) {
-                    var i, textElem, tspan, word, words, _ref2, _ref3, _ref4, _results;
-                    textElem = d3.select(this);
-                    words = d.name.split(" ");
-                    textElem.text("");
-                    i = 0;
-                    _results = [];
-                    while (words.length) {
-                        word = [(_ref2 = words.shift()) != null ? _ref2 : "", (_ref3 = words.shift()) != null ? _ref3 : "", (_ref4 = words.shift()) != null ? _ref4 : ""].join(" ");
-                        tspan = textElem.append("tspan").text(word);
-                        if (i > 0) {
-                            tspan.attr("x", 0).attr("dy", "15");
-                        }
-                        _results.push(i++);
-                    }
-                    return _results;
-                };
-                group.filter(function(d) {
-                    return d.depth === 1;
-                }).append("text").text(function(d) {
-                        return d.name;
-                    }).attr("dy", ".35em").style("text-anchor", "middle").attr("transform", textTransform).each(insertLinebreaks);
-                group.filter(function(d) {
-                    return d.depth === 3;
-                }).on("click", clickHandler2);
-                group.filter(function(d) {
-                    return d.depth === 2;
-                }).on("click", clickHandler1);
-                return group.filter(function(d) {
-                    return d.depth === 1;
-                }).on("click", clearHighlights);
-            };
-            draw(data);
-            legend({
-                el: el,
-                colorScale: color,
-                data: data.children,
-                labelKey: "name",
-                colorKey: "answer",
-                valueKey: "percent",
-                handler: function(data) {
-                    answers = data;
-                    return update();
-                }
-            });
-            filters = [
-                {
-                    options: options
-                }, {
-                    options: options
-                }
-            ];
-            el.append("h4").text("Filters: ");
-            divs = el.selectAll(".filter").data(filters).enter().append("div").attr("class", "filter");
-            selected = [];
-            change = function(d, i) {
-                selected[i] = this.options[this.selectedIndex].__data__.field;
+            label.text("");
+            return svg.selectAll("g").attr("opacity", 1);
+            /*
+             tweenArc =  (a) ->
+             if old and old[a.id]
+             start = _.pick old[a.id][0], "x", "y", "dy", "y", "depth"
+             else
+             start = {x:0,dx:0,y:0,dy:0,depth:0}
+             end = {x: a.x, dx: a.dx, y: a.y, dy: a.dy, depth: a.depth}
+
+             #console.log start.dy, end.dy
+             i = d3.interpolate(start, end)
+             (t) ->
+             arc i(t)
+
+             tran.attrTween("d", tweenArc)
+             */
+
+        };
+        draw2 = function(data) {
+            var group;
+
+            data = partition.nodes(data);
+            svg.selectAll("g").remove();
+            group = svg.selectAll("g").data(data, get("id")).enter().append("g");
+            group.filter(function(d) {
+                return d.depth;
+            }).append("path").style("stroke", "#fff").style("fill", get("answer", color)).attr("d", arc);
+            group.filter(function(d) {
+                return d.depth === 1;
+            }).append("text").text(function(d) {
+                    return d.name;
+                }).attr("dy", ".35em").style("text-anchor", "middle").attr("transform", textTransform(arc, radius)).each(insertLinebreaks);
+            group.filter(function(d) {
+                return d.depth === 3;
+            }).on("click", clickHandler2);
+            group.filter(function(d) {
+                return d.depth === 2;
+            }).on("click", clickHandler1);
+            return group.filter(function(d) {
+                return d.depth === 1;
+            }).on("click", clearHighlights);
+        };
+        draw = function(data) {
+            var enter, exit, exitTrans, group;
+
+            data = partition.nodes(data);
+            group = svg.selectAll("g").data(data, get("id"));
+            enter = group.enter().append("g");
+            exit = group.exit();
+            exitTrans = exit.transition().duration(1000).remove();
+            if (data.length > 3) {
+                exitTrans.select("path").attr("d", arc2).style("opacity", 0);
+            } else {
+                exitTrans.select("path").style("opacity", 0);
+            }
+            exitTrans.select("text").style("opacity", 0);
+            enter.filter(function(d) {
+                return d.depth;
+            }).append("path").style("stroke", "#fff").style("fill", get("answer", color)).attr("d", arc2).style("opacity", 0);
+            if (data.length > 4) {
+                group.select("path").transition().duration(1000).attr("d", arc).style("opacity", 1);
+            } else {
+                group.select("path").attr("d", arc).transition().duration(1000).style("opacity", 1);
+            }
+            enter.filter(function(d) {
+                return d.depth === 1;
+            }).append("text").text(function(d) {
+                    return d.name;
+                }).attr("dy", ".35em").style("text-anchor", "middle").each(insertLinebreaks).style("opacity", 1);
+            return group.select("text").transition().duration(1000).attr("transform", textTransform(arc, radius));
+        };
+        draw(data);
+        legend({
+            el: el,
+            colorScale: color,
+            data: data.children,
+            labelKey: "name",
+            colorKey: "answer",
+            valueKey: "percent",
+            handler: function(data) {
+                answers = data;
                 return update();
-            };
-            selects = divs.append("select").on("change", change);
-            selects.selectAll("option").data(get("options")).enter().append("option").text(get("label"));
-            return update = function() {
-                data = transformData(root, _.compact(selected), answers);
-                return draw(data);
-            };
+            }
         });
+        filters = [
+            {
+                options: options
+            }, {
+                options: options
+            }
+        ];
+        el.append("h4").text("Filters: ");
+        divs = el.selectAll(".filter").data(filters).enter().append("div").attr("class", "filter");
+        selected = [];
+        change = function(d, i) {
+            selected[i] = this.options[this.selectedIndex].__data__.field;
+            return update();
+        };
+        selects = divs.append("select").on("change", change);
+        selects.selectAll("option").data(get("options")).enter().append("option").text(get("label"));
+        return update = function() {
+            data = transformData(opts.data, _.compact(selected), answers);
+            return draw(data);
+        };
     };
 
     window.pollChart.showSunburst = function(source, selector) {
+        var opts;
+
         if (selector == null) {
             selector = "#sunburst";
         }
-        d3.select(selector).html("");
-        return pollChart.sunburst({
+        width = height = d3.select(selector).html("").node().offsetWidth;
+        opts = {
             el: selector,
-            src: source,
             fields: ["gender", "agegroup", "political"],
             labels: ["Gender", "Age Group", "Politics"],
-            width: 600,
-            height: 600,
             colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
+            width: width,
+            height: height,
             margin: {
                 top: 10,
                 right: 10,
                 bottom: 10,
                 left: 10
             }
-        });
+        };
+        if (_.isString(source)) {
+            return d3.json(source, function(err, data) {
+                if (!err) {
+                    opts.data = data;
+                    return pollChart.sunburst(opts);
+                }
+            });
+        } else {
+            opts.data = source;
+            return pollChart.sunburst(opts);
+        }
     };
 
+
 }).call(this);
+
 
 // Generated by CoffeeScript 1.6.3
 /*

@@ -15,14 +15,6 @@ $(document).ready(function() {
   <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
 
 <h3>Sunburst Charts</h3>
-<form>
-    <label>Please select the question</label>
-    <select name="question" id="question">
-        {% for q in allquestions %}
-        <option value="{{q.pk}}">Question {{q.pk}}</option>
-        {% endfor %}
-    </select>
-</form>
 <div class="pollChart" id="sunburst"></div>
 <script src="{% static 'javascripts/vendor/d3.js' %}"></script>
 <script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
@@ -32,10 +24,12 @@ $(document).ready(function() {
         var pollChart = window.pollChart;
         d3.select("form select").on("change", function() {
             console.log(this.options[this.selectedIndex].value);
-            url = "/questions/getjson/"+this.options[this.selectedIndex].value+"/";
-            pollChart.showSunburst(url);
+/*            url = "/questions/getjson/"+this.options[this.selectedIndex].value+"/";*/
+            pollChart.showSunburst('{{json|safe}}');
         });
-        pollChart.showSunburst('{% url getjson question.id %}');
+        data = JSON.parse('{{json|safe}}');
+        console.log(data);
+        pollChart.showSunburst(data);
 
     })();
 

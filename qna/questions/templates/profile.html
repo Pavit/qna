@@ -1,63 +1,232 @@
-{% extends "base.html" %}
-{% block profile %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+  <title>Poll Charts</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
+</head>
+<body>
+<h3>Grid Chart</h3>
+<div class="pollChart" id="grid"></div>
+<h3>Stacked Charts</h3>
+<div class="pollChart" id="stacked"></div>
+<div class="pollChart" id="stacked2"></div>
+<script src="{% static 'javascripts/vendor/d3.js' %}"></script>
+<script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
+<script src="{% static 'javascripts/chart.js' %}"></script>
 
-<!--PROFILE BEGINS HERE-->
+<script>
+    (function(){
+        var answer1, answer2, answer3, answer4, pollChart;
 
-<div class="row">
-  <div class="large-9 large-centered columns">
-    <div class="panel gray profile">
-      <h1>{{user.userprofile.first_name}} {{user.userprofile.last_name}}</h1>
-      <p class="subheader text-right">Member Since {{user.userprofile.created_at}}</p>
-      <p>Age: {{user.userprofile.age}}</p>
-      <div class="row">
-        <div class="large-12 columns">
-          <p>Friends: {{user.userprofile.friends.count}}</p>
-          <p>Friend List: </p>
-          {%for friend in user.userprofile.friends.all %}
-          <p>{{friend.first_name}}</p></br>
-          {%endfor%}
-        </div>
-      </div>
-      <p>Favorite Subject: {{user.userprofile.toptag}}</p>
-      <div class="row">
-        <div class="large-12 columns">
-          <p>Grid:</p>
-        </div>
-      </div>
-      <p>Submitter Ranking: {{user.userprofile.submittedresponsesrank}}</p>
-      <p>Respondent Ranking: {{user.answeredresponsesrank}}</p>
-      <!-- End Stats -->
-      <!-- Questions Submitted -->
-      <div class="row">
-        <div class="large-12 columns">
-          <h2>Questions Submitted ({{user.userprofile.submissions.count}})</h2>
-          <p>{{user.userprofile.total_votes}} people have answered your questions at a rate of {{user.userprofile.submittedresponserate}} per day.</p>
-          <!-- Begin Insert of User-Submitted Questions -->
-            {%for question in user.userprofile.submissions.all %}
-            {{question.question}}<br/>
-            Answers: <br>
-            {% for answer in question.answer_set.all %}
-            {{answer}} : {{answer.votes.count}}<br>
-            {%endfor%}
-            {%endfor%}
-          <!-- End Insert of User-Submitted Questions -->
-          </div>
-      </div>
-    <!-- End Questions Submitted -->
-    <!-- Questions Answered -->
-      <div class="row">
-        <div class="large-12 columns">
-          <h2>Questions Answered ({{user.userprofile.selections.count}})</h2>
-          <p>Rate: {{user.userprofile.answeredresponserate}} per day.</p>
-          <!-- Begin Insert of User-Submitted Answers -->
-        		{% for answer in user.userprofile.selection.all %}
-        		Question: {{answer.question}}<br>
-            Answer: {{answer}}<br>
-        		{%endfor%}
-          <!-- End Insert of User-Submitted Answers -->
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{%endblock profile%}
+        require("init");
+
+        pollChart = window.pollChart;
+
+        answer1 = [
+            {
+                id: 1,
+                label: "Answer 1",
+                value: 100,
+                gender: {
+                    m: 30,
+                    f: 50
+                },
+                age: {
+                    "20s": 30,
+                    "30s": 20,
+                    "40s": 30
+                }
+            }, {
+                id: 2,
+                label: "Answer 2",
+                value: 234,
+                gender: {
+                    m: 50,
+                    f: 160
+                },
+                age: {
+                    "20s": 90,
+                    "30s": 100,
+                    "40s": 30
+                }
+            }, {
+                id: 3,
+                label: "Answer 3",
+                value: 40,
+                gender: {
+                    m: 10,
+                    f: 25
+                },
+                age: {
+                    "20s": 30,
+                    "30s": 2,
+                    "40s": 2
+                }
+            }, {
+                id: 4,
+                label: "Answer 4",
+                value: 10,
+                gender: {
+                    m: 1,
+                    f: 9
+                },
+                age: {
+                    "20s": 2,
+                    "30s": 5,
+                    "40s": 2
+                }
+            }, {
+                id: 5,
+                label: "Answer 5",
+                value: 200,
+                gender: {
+                    m: 30,
+                    f: 50
+                },
+                age: {
+                    "20s": 30,
+                    "30s": 20,
+                    "40s": 30
+                }
+            }
+        ];
+
+        answer2 = [
+            {
+                id: 1,
+                label: "Answer 1",
+                value: 100
+            }, {
+                id: 2,
+                label: "Answer 2",
+                value: 32
+            }, {
+                id: 3,
+                label: "Answer 3",
+                value: 40
+            }, {
+                id: 4,
+                label: "Answer 4",
+                value: 1
+            }, {
+                id: 5,
+                label: "Answer 5",
+                value: 23
+            }
+        ];
+
+        answer3 = [
+            {
+                id: 1,
+                label: "Answer 1",
+                value: 20
+            }, {
+                id: 2,
+                label: "Answer 2",
+                value: 30
+            }, {
+                id: 3,
+                label: "Answer 3",
+                value: 40
+            }, {
+                id: 4,
+                label: "Answer 4",
+                value: 1
+            }, {
+                id: 5,
+                label: "Answer 5",
+                value: 6
+            }
+        ];
+
+        answer4 = [
+            {
+                id: 1,
+                label: "Answer 1",
+                value: 100
+            }, {
+                id: 2,
+                label: "Answer 2",
+                value: 50
+            }, {
+                id: 3,
+                label: "Answer 3",
+                value: 10
+            }, {
+                id: 4,
+                label: "Answer 4",
+                value: 1
+            }, {
+                id: 5,
+                label: "Answer 5",
+                value: 500
+            }
+        ];
+
+        pollChart.stacked({
+            el: "#stacked",
+            data: answer1
+        });
+
+        pollChart.stacked({
+            el: "#stacked2",
+            data: answer2,
+            width: 700,
+            height: 60,
+            margin: {
+                top: 0,
+                right: 0,
+                bottom: 30,
+                left: 0
+            },
+            colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"]
+        });
+
+        pollChart.grid({
+            el: "#grid",
+            width: 700,
+            height: 60,
+            margin: {
+                top: 0,
+                right: 0,
+                bottom: 30,
+                left: 0
+            },
+            colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
+            data: [
+                {
+                    question: "Some Question",
+                    answers: answer1,
+                    chosen: 1
+                }, {
+                    question: "Some Question2",
+                    answers: answer2,
+                    chosen: 1
+                }, {
+                    question: "Some Question3",
+                    answers: answer3,
+                    chosen: 1
+                }, {
+                    question: "Some Question4",
+                    answers: answer4,
+                    chosen: 5
+                }, {
+                    question: "Some Question5",
+                    answers: answer2,
+                    chosen: 2
+                }
+            ]
+        });
+
+
+    })()
+
+
+</script>
+
+
+
+</body>
+</html>

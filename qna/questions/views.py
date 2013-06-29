@@ -102,13 +102,13 @@ def previous_question(request, previous_question_id):
     for a in previous_question.answer_set.all():
         resp_array.append(a.answer)
         votes_array.append(a.votes.count())
-    
+
     for a in votes_array:
         total = total + a
-    
+
     for a in votes_array:
         percent_array.append(int(math.ceil((a/total) *100)*100/100))
-    
+
     for i in resp_array:
         info = {
             'answer': resp_array[x],
@@ -163,10 +163,21 @@ def previous_question(request, previous_question_id):
 ###################### THIS IS DAT NEW SHIT - BASED ON GAYVE'S 6/25 FILES ###################################
 def question_details(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    allquestions = Question.objects.all().values("pk").order_by("pk")
+    resp_dict={
+        "question":question.question,
+        "value":question.total_vote_count,
+        "answers":[],
+    }
+    for answer in question.answer_set.all():
+        resp_dict["answers"].append({
+            "answer":answer.answer,
+            "count":answer.votes.count(),
+            "data":list(answer.selected_by.values('gender','agegroup','political').annotate(count=Count('id'))),
+        })
+    json = simplejson.dumps(resp_dict).replace("'",r"\'")
     context = {
         "question":question,
-        "allquestions":allquestions,
+        "json":json,
     }
     return render_to_response("question_details.html", context, context_instance=RequestContext(request))
 
