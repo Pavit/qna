@@ -282,13 +282,26 @@ def submit(request):
 @login_required
 def profile(request):
     user = request.user.userprofile
-    #user.populate_graph_info()
-    user.save()
-    uservotes = user.selections.count()
-    pollcount = Question.objects.all().count()
-    # for q in user.submissions.all():
-    #     totalvotes += q.answer_set.get_vote_count()
-    return render_to_response("profile.html", {}, context_instance = RequestContext(request))
+    grid_data = []
+    for q in user.answered.all():
+        #### IN REAL LIFE, this is supposed to return only 1 answer choice.
+        #### Since we have repeats enabled for testing purposes, this also has to be modified.
+        #### For testing I am being lazy and just grabbing the first choice returnede
+        a = user.selections.filter(question_id=q.id)[0]
+        #### Real life version uses .get(), which bombs if there's more than 1 item
+        #### a = user.selections.get(question_id=q.id)
+        answerlist = list(q.answer_set.values("id","answer").annotate(value=Count("votes")))
+        for item in answerlist:
+            item["label"] = item.pop("answer")
+        grid_data.append({
+            'question': q.question,
+            'answers': answerlist,
+            'chosen': a.id,
+            })
+    context = {
+        'grid_data':grid_data,
+    }
+    return render_to_response("profile.html", context, context_instance = RequestContext(request))
 
 def search_test(request):
     return render_to_response("search_test.html")

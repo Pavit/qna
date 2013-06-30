@@ -687,3 +687,70 @@
     };
 
 }).call(this);
+
+
+  /*
+
+    Horizontal Stacked Chart
+
+    Data should be of the form:
+    [
+      {label: "Some Answer", value:2000}
+    ]
+  */
+
+  (function() {
+    var defaults;
+
+    if (window.pollChart == null) {
+        window.pollChart = {};
+    }
+  var defaults, _ref;
+
+  if ((_ref = window.pollChart) == null) {
+    window.pollChart = {};
+  }
+
+  defaults = {
+    width: 700,
+    height: 60,
+    margin: {
+      top: 0,
+      right: 0,
+      bottom: 30,
+      left: 0
+    },
+    colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
+    data: []
+  };
+
+  window.pollChart.stacked = function(opts) {
+    var chart, color, data, el, get, group, height, helpers, item, margin, percent, pollChart, scale, start, svg, tooltip, total, width, _i, _len;
+
+    pollChart = window.pollChart;
+    helpers = pollChart.helpers;
+    get = helpers.get;
+    tooltip = pollChart.tooltip;
+    opts = _.defaults(opts, defaults);
+    margin = opts.margin, width = opts.width, height = opts.height, data = opts.data;
+    width = width - margin.left - margin.right;
+    height = height - margin.top - margin.bottom;
+    total = d3.sum(data, get("value"));
+    scale = d3.scale.linear().range([0, width]).domain([0, total]);
+    color = d3.scale.ordinal().range(opts.colors);
+    start = 0;
+    for (_i = 0, _len = data.length; _i < _len; _i++) {
+      item = data[_i];
+      item.start = start;
+      percent = Math.round(item.value / total * 100);
+      item.tooltip = "" + item.label + " (" + percent + "%)";
+      start += item.value;
+    }
+    el = d3.select(opts.el);
+    svg = el.append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    group = svg.selectAll("g").data(data, get("label")).enter().append("g");
+    chart = group.append("rect").attr("class", "stack").style("fill", get("label", color)).attr("height", height).attr("x", get("start", scale)).attr("width", get("value", scale));
+    return tooltip(el, chart, get("tooltip"));
+  };
+
+}).call(this);

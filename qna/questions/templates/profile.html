@@ -1,28 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load staticfiles %}
+{% extends "base.html" %}
+
+{% block profile %}
+{% load staticfiles %}
   <title>Poll Charts</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF8">
   <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
-</head>
-<body>
 <h3>Grid Chart</h3>
 <div class="pollChart" id="grid"></div>
 <h3>Stacked Charts</h3>
 <div class="pollChart" id="stacked"></div>
 <div class="pollChart" id="stacked2"></div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="{% static 'javascripts/vendor/d3.js' %}"></script>
 <script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
 <script src="{% static 'javascripts/chart.js' %}"></script>
 
 <script>
-    (function(){
-        var answer1, answer2, answer3, answer4, pollChart;
+pollChart.grid({
+            el: "#grid",
+            width: 700,
+            height: 60,
+            margin: {
+                top: 0,
+                right: 0,
+                bottom: 30,
+                left: 0
+            },
+            colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
+            data: [
+    {% for x in grid_data %}
+    {
+        question:"{{x.question|safe}}",
+        answers:[
+            {% for y in x.answers %}
+                {
+                    id:{{y.id}},
+                    label:"{{y.label|safe}}",
+                    value:{{y.value}}
+                }{%if not forloop.last %},{%endif%}
+                {%endfor%}
+                ],
+        chosen:{{x.chosen}}
+    }{% if not foorloop.last %},{%endif%}
+    {% endfor %}
+    ]
+        });
 
-        require("init");
+</script>
 
-        pollChart = window.pollChart;
+<script>
+
+        var answer1, answer2, answer3, answer4;
 
         answer1 = [
             {
@@ -183,50 +211,6 @@
             },
             colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"]
         });
-
-        pollChart.grid({
-            el: "#grid",
-            width: 700,
-            height: 60,
-            margin: {
-                top: 0,
-                right: 0,
-                bottom: 30,
-                left: 0
-            },
-            colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
-            data: [
-                {
-                    question: "Some Question",
-                    answers: answer1,
-                    chosen: 1
-                }, {
-                    question: "Some Question2",
-                    answers: answer2,
-                    chosen: 1
-                }, {
-                    question: "Some Question3",
-                    answers: answer3,
-                    chosen: 1
-                }, {
-                    question: "Some Question4",
-                    answers: answer4,
-                    chosen: 5
-                }, {
-                    question: "Some Question5",
-                    answers: answer2,
-                    chosen: 2
-                }
-            ]
-        });
-
-
-    })()
-
-
 </script>
 
-
-
-</body>
-</html>
+{% endblock profile %}
