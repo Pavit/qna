@@ -307,7 +307,7 @@
     };
 
     window.pollChart.sunburst = function(opts) {
-        var answers, arc, arc2, arc3, change, clearHighlights, clickHandler1, clickHandler2, clicked, clicked2, color, data, divs, draw, draw2, el, field, filters, getSize, height, helpers, index, innerRadius, label, legend, margin, old, options, outerRadius, partition, pollChart, radius, selected, selects, svg, update, width, writeLabel, writeLabel2, _i, _len, _ref1, _ref2;
+        var answers, arc, arc2, arcTween, change, clearHighlights, clickHandler1, clickHandler2, clicked, clicked2, color, data, divs, draw, el, field, filters, getSize, height, helpers, index, innerRadius, label, legend, margin, old, options, outerRadius, partition, pollChart, radius, selected, selects, stash, stashEnter, svg, update, width, writeLabel, writeLabel2, _i, _len, _ref1, _ref2;
 
         pollChart = window.pollChart;
         helpers = pollChart.helpers;
@@ -352,11 +352,6 @@
             return d.x + (d.dx / 2);
         }).endAngle(function(d) {
                 return d.x + (d.dx / 2) + 0.01;
-            }).innerRadius(innerRadius).outerRadius(outerRadius);
-        arc3 = d3.svg.arc().startAngle(function(d) {
-            return d.x + d.dx - 0.01;
-        }).endAngle(function(d) {
-                return d.x + d.dx;
             }).innerRadius(innerRadius).outerRadius(outerRadius);
         el = d3.select(opts.el);
         el.append("h2").text(opts.data.question);
@@ -470,46 +465,35 @@
             clicked2 = [];
             label.text("");
             return svg.selectAll("g").attr("opacity", 1);
-            /*
-             tweenArc =  (a) ->
-             if old and old[a.id]
-             start = _.pick old[a.id][0], "x", "y", "dy", "y", "depth"
-             else
-             start = {x:0,dx:0,y:0,dy:0,depth:0}
-             end = {x: a.x, dx: a.dx, y: a.y, dy: a.dy, depth: a.depth}
-
-             #console.log start.dy, end.dy
-             i = d3.interpolate(start, end)
-             (t) ->
-             arc i(t)
-
-             tran.attrTween("d", tweenArc)
-             */
-
         };
-        draw2 = function(data) {
-            var group;
+        old = {};
+        stash = function(d) {
+            return old[d.id] = {
+                x: d.x,
+                dx: d.dx,
+                y: d.y,
+                dy: d.dy
+            };
+        };
+        stashEnter = function(d) {
+            var middle;
 
-            data = partition.nodes(data);
-            svg.selectAll("g").remove();
-            group = svg.selectAll("g").data(data, get("id")).enter().append("g");
-            group.filter(function(d) {
-                return d.depth;
-            }).append("path").style("stroke", "#fff").style("fill", get("answer", color)).attr("d", arc);
-            group.filter(function(d) {
-                return d.depth === 1;
-            }).append("text").text(function(d) {
-                    return d.name;
-                }).attr("dy", ".35em").style("text-anchor", "middle").attr("transform", textTransform(arc, radius)).each(insertLinebreaks);
-            group.filter(function(d) {
-                return d.depth === 3;
-            }).on("click", clickHandler2);
-            group.filter(function(d) {
-                return d.depth === 2;
-            }).on("click", clickHandler1);
-            return group.filter(function(d) {
-                return d.depth === 1;
-            }).on("click", clearHighlights);
+            middle = d.x + (d.dx / 2);
+            return old[d.id] = {
+                x: middle,
+                dx: 0.01
+            };
+        };
+        arcTween = function(a) {
+            var i;
+
+            i = d3.interpolate(old[a.id], a);
+            return function(t) {
+                var b;
+
+                b = i(t);
+                return arc(b);
+            };
         };
         draw = function(data) {
             var enter, exit, exitTrans, group;
@@ -519,26 +503,27 @@
             enter = group.enter().append("g");
             exit = group.exit();
             exitTrans = exit.transition().duration(1000).remove();
-            if (data.length > 3) {
-                exitTrans.select("path").attr("d", arc2).style("opacity", 0);
-            } else {
-                exitTrans.select("path").style("opacity", 0);
-            }
+            exitTrans.select("path").style("opacity", 0);
             exitTrans.select("text").style("opacity", 0);
             enter.filter(function(d) {
                 return d.depth;
-            }).append("path").style("stroke", "#fff").style("fill", get("answer", color)).attr("d", arc2).style("opacity", 0);
-            if (data.length > 4) {
-                group.select("path").transition().duration(1000).attr("d", arc).style("opacity", 1);
-            } else {
-                group.select("path").attr("d", arc).transition().duration(1000).style("opacity", 1);
-            }
+            }).append("path").style("stroke", "#fff").style("fill", get("answer", color)).style("opacity", 0).attr("d", arc2).each(stashEnter);
+            group.select("path").transition().duration(1000).attrTween("d", arcTween).style("opacity", 1).each("end", stash);
             enter.filter(function(d) {
                 return d.depth === 1;
             }).append("text").text(function(d) {
                     return d.name;
                 }).attr("dy", ".35em").style("text-anchor", "middle").each(insertLinebreaks).style("opacity", 1);
-            return group.select("text").transition().duration(1000).attr("transform", textTransform(arc, radius));
+            group.select("text").transition().duration(1000).attr("transform", textTransform(arc, radius));
+            group.filter(function(d) {
+                return d.depth === 3;
+            }).on("click", clickHandler2);
+            group.filter(function(d) {
+                return d.depth === 2;
+            }).on("click", clickHandler1);
+            return group.filter(function(d) {
+                return d.depth === 1;
+            }).on("click", clearHighlights);
         };
         draw(data);
         legend({
@@ -576,7 +561,7 @@
     };
 
     window.pollChart.showSunburst = function(source, selector) {
-        var opts;
+        var height, opts, width;
 
         if (selector == null) {
             selector = "#sunburst";
@@ -608,7 +593,6 @@
             return pollChart.sunburst(opts);
         }
     };
-
 
 }).call(this);
 
@@ -688,69 +672,64 @@
 
 }).call(this);
 
+(function(){
+    /*
 
-  /*
+     Horizontal Stacked Chart
 
-    Horizontal Stacked Chart
+     Data should be of the form:
+     [
+     {label: "Some Answer", value:2000}
+     ]
+     */
 
-    Data should be of the form:
-    [
-      {label: "Some Answer", value:2000}
-    ]
-  */
+    var defaults, _ref;
 
-  (function() {
-    var defaults;
-
-    if (window.pollChart == null) {
+    if ((_ref = window.pollChart) == null) {
         window.pollChart = {};
     }
-  var defaults, _ref;
 
-  if ((_ref = window.pollChart) == null) {
-    window.pollChart = {};
-  }
+    defaults = {
+        width: 700,
+        height: 60,
+        margin: {
+            top: 0,
+            right: 0,
+            bottom: 30,
+            left: 0
+        },
+        colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
+        data: []
+    };
 
-  defaults = {
-    width: 700,
-    height: 60,
-    margin: {
-      top: 0,
-      right: 0,
-      bottom: 30,
-      left: 0
-    },
-    colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"],
-    data: []
-  };
+    window.pollChart.stacked = function(opts) {
+        var chart, color, data, el, get, group, height, helpers, item, margin, percent, pollChart, scale, start, svg, tooltip, total, width, _i, _len;
 
-  window.pollChart.stacked = function(opts) {
-    var chart, color, data, el, get, group, height, helpers, item, margin, percent, pollChart, scale, start, svg, tooltip, total, width, _i, _len;
+        pollChart = window.pollChart;
+        helpers = pollChart.helpers;
+        get = helpers.get;
+        tooltip = pollChart.tooltip;
+        opts = _.defaults(opts, defaults);
+        margin = opts.margin, width = opts.width, height = opts.height, data = opts.data;
+        width = width - margin.left - margin.right;
+        height = height - margin.top - margin.bottom;
+        total = d3.sum(data, get("value"));
+        scale = d3.scale.linear().range([0, width]).domain([0, total]);
+        color = d3.scale.ordinal().range(opts.colors);
+        start = 0;
+        for (_i = 0, _len = data.length; _i < _len; _i++) {
+            item = data[_i];
+            item.start = start;
+            percent = Math.round(item.value / total * 100);
+            item.tooltip = "" + item.label + " (" + percent + "%)";
+            start += item.value;
+        }
+        el = d3.select(opts.el);
+        svg = el.append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        group = svg.selectAll("g").data(data, get("label")).enter().append("g");
+        chart = group.append("rect").attr("class", "stack").style("fill", get("label", color)).attr("height", height).attr("x", get("start", scale)).attr("width", get("value", scale));
+        return tooltip(el, chart, get("tooltip"));
+    };
 
-    pollChart = window.pollChart;
-    helpers = pollChart.helpers;
-    get = helpers.get;
-    tooltip = pollChart.tooltip;
-    opts = _.defaults(opts, defaults);
-    margin = opts.margin, width = opts.width, height = opts.height, data = opts.data;
-    width = width - margin.left - margin.right;
-    height = height - margin.top - margin.bottom;
-    total = d3.sum(data, get("value"));
-    scale = d3.scale.linear().range([0, width]).domain([0, total]);
-    color = d3.scale.ordinal().range(opts.colors);
-    start = 0;
-    for (_i = 0, _len = data.length; _i < _len; _i++) {
-      item = data[_i];
-      item.start = start;
-      percent = Math.round(item.value / total * 100);
-      item.tooltip = "" + item.label + " (" + percent + "%)";
-      start += item.value;
-    }
-    el = d3.select(opts.el);
-    svg = el.append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    group = svg.selectAll("g").data(data, get("label")).enter().append("g");
-    chart = group.append("rect").attr("class", "stack").style("fill", get("label", color)).attr("height", height).attr("x", get("start", scale)).attr("width", get("value", scale));
-    return tooltip(el, chart, get("tooltip"));
-  };
 
 }).call(this);
