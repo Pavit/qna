@@ -1,9 +1,12 @@
 # Django settings for qna project.
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 import os
 import dj_database_url
+
+if not os.environ.get("HEROKU_DEV", False):
+    DEBUG = True  ### For local testing
+else:
+    DEBUG = False ### Disable debug on heroku for compression
+TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -66,7 +69,7 @@ MEDIA_URL = ''
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
-
+ROOT_PATH = os.path.dirname(__file__)
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
@@ -84,6 +87,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -111,7 +115,7 @@ ROOT_URLCONF = 'qna.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'qna.wsgi.application'
 
-ROOT_PATH = os.path.dirname(__file__)
+
 
 TEMPLATE_DIRS = (
     os.path.join(ROOT_PATH,"templates"),
@@ -134,6 +138,9 @@ INSTALLED_APPS = (
     # 'social_auth',
     'facepy',
     'wadofstuff.django.serializers',
+    'optimizations',  ## pip install git+git://github.com/etianen/django-optimizations.git
+    'compressor',  ##  pip install django_compressor
+    'easy_pjax',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -146,6 +153,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     # 'social_auth.context_processors.social_auth_login_redirect',
     # 'social_auth.context_processors.social_auth_backends',
+    'django.core.context_processors.request',
 
 )
 
@@ -159,20 +167,59 @@ AUTHENTICATION_BACKENDS = (
 )
 
 AUTH_PROFILE_MODULE= 'core.UserProfile'
+
+STATIC_ASSETS = {
+    "default": {
+        "js": {
+            "include": (
+                "javascripts/vendor/jquery.js",  # Load jQuery first!
+                "javascripts/vendor/jquery.pjax.js",
+                "javascripts/vendor/underscore.js",
+                "javascripts/foundation.min.js",
+                "javascripts/vendor/custom.modernizr.js",
+                "javascripts/vendor/zepto.js", 
+                "javascripts/jquery.powertip.min.js",
+                "javascripts/typeahead.js",
+                "javascripts/app.js",
+                "javascripts/vendor/d3.js",
+            ),
+        },
+        "css": {
+            "include": (
+                "stylesheets/*.css",
+            ),
+        },
+    },
+}
+CACHES = {
+    # The default Django cache. Set this to whatever you're currently using, or use this as a default.
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+    # A long-expiry local memory cache for django-optimizations.
+    "optimizations.assetcache": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "TIMEOUT": 60 * 60,
+        "LOCATION": "optimiizations.assetcache",
+    },
+}
+
+
+
 #---------social_auth settings--------------------
 # SOCIAL_AUTH_USER_MODEL = 'core.UserProfile'
-LOGIN_URL          = '/login-form/'
-LOGIN_REDIRECT_URL = '/questions/'
-LOGIN_ERROR_URL    = '/login-error/'
+# LOGIN_URL          = '/login-form/'
+# LOGIN_REDIRECT_URL = '/questions/'
+# LOGIN_ERROR_URL    = '/login-error/'
 
-FACEBOOK_EXTENDED_PERMISSIONS = [
-    'email','friends_likes','user_about_me',
-    'user_birthday', 'friends_birthday', 'friends_about_me',
-    'user_location', 'friends_location','user_relationships','friends_relationships',
-    'friends_education_history','user_education_history','user_interests',
-    'friends_interests','user_relationship_details','friends_relationship_details','user_religion_politics',
-    'friends_religion_politics',
-]
+# FACEBOOK_EXTENDED_PERMISSIONS = [
+#     'email','friends_likes','user_about_me',
+#     'user_birthday', 'friends_birthday', 'friends_about_me',
+#     'user_location', 'friends_location','user_relationships','friends_relationships',
+#     'friends_education_history','user_education_history','user_interests',
+#     'friends_interests','user_relationship_details','friends_relationship_details','user_religion_politics',
+#     'friends_religion_politics',
+# ]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

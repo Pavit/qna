@@ -2,7 +2,10 @@
 
 {% block profile %}
 {% load staticfiles %}
-  <title>Poll Charts</title>
+
+{% load compress %}
+{% load assets %}
+<head>{% script "javascripts/chart.js" %}{% script "javascripts/vendor/underscore.js" %}</head>
   <meta http-equiv="content-type" content="text/html; charset=UTF8">
   <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
 <h3>Grid Chart</h3>
@@ -10,11 +13,8 @@
 <h3>Stacked Charts</h3>
 <div class="pollChart" id="stacked"></div>
 <div class="pollChart" id="stacked2"></div>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="{% static 'javascripts/vendor/d3.js' %}"></script>
-<script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
-<script src="{% static 'javascripts/chart.js' %}"></script>
 
+{% compress js %}
 <script>
 pollChart.grid({
             el: "#grid",
@@ -45,9 +45,7 @@ pollChart.grid({
     {% endfor %}
     ]
         });
-
 </script>
-
 <script>
 
         var answer1, answer2, answer3, answer4;
@@ -212,5 +210,5 @@ pollChart.grid({
             colors: ["#FFF5E4", "#FF7E65", "#7DCDFC", "#2084C4", "#3D444B"]
         });
 </script>
-
+{% endcompress %}
 {% endblock profile %}

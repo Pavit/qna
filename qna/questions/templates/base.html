@@ -1,11 +1,14 @@
 <!DOCTYPE html>
+{% load assets %}
 {% load staticfiles %}
+{% load compress %}
 {% load questions_tags %}
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html class="no-js" lang="en"> <!--<![endif]-->
 {% block head %}
 <head>
+{% script %}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width" />
@@ -130,21 +133,36 @@
 
 </div>
 
-{% block javascript %}
-{# --------- LOAD JQUERY AND GOOGLE CHART API -------------#}
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 
-  <!-- DO NOT CHANGE. The order matters for the autocomplete to work with foundation -->
-  <script src="{% static 'javascripts/vendor/custom.modernizr.js' %}"></script>
+
+<!--Signup Modal-->
+<div id="loginModal" class="reveal-modal medium">
+
+<div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
+<div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
+<div class="row"><div class="large-12 columns"><a href class="small button secondary">Login</a></div></div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <p><a href="" class="fblogin">Login with Facebook</a></p>
+    <p><a href="" class="login">Login with Google</a></p>
+    <p><a href="" class="login">Login with Twitter</a></p>
+  </div>
+</div>
+<a class="close-reveal-modal">&#215;</a>
+</div>
+
+{% compress js %}
+  <!--   <script src="{% static 'javascripts/vendor/custom.modernizr.js' %}"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
-  <script src="{% static 'javascripts/foundation.min.js' %}"></script>
-  <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
-  <script src=" {% static 'javascripts/typeahead.js' %}"></script>
+ <script src="{% static 'javascripts/vendor/zepto.js' %}"></script>
+    <script src="{% static 'javascripts/foundation.min.js' %}"></script>
+    <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
+    <script src=" {% static 'javascripts/typeahead.js' %}"></script>-->
   <script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
-  <script src="{% static 'javascripts/app.js' %}"></script>
+ <!-- <script src="{% static 'javascripts/app.js' %}"></script>-->
 <script type = "text/javascript">
 $(document).ready(function() {
   $('#search').typeahead([
@@ -176,95 +194,6 @@ $(document).on('click', '.searchresults a', function() {
   $this.attr('href', $this.attr('href').replace('%QUERY', query));
 });
 </script>
-  <!--<script type="text/javascript" src="{% static "javascripts/search.js" %}"></script>-->
-
-  <!--<script type = "text/javascript">
-    $(function() {
-
-      $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-
-        if (!((item.label=="Show All Search Results") || (item.label=="Submit New Question"))) {
-  item.label = item.label.replace(RegExp(this.term, "i"), "<span style='color:Blue;'>" + this.term + "</span>");
-};
-        return $("<li></li>").data("item.autocomplete", item).append($("<a></a>").html(item.label)).appendTo(ul);
-      };
-
-
-      $("#search").autocomplete({
-        source: function(request, response) {
-          var pavdude = request.term;
-          $.ajax({
-            url: "{% url search %}?searchtext=" + request.term + "/",
-            type: "GET",
-            success: function(data) {
-
-              response($.map(data, function(item) {
-                return {
-                  label: item.fields.question,
-                  value: item.pk
-                }
-              }));
-            },
-            data: request.term,
-            dataType: "json"
-          });
-          var searchtext = request.term;
-        },
-
-        response: function(event, ui) {
-          ui.content.push({
-            label:  "Show All Search Results",
-            value: ui
-          });
-          ui.content.push({
-            label:  "Submit New Question",
-            value: ui
-          });
-        },
-        select: function(event, ui) {
-          event.preventDefault()
-          if (ui.item.label == "Show All Search Results")
-          {
-            var searchtext = $("#search").val();
-            $('#previous_question, #current_question').fadeOut(300);
-            $('#search_results').html('&nbsp;').load('/questions/search_results/'+searchtext+"/");
-          }
-          else if (ui.item.label == "Submit New Question")
-            {
-              $('#previous_question').fadeOut(300);
-              $('#current_question').fadeOut(300);
-              window.open("/questions/submit/","_self");
-            }
-          else
-          {
-            var url = "/questions/" + ui.item.value + "/";
-            $('#previous_question').fadeOut(300);
-            $('#current_question').delay(200).fadeOut(300);
-            $('#current_question').html('&nbsp;').load(url);
-            $('#current_question').fadeIn(300);
-            $('#previous_question').fadeIn(300);
-          };
-        }
-      })
-    });
-  </script>-->
-{% endblock javascript %}
-
-<!--Signup Modal-->
-<div id="loginModal" class="reveal-modal medium">
-
-<div class="row"><div class="large-12 columns"><input type="text" placeholder="Email"></div></div>
-<div class="row"><div class="large-12 columns"><input type="text" placeholder="Password"></div></div>
-<div class="row"><div class="large-12 columns"><a href class="small button secondary">Login</a></div></div>
-
-<div class="row">
-  <div class="large-12 columns">
-    <p><a href="" class="fblogin">Login with Facebook</a></p>
-    <p><a href="" class="login">Login with Google</a></p>
-    <p><a href="" class="login">Login with Twitter</a></p>
-  </div>
-</div>
-<a class="close-reveal-modal">&#215;</a>
-</div>
+{%endcompress%}
 </body>
 </html>

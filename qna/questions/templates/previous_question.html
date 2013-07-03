@@ -3,12 +3,13 @@
 {% block previous_question %}
 
 {% load staticfiles %}
+{% load assets %}
 
+{% load compress %}
 {% load questions_tags %}
 
 
-<script type="text/javascript" src="{% static 'javascripts/d3/d3.v3.min.js' %}" charset="utf-8"></script>
-<!-- <script type="text/javascript" src="http://d3js.org/d3.v3.min.js' %}" charset="utf-8"></script> -->
+
 <style type="text/css">
 .chart rect {
   stroke:black;
@@ -36,6 +37,7 @@
           <p>{{ previous_question.total_vote_count }} Votes</p><br>
           
           <p> Alternate Previous Question Charts.vSA</p>
+          {% compress js %}
           <script type="text/javascript">
           var data = {{json2|safe}}
           var total_votes = {{ json|safe }}
@@ -99,11 +101,13 @@
               .text(total_votes + " Total Votes");
 
           </script>
-
+{%endcompress%}
       </div>
     </div>
   </div>
 </div>
 
+
+<!--<script type="text/javascript" src="{% static 'javascripts/d3/d3.v3.min.js' %}" charset="utf-8"></script>-->
 
 {% endblock previous_question %}

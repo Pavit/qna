@@ -79,15 +79,25 @@ def current_question(request, current_question_id):
     current_question = get_object_or_404(Question, pk=current_question_id)
     next_question = Question.objects.filter(~Q(id = current_question.id)).order_by('?')[:1].get()
     print "WTF"
+    print request.META.get('HTTP_X_PJAX')
+    context = {
+        'pjax': request.META.get('HTTP_X_PJAX'),
+        'current_question': current_question,
+        }
     if request.is_ajax():
         print "vote is ajax"
         print current_question
-        context = Context({'current_question': current_question})
+        print request.META.get('HTTP_X_PJAX')
+        context = Context({
+            'current_question': current_question,
+            'pjax': request.META.get('HTTP_X_PJAX'),
+            'request':request,
+        })
         return_str = render_block_to_string('current_question.html', 'current_question', context)
         return HttpResponse(return_str)
         # return TemplateResponse(request, 'current_question.html', {"current_question": current_question.question}, ajax_blocks=('current_question'))
         # return render_to_response("view_question.html", {"current_question":current_question}, context_instance = RequestContext(request))
-    return render_to_response("current_question.html", {"current_question": current_question, "next_question": next_question}, context_instance = RequestContext(request))
+    return render_to_response("current_question.html",context, context_instance = RequestContext(request))
 
 
 def previous_question(request, previous_question_id):

@@ -1,32 +1,9 @@
-{% extends "base.html" %}
-
+{% extends "base.html"|pjax:request %}
 {% block current_question %}
 
 {% load staticfiles %}
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-  pageurl = '/questions/'+ '{{current_question.id}}' + '/';
-  window.history.pushState({path:pageurl},'',pageurl);
-});
-</script>
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.answer').click(function(e) {
-    e.preventDefault();
-    $('#content div').empty();
-      $.ajax({
-        url: '/questions/' + this.id + '/vote' + '/',
-        success: function(data) {
-            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(200);
-            $('#previous_question').html('&nbsp;').load("/questions/previous_question/" + data.previous_question_pk + "/").hide().fadeIn(200);
-        }
-      });
-  });
-});
-</script>
-
+{% load assets %}
+{% load compress%}
 <div id ="current_question">
   <div class="row">
     <div class="large-9 large-centered columns">
@@ -46,5 +23,39 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
+
+
+{% compress js %}
+<script type="text/javascript">
+$(document).ready(function() {
+  pageurl = '/questions/'+ '{{current_question.id}}' + '/';
+  window.history.pushState({path:pageurl},'',pageurl);  
+/*  var myVal = window.location.href;
+  tmp = myVal.substr ( myVal.indexOf ( '/questions/' ) );
+  console.log(tmp);
+  if (tmp !== '{{current_question.id}}/') {
+    console.log(pageurl);
+    window.location=pageurl;
+  };
+  console.log('{{current_question.id}}'); */
+})
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.answer').click(function(e) {
+    e.preventDefault();
+    $('#content div').empty();
+      $.ajax({
+        url: '/questions/' + this.id + '/vote' + '/',
+        success: function(data) {
+            $('#current_question').html('&nbsp;').load("/questions/"+data.current_question_pk +"/").hide().fadeIn(200);
+            $('#previous_question').html('&nbsp;').load("/questions/previous_question/" + data.previous_question_pk + "/").hide().fadeIn(200);
+        }
+      });
+  });
+});
+</script>
+{% endcompress %}
 
 {% endblock current_question %}

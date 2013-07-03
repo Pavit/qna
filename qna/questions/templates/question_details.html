@@ -2,23 +2,34 @@
 
 {% block question_details %}
 {% load staticfiles %}
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-  pageurl = "{% url question_details question.id %}"
-  window.history.pushState({path:pageurl},'',pageurl);
-});
-</script>
+{% load compress %}
+{% load assets %}
+<head>{% script "javascripts/chart.js" %}{% script "javascripts/vendor/underscore.js" %}</head>
 
   <meta http-equiv="content-type" content="text/html; charset=UTF8">
   <link rel="stylesheet" href="{% static 'stylesheets/poll.css' %}" />
 
 <h3>Sunburst Charts</h3>
 <div class="pollChart" id="sunburst"></div>
-<script src="{% static 'javascripts/vendor/d3.js' %}"></script>
+
+
+
+
+
+
+
+
+<!--<script src="{% static 'javascripts/vendor/d3.js' %}"></script>
 <script src="{% static 'javascripts/vendor/underscore.js' %}"></script>
-<script src="{% static 'javascripts/chart.js' %}"></script>
+<script src="{% static 'javascripts/chart.js' %}"></script>-->
+
+{% compress js %}
+<script type="text/javascript">
+$(document).ready(function() {
+  pageurl = "{% url question_details question.id %}"
+  window.history.pushState({path:pageurl},'',pageurl);
+});
+</script>
 <script>
     (function(){
         var pollChart = window.pollChart;
@@ -34,6 +45,5 @@ $(document).ready(function() {
     })();
 
 </script>
-
-
+{% endcompress %}
 {% endblock question_details %}
