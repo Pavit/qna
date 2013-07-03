@@ -8,3 +8,6 @@ simplejson==2.3.2
 requests
 south
 facepy
+django-optimizations
+django_compressor
+django-easy-pjax
