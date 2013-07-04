@@ -106,7 +106,7 @@
 
 <div class="row">
   <div class="large-12 columns">
-    <p class="text-justify">You can also sign up with <a href id="fblogin" class="fblogin">Facebook</a>, <a href>Twitter</a>, or <a href data-reveal-id="loginModal">email.</a></p>
+    <p class="text-justify">You can also sign up with <a href class="fblogin">Facebook</a>, <a href>Twitter</a>, or <a href data-reveal-id="loginModal">email.</a></p>
   </div>
 </div>
 
@@ -162,6 +162,24 @@
     <script src="{% static 'javascripts/jquery.powertip.min.js' %}"></script>
     <script src=" {% static 'javascripts/typeahead.js' %}"></script>-->
   <script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
+  <script type="text/javascript">
+    $('.fblogin').click(function(e) {
+    e.preventDefault();
+    FB.login(function(response) {
+      var access_token=response.authResponse.accessToken;
+      window.location.href =  '/facebook_login_success?access_token=' + access_token;
+}, {scope: 'email,user_birthday,user_education_history,user_hometown,user_location,user_questions,user_relationships,user_religion_politics,user_work_history,user_interests,user_activities'});
+  });
+
+  $('.logout').click(function(e){
+    e.preventDefault();
+    FB.logout(function(response){
+      window.location.href = '/logout/';
+    });
+
+  });
+</script>
+
  <!-- <script src="{% static 'javascripts/app.js' %}"></script>-->
 <script type = "text/javascript">
 $(document).ready(function() {
