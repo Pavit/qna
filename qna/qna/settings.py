@@ -5,7 +5,7 @@ import dj_database_url
 if not os.environ.get("HEROKU_DEV", False):
     DEBUG = True  ### For local testing
 else:
-    DEBUG = False ### Disable debug on heroku for compression
+    DEBUG = True ### Disable debug on heroku for compression
 TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
