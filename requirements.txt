@@ -9,5 +9,6 @@ requests
 south
 facepy
 django-optimizations
-django_compressor
+git+git://github.com/etianen/django-optimizations.git
 django-easy-pjax
+PIL
