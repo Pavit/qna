@@ -81,17 +81,16 @@ def current_question(request, current_question_id):
     print "WTF"
     print request.META.get('HTTP_X_PJAX')
     context = {
-        'pjax': request.META.get('HTTP_X_PJAX'),
+        # 'pjax': request.META.get('HTTP_X_PJAX'),
         'current_question': current_question,
         }
     if request.is_ajax():
         print "vote is ajax"
         print current_question
-        print request.META.get('HTTP_X_PJAX')
         context = Context({
             'current_question': current_question,
-            'pjax': request.META.get('HTTP_X_PJAX'),
-            'request':request,
+            # 'pjax': request.META.get('HTTP_X_PJAX'),
+            # 'request':request,
         })
         return_str = render_block_to_string('current_question.html', 'current_question', context)
         return HttpResponse(return_str)

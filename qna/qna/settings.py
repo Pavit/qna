@@ -153,7 +153,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     # 'social_auth.context_processors.social_auth_login_redirect',
     # 'social_auth.context_processors.social_auth_backends',
-    'django.core.context_processors.request',
+    # 'django.core.context_processors.request',   django-easy-pjax requires this, but I don't have it working yet.
 
 )
 
@@ -173,7 +173,7 @@ STATIC_ASSETS = {
         "js": {
             "include": (
                 "javascripts/vendor/jquery.js",  # Load jQuery first!
-                "javascripts/vendor/jquery.pjax.js",
+                # "javascripts/vendor/jquery.pjax.js",
                 "javascripts/vendor/underscore.js",
                 "javascripts/foundation.min.js",
                 "javascripts/vendor/custom.modernizr.js",
